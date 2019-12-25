@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>9b9e1e65-8a89-4532-8019-00907e30d725</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>MUI.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Helper\ControlsHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Helper\TreeHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ModernButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\SimplePanel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\WindowCommands.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\WindowCommandsItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Window\DpiAwareWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Window\DpiInformation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Window\ModernWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToFontWeightConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullOrEmptyStringToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\ToLowerConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\ToUpperConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LocalizationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModernUIHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Presentation\AppearanceManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Presentation\CommandBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Presentation\FontSize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Presentation\NotifyPropertyChanged.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Presentation\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProcessDpiAwareness.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Win32\MonitorDpiType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Win32\NativeMethods.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Win32\OSVersionHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Win32\RECT.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Localization\StringResources.zh.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\Basic\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\Basic\Geometries.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\Basic\Paths.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\ModernUI.Dark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\ModernUI.Light.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\ModernUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\Base\ButtonBaseStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\Button.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Themes\ModernButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Styles\TextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>
