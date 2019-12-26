@@ -10,10 +10,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Bitmap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ClipBorder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ClipBorder.Utils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ContentControlEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\DropDownButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Helper\ControlsHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Helper\TreeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ModernButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ProgressButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\SimplePanel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\SplitButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\WindowCommands.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\WindowCommandsItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Window\DpiAwareWindow.cs" />
@@ -75,6 +82,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Themes\DropDownButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -84,6 +95,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)Styles\TextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Themes\SplitButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

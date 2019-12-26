@@ -22,15 +22,16 @@ namespace DH.MUI.Controls
         //[AttachedPropertyBrowsableForType(typeof(NumericUpDown))]
         public static Visibility GetDisabledVisualElementVisibility(UIElement element)
         {
-            return (Visibility)element.GetValue(DisabledVisualElementVisibilityProperty);
+            return (Visibility)element?.GetValue(DisabledVisualElementVisibilityProperty);
         }
 
         /// <summary>
         /// Sets the value to handle the visibility of the DisabledVisualElement in the template.
         /// </summary>
+        /// <param name="element"><see cref="UIElement"/> to set <see cref="DisabledVisualElementVisibilityProperty"/> on.</param>
         public static void SetDisabledVisualElementVisibility(UIElement element, Visibility value)
         {
-            element.SetValue(DisabledVisualElementVisibilityProperty, value);
+            element?.SetCurrentValue(DisabledVisualElementVisibilityProperty, value);
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace DH.MUI.Controls
         [AttachedPropertyBrowsableForType(typeof(WindowCommands))]
         public static CharacterCasing GetContentCharacterCasing(UIElement element)
         {
-            return (CharacterCasing)element.GetValue(ContentCharacterCasingProperty);
+            return (CharacterCasing)element?.GetValue(ContentCharacterCasingProperty);
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace DH.MUI.Controls
         /// </summary>
         public static void SetContentCharacterCasing(UIElement element, CharacterCasing value)
         {
-            element.SetValue(ContentCharacterCasingProperty, value);
+            element?.SetCurrentValue(ContentCharacterCasingProperty, value);
         }
 
 
@@ -80,9 +81,9 @@ namespace DH.MUI.Controls
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
         [AttachedPropertyBrowsableForType(typeof(ComboBox))]
         [AttachedPropertyBrowsableForType(typeof(ButtonBase))]
-        public static Brush GetFocusBorderBrush(DependencyObject obj)
+        public static Brush GetFocusBorderBrush(DependencyObject element)
         {
-            return (Brush)obj.GetValue(FocusBorderBrushProperty);
+            return (Brush)element?.GetValue(FocusBorderBrushProperty);
         }
 
         /// <summary>
@@ -93,9 +94,9 @@ namespace DH.MUI.Controls
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
         [AttachedPropertyBrowsableForType(typeof(ComboBox))]
         [AttachedPropertyBrowsableForType(typeof(ButtonBase))]
-        public static void SetFocusBorderBrush(DependencyObject obj, Brush value)
+        public static void SetFocusBorderBrush(DependencyObject element, Brush value)
         {
-            obj.SetValue(FocusBorderBrushProperty, value);
+            element?.SetCurrentValue(FocusBorderBrushProperty, value);
         }
 
         public static readonly DependencyProperty FocusBorderThicknessProperty
@@ -112,9 +113,9 @@ namespace DH.MUI.Controls
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
         [AttachedPropertyBrowsableForType(typeof(ComboBox))]
         [AttachedPropertyBrowsableForType(typeof(ButtonBase))]
-        public static Thickness GetFocusBorderThickness(DependencyObject obj)
+        public static Thickness GetFocusBorderThickness(DependencyObject element)
         {
-            return (Thickness)obj.GetValue(FocusBorderThicknessProperty);
+            return (Thickness)element?.GetValue(FocusBorderThicknessProperty);
         }
 
         /// <summary>
@@ -126,12 +127,9 @@ namespace DH.MUI.Controls
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
         [AttachedPropertyBrowsableForType(typeof(ComboBox))]
         [AttachedPropertyBrowsableForType(typeof(ButtonBase))]
-        public static void SetFocusBorderThickness(DependencyObject obj, Thickness value)
+        public static void SetFocusBorderThickness(DependencyObject element, Thickness value)
         {
-            if (obj != null)
-            {
-                obj?.SetValue(FocusBorderThicknessProperty, value);
-            }
+            element?.SetCurrentValue(FocusBorderThicknessProperty, value);
         }
 
         public static readonly DependencyProperty MouseOverBorderBrushProperty
@@ -150,12 +148,12 @@ namespace DH.MUI.Controls
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
         [AttachedPropertyBrowsableForType(typeof(ComboBox))]
         //[AttachedPropertyBrowsableForType(typeof(Tile))]
-        public static Brush GetMouseOverBorderBrush(DependencyObject obj)
+        public static Brush GetMouseOverBorderBrush(DependencyObject element)
         {
-            return (Brush)obj?.GetValue(MouseOverBorderBrushProperty);
+            return (Brush)element?.GetValue(MouseOverBorderBrushProperty);
         }
 
-        
+
         [Category(AppName.MuiApps)]
         [AttachedPropertyBrowsableForType(typeof(TextBox))]
         [AttachedPropertyBrowsableForType(typeof(CheckBox))]
@@ -163,19 +161,17 @@ namespace DH.MUI.Controls
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
         [AttachedPropertyBrowsableForType(typeof(ComboBox))]
         //[AttachedPropertyBrowsableForType(typeof(Tile))]
-        public static void SetMouseOverBorderBrush(DependencyObject obj, Brush value)
+        public static void SetMouseOverBorderBrush(DependencyObject element, Brush value)
         {
-            obj.SetValue(MouseOverBorderBrushProperty, value);
+            element?.SetCurrentValue(MouseOverBorderBrushProperty, value);
         }
 
-        /// <summary>
-        /// DependencyProperty for <see cref="CornerRadius" /> property.
-        /// </summary>
+
         public static readonly DependencyProperty CornerRadiusProperty
             = DependencyProperty.RegisterAttached("CornerRadius", typeof(CornerRadius), typeof(ControlsHelper),
                                                   new FrameworkPropertyMetadata(
-                                                      new CornerRadius(),
-                                                      FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+                                                  new CornerRadius(),
+                                                  FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
 
         /// <summary> 
         /// The CornerRadius property allows users to control the roundness of the button corners independently by 
@@ -191,7 +187,7 @@ namespace DH.MUI.Controls
 
         public static void SetCornerRadius(UIElement element, CornerRadius value)
         {
-            element?.SetValue(CornerRadiusProperty, value);
+            element?.SetCurrentValue(CornerRadiusProperty, value);
         }
 
         /// <summary>
@@ -208,7 +204,7 @@ namespace DH.MUI.Controls
         /// <returns>IsReadOnly property value.</returns>
         public static bool GetIsReadOnly(UIElement element)
         {
-            return (bool)element.GetValue(IsReadOnlyProperty);
+            return (bool)element?.GetValue(IsReadOnlyProperty);
         }
 
         /// <summary>
@@ -216,7 +212,7 @@ namespace DH.MUI.Controls
         /// </summary>
         public static void SetIsReadOnly(UIElement element, bool value)
         {
-            element.SetValue(IsReadOnlyProperty, value);
+            element?.SetCurrentValue(IsReadOnlyProperty, value);
         }
     }
 }

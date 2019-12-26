@@ -6,6 +6,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/DH.MUI;component/Themes/ModernWindow.xaml" />
         <ResourceDictionary Source="/DH.MUI;component/Themes/ModernButton.xaml" />
+        <ResourceDictionary Source="/DH.MUI;component/Themes/SplitButton.xaml" />
+        <ResourceDictionary Source="/DH.MUI;component/Themes/DropDownButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
