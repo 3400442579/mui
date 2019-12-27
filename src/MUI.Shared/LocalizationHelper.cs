@@ -383,24 +383,16 @@ namespace DH.MUI
 
         public static bool Remove(int selectedIndex)
         {
-            try
-            {
-                if (selectedIndex == -1 || selectedIndex > Application.Current.Resources.MergedDictionaries.Count - 1)
-                    return false;
-
-                if (Application.Current.Resources.MergedDictionaries[selectedIndex].Source.OriginalString.Contains("StringResources.xaml"))
-                    return false;
-
-                //Remove from the current list.
-                Application.Current.Resources.MergedDictionaries.RemoveAt(selectedIndex);
-
-                return true;
-            }
-            catch //(Exception ex)
-            {
-                //LogWriter.Log(ex, "Remove Resource", selectedIndex);
+            if (selectedIndex == -1 || selectedIndex > Application.Current.Resources.MergedDictionaries.Count - 1)
                 return false;
-            }
+
+            if (Application.Current.Resources.MergedDictionaries[selectedIndex].Source.OriginalString.Contains("StringResources.xaml"))
+                return false;
+
+            //Remove from the current list.
+            Application.Current.Resources.MergedDictionaries.RemoveAt(selectedIndex);
+
+            return true;
         }
 
         /// <summary>

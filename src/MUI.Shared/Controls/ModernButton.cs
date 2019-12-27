@@ -9,21 +9,7 @@ namespace DH.MUI.Controls
     /// </summary>
     public class ModernButton : Button
     {
-        /// <summary>Identifies the <see cref="EllipseDiameter"/> dependency property.</summary>
-        public static readonly DependencyProperty EllipseDiameterProperty = DependencyProperty.Register(nameof(EllipseDiameter), typeof(double), typeof(ModernButton), new PropertyMetadata(22D));
-
-        /// <summary>Identifies the <see cref="EllipseStrokeThickness"/> dependency property.</summary>
-        public static readonly DependencyProperty EllipseStrokeThicknessProperty = DependencyProperty.Register(nameof(EllipseStrokeThickness), typeof(double), typeof(ModernButton), new PropertyMetadata(1D));
-
-        /// <summary>Identifies the <see cref="IconData"/> dependency property.</summary>
-        public static readonly DependencyProperty IconDataProperty = DependencyProperty.Register(nameof(IconData), typeof(Geometry), typeof(ModernButton));
-
-        /// <summary>Identifies the <see cref="IconHeight"/> dependency property.</summary>
-        public static readonly DependencyProperty IconHeightProperty = DependencyProperty.Register(nameof(IconHeight), typeof(double), typeof(ModernButton), new PropertyMetadata(12D));
-
-        /// <summary>Identifies the <see cref="IconWidth"/> dependency property.</summary>
-        public static readonly DependencyProperty IconWidthProperty = DependencyProperty.Register(nameof(IconWidth), typeof(double), typeof(ModernButton), new PropertyMetadata(12D));
-
+      
         /// <summary>
         /// Initializes a new instance of the <see cref="ModernButton"/> class.
         /// </summary>
@@ -32,23 +18,8 @@ namespace DH.MUI.Controls
             this.DefaultStyleKey = typeof(ModernButton);
         }
 
-        /// <summary>
-        /// Gets or sets the ellipse diameter.
-        /// </summary>
-        public double EllipseDiameter
-        {
-            get { return (double)GetValue(EllipseDiameterProperty); }
-            set { SetValue(EllipseDiameterProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the ellipse stroke thickness.
-        /// </summary>
-        public double EllipseStrokeThickness
-        {
-            get { return (double)GetValue(EllipseStrokeThicknessProperty); }
-            set { SetValue(EllipseStrokeThicknessProperty, value); }
-        }
+        /// <summary>Identifies the <see cref="IconData"/> dependency property.</summary>
+        public static readonly DependencyProperty IconProperty = DependencyProperty.Register(nameof(Icon), typeof(Canvas), typeof(ModernButton));
 
         /// <summary>
         /// Gets or sets the icon path data.
@@ -56,11 +27,14 @@ namespace DH.MUI.Controls
         /// <value>
         /// The icon path data.
         /// </value>
-        public Geometry IconData
+        public Canvas Icon
         {
-            get { return (Geometry)GetValue(IconDataProperty); }
-            set { SetValue(IconDataProperty, value); }
+            get { return (Canvas)GetValue(IconProperty); }
+            set { SetValue(IconProperty, value); }
         }
+
+        /// <summary>Identifies the <see cref="IconHeight"/> dependency property.</summary>
+        public static readonly DependencyProperty IconHeightProperty = DependencyProperty.Register(nameof(IconHeight), typeof(double), typeof(ModernButton), new PropertyMetadata(12D));
 
         /// <summary>
         /// Gets or sets the icon height.
@@ -74,16 +48,27 @@ namespace DH.MUI.Controls
             set { SetValue(IconHeightProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets the icon width.
-        /// </summary>
-        /// <value>
-        /// The icon width.
-        /// </value>
+
+
+
+        /// <summary>Identifies the <see cref="IconWidth"/> dependency property.</summary>
+        public static readonly DependencyProperty IconWidthProperty = DependencyProperty.Register(nameof(IconWidth), typeof(double), typeof(ModernButton), new PropertyMetadata(12D));
+
         public double IconWidth
         {
             get { return (double)GetValue(IconWidthProperty); }
             set { SetValue(IconWidthProperty, value); }
+        }
+
+
+        /// <summary>Identifies the <see cref="Orientation"/> dependency property.</summary>
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(  nameof(Orientation),  typeof(Orientation), typeof(ModernButton),
+                new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure));
+
+        public Orientation Orientation
+        {
+            get { return (Orientation)this.GetValue(OrientationProperty); }
+            set { this.SetValue(OrientationProperty, value); }
         }
     }
 }

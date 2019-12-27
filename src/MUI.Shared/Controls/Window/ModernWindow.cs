@@ -16,8 +16,9 @@ namespace DH.MUI.Controls
     {
         /// <summary>Identifies the <see cref="BackgroundContent"/> dependency property.</summary>
         public static readonly DependencyProperty BackgroundContentProperty = DependencyProperty.Register(nameof(BackgroundContent), typeof(object), typeof(ModernWindow));
-        /// <summary>Identifies the <see cref="IsTitleVisible"/> dependency property.</summary>
-        public static readonly DependencyProperty IsTitleVisibleProperty = DependencyProperty.Register(nameof(IsTitleVisible), typeof(bool), typeof(ModernWindow), new PropertyMetadata(false));
+        /// <summary>Identifies the <see cref="TitleVisible"/> dependency property.</summary>
+        public static readonly DependencyProperty TitleVisibleProperty = DependencyProperty.Register(nameof(TitleVisible), typeof(bool), typeof(ModernWindow), new PropertyMetadata(true));
+        public static readonly DependencyProperty IconVisibleProperty = DependencyProperty.Register(nameof(IconVisible), typeof(bool), typeof(ModernWindow), new PropertyMetadata(true));
 
         public static readonly DependencyProperty LeftWindowCommandsProperty = DependencyProperty.Register("LeftWindowCommands", typeof(WindowCommands), typeof(ModernWindow), new PropertyMetadata(null, UpdateLogicalChilds));
         public static readonly DependencyProperty RightWindowCommandsProperty = DependencyProperty.Register("RightWindowCommands", typeof(WindowCommands), typeof(ModernWindow), new PropertyMetadata(null, UpdateLogicalChilds));
@@ -56,11 +57,20 @@ namespace DH.MUI.Controls
         /// <summary>
         /// Gets or sets a value indicating whether the window title is visible in the UI.
         /// </summary>
-        public bool IsTitleVisible
+        public bool TitleVisible
         {
-            get { return (bool)GetValue(IsTitleVisibleProperty); }
-            set { SetValue(IsTitleVisibleProperty, value); }
+            get { return (bool)GetValue(TitleVisibleProperty); }
+            set { SetValue(TitleVisibleProperty, value); }
         }
+        /// <summary>
+        /// Gets or sets a value indicating whether the window title is visible in the UI.
+        /// </summary>
+        public bool IconVisible
+        {
+            get { return (bool)GetValue(IconVisibleProperty); }
+            set { SetValue(IconVisibleProperty, value); }
+        }
+
         /// <summary>
         /// When overridden in a derived class, is invoked whenever application code or internal processes call System.Windows.FrameworkElement.ApplyTemplate().
         /// </summary>
@@ -147,7 +157,5 @@ namespace DH.MUI.Controls
         {
             SystemCommands.RestoreWindow(this);
         }
-
-
     }
 }

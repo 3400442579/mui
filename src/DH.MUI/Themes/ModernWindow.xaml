@@ -20,12 +20,14 @@
         <Setter Property="MinHeight" Value="320" />
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
         <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Focusable" Value="False"/>
         <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:ModernWindow}">
-                    <Border x:Name="WindowBorder" Margin="{Binding Source={x:Static SystemParameters.WindowNonClientFrameThickness}}">
+                    <Border  FocusVisualStyle="{x:Null}" x:Name="WindowBorder" Margin="{Binding Source={x:Static SystemParameters.WindowNonClientFrameThickness}}">
                         <Border.Background>
                             <SolidColorBrush x:Name="WindowBorderBackground" Color="{DynamicResource WindowBackgroundColor}" />
                         </Border.Background>
@@ -35,10 +37,10 @@
                             </Storyboard>
                         </Border.Resources>
 
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                        <Border  FocusVisualStyle="{x:Null}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
                             
                             <AdornerDecorator>
-                                <Grid x:Name="LayoutRoot">
+                                <Grid x:Name="LayoutRoot" FocusVisualStyle="{x:Null}" Focusable="False">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
@@ -58,20 +60,14 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         
-                                        <!-- logo (visible only when LogoData is not null) -->
-                                        <!--<Border Background="{DynamicResource Accent}" Margin="8,2"
-                                                DataContext="{TemplateBinding LogoData}"
-                                                Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=inverse}">
-                                            <Path Data="{Binding}" Stretch="Fill" Fill="White" Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>-->
-                                        <ContentControl Content="{TemplateBinding Icon}"
-                                                        HorizontalContentAlignment="Stretch"
-                                                        VerticalContentAlignment="Stretch"
-                                                        Panel.ZIndex="1"
-                                                        Focusable="False"
-                                                        Visibility="{Binding Icon ,Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=inverse}" />
+                                        <Image Source="{TemplateBinding Icon}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Panel.ZIndex="1"
+                                               Focusable="False" 
+                                               MaxHeight="20" Margin="5,0,0,0"
+                                               Visibility="{Binding IconVisible ,Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                                     
                                         <DockPanel Grid.Column="1" Focusable="False">
                                             <!--  the left window commands  -->
                                             <ContentPresenter x:Name="PART_LeftWindowCommands"
@@ -90,8 +86,10 @@
                                                               Focusable="False" />
 
                                             <!--  the title bar  -->
-                                            <TextBlock  Text="{TemplateBinding Title}" VerticalAlignment="Center" Style="{StaticResource ModernWindowTitle}"
-                                                   Visibility="{Binding IsTitleVisible,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{TemplateBinding Title}" VerticalAlignment="Center" 
+                                                       Style="{StaticResource ModernWindowTitle}" 
+                                                       Margin="5,0"
+                                                       Visibility="{Binding IsTitleVisible,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         </DockPanel>
 
                                         <!-- window system buttons-->
@@ -124,7 +122,7 @@
                                             </Grid>
                                             <Button Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" ToolTip="{DynamicResource Loc.Close}" Style="{StaticResource SystemCloseButton}" >
                                                 <Button.Content>
-                                                    <Grid Width="13" Height="12" RenderTransform="1,0,0,1,0,1">
+                                                    <Grid Width="13" Height="12" RenderTransform="1,0,0,1,0,1" VerticalAlignment="Center" HorizontalAlignment="Center">
                                                         <Path Data="M0,0 L8,7 M8,0 L0,7 Z" Width="8" Height="7" VerticalAlignment="Center" HorizontalAlignment="Center"
                                                               Stroke="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" StrokeThickness="1.5"  />
                                                     </Grid>

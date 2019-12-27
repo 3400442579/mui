@@ -3,6 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../Localization/StringResources.zh.xaml" />
         <ResourceDictionary Source="Button.xaml" />
         <ResourceDictionary Source="TextBlock.xaml" />
         <!--<ResourceDictionary Source="Calendar.xaml" />

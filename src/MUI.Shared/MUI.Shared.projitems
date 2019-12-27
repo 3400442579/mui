@@ -21,8 +21,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ProgressButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\SimplePanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\SplitButton.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\WindowCommands.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\WindowCommandsItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Window\WindowCommands.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Window\WindowCommandsItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Window\DpiAwareWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Window\DpiInformation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Window\ModernWindow.cs" />

@@ -18,7 +18,7 @@
                   BorderThickness="{TemplateBinding BorderThickness}"
                   BorderBrush="{TemplateBinding BorderBrush}"
                   SnapsToDevicePixels="true">
-            <ContentPresenter Margin="{TemplateBinding Padding}"
+            <ContentPresenter Margin="{TemplateBinding Padding}" 
                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                               RecognizesAccessKey="True"
@@ -68,18 +68,6 @@
     </Style.Triggers>
   </Style>
 
-  <Style x:Key="AlertButton" TargetType="ButtonBase" BasedOn="{StaticResource SystemButtonBase}">
-    <Setter Property="Cursor" Value="Hand" />
-    <Setter Property="Margin" Value="8"/>
-    <Setter Property="Padding" Value="4"/>
-    <Style.Triggers>
-      <Trigger Property="IsMouseOver" Value="True">
-        <Setter Property="Opacity" Value=".7" />
-      </Trigger>
-      <Trigger Property="IsPressed" Value="True">
-        <Setter Property="Opacity" Value=".4" />
-      </Trigger>
-    </Style.Triggers>
-  </Style>
+ 
 
 </ResourceDictionary>

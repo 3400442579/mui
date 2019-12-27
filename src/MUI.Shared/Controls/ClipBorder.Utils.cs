@@ -457,6 +457,9 @@ namespace DH.MUI.Controls
         /// <returns>true if yes, otherwise false</returns>
         public static bool IsEqualTo(this Brush brush, Brush otherBrush)
         {
+            if (otherBrush == null|| brush==null)
+                return false;
+
             if (brush.GetType() != otherBrush.GetType())
                 return false;
 

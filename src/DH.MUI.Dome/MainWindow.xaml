@@ -5,11 +5,20 @@
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:controls="http://dhmui.com/MUI"
-                  mc:Ignorable="d" 
+                mc:Ignorable="d" Icon="\icon.ico"   Focusable="False"
                 Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button Content="aa" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    <Window.Resources>
+        <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/DH.MUI;component/Styles/Basic/Paths.xaml" />
+        </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid  Focusable="False" FocusVisualStyle="{x:Null}">
+        <Button Content="aa" Margin="0,50,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-        <controls:ModernButton BorderThickness="1" Content="aa" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <controls:ModernButton BorderThickness="1" 
+                               IconWidth="20"  Content="测试" 
+                               Icon="{DynamicResource appbar_camera_flash}"/>
     </Grid>
 </mui:ModernWindow>
