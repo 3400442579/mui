@@ -152,8 +152,8 @@ namespace DH.MUI.Controls
                 this.MinHeight *= relScaleY;
                 this.MaxHeight *= relScaleY;
 
-                this.Width = width;
-                this.Height = height;
+                this.SetCurrentValue(WidthProperty, width);
+                this.SetCurrentValue(HeightProperty, height);
             }
         }
 
