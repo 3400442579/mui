@@ -1,8 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Color x:Key="WindowBackgroundColor">#ffffff</Color>
 
+    <Color x:Key="WindowBackgroundColor">#ffffff</Color>
+    
+    
     <SolidColorBrush x:Key="ButtonBackground" Color="#ffffff" />
     <SolidColorBrush x:Key="ButtonBackgroundHover" Color="#dddddd" />
     <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource AccentColor}" />

@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 
-namespace DH.MUI
+namespace DH.MUI.Common
 {
     /// <summary>
     /// Provides various common helper methods.

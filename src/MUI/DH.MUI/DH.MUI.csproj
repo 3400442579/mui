@@ -19,56 +19,97 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Styles\Base\ButtonBaseStyle.xaml">
+    <Page Update="Themes\MT.Calendar.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Styles\Basic\Converters.xaml">
+    <Page Update="Themes\MT.CheckBox.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Styles\Basic\Geometries.xaml">
+    <Page Update="Themes\MT.ComboBox.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Styles\Basic\Icons.xaml">
+    <Page Update="Themes\MT.ContextMenu.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Styles\Button.xaml">
+    <Page Update="Themes\MT.GridSplitter.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Styles\ModernUI.Dark.xaml">
+    <Page Update="Themes\MT.Hyperlink.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Styles\ModernUI.Light.xaml">
+    <Page Update="Themes\MT.Label.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Styles\ModernUI.xaml">
+    <Page Update="Themes\MT.ListBox.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Styles\TextBlock.xaml">
+    <Page Update="Themes\MT.ListView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\DropDownButton.xaml">
+    <Page Update="Themes\MT.MenuItem.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\MT.Button.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Converters.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Geometries.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Icons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\ModernUI.Dark.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\ModernUI.Light.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\ModernUI.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\MT.DropDownButton.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Themes\ModernButton.xaml">
+    <Page Update="Themes\MT.ModernButton.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\ModernWindow.xaml">
+    <Page Update="Themes\MT.Window.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\SplitButton.xaml">
+    <Page Update="Themes\MT.SplitButton.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\WindowCommands.xaml">
+    <Page Update="Themes\MT.WindowCommands.xaml">
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Themes\Styles\" />
+    <Page Update="Themes\MT.PasswordBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\MT.RadioButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\MT.Slider.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\MT.TextBlock.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\MT.TextBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\MT.ToolTip.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\MT.TreeView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

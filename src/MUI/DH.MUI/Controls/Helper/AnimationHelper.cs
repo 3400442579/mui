@@ -5,9 +5,9 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace DH.MUI.Controls.Helper
+namespace DH.MUI.Controls
 {
-    public class AnimationHelper
+    public static class AnimationHelper
     {
         /// <summary>
         ///     创建一个Thickness动画

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DH.MUI.Presentation
+namespace DH.MUI.Core
 {
     /// <summary>
     /// The command that relays its functionality by invoking delegates.

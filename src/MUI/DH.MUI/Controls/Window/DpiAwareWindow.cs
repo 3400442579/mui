@@ -1,4 +1,5 @@
-﻿using DH.MUI.Win32;
+﻿using DH.MUI.Common;
+using DH.MUI.Win32;
 using Microsoft.Win32;
 using System;
 using System.Runtime.InteropServices;

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace DH.MUI.Presentation
+namespace DH.MUI.Core
 {
     /// <summary>
     /// The base implementation of the INotifyPropertyChanged contract.

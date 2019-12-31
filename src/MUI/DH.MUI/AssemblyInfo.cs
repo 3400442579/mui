@@ -10,9 +10,9 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 
-[assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Presentation")]
+[assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Core")]
 [assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Controls")]
 [assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Converters")]
+[assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Common")]
 [assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Win32")]
-[assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI")]
 [assembly: XmlnsPrefix("http://dhmui.com/MUI", "mui")]

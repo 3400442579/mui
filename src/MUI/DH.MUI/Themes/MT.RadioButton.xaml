@@ -1,5 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:DH.MUI.Controls">
+    
     <Style x:Key="{x:Type RadioButton}" TargetType="{x:Type RadioButton}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Foreground" Value="{DynamicResource WindowText}" />
@@ -9,15 +11,15 @@
                     <Grid x:Name="LayoutRoot" Margin="{TemplateBinding Padding}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="4"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                       
-                        <Ellipse VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="CheckBorder" Width="16" Height="16"  Fill="{DynamicResource ButtonBackground}" Stroke="{DynamicResource ButtonBorder}" StrokeThickness="1"/>
-                        <Ellipse VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="CheckMark" Width="6" Height="6"  Fill="{TemplateBinding Foreground}" Visibility="Collapsed"/>
-                       
-                        <ContentPresenter Grid.Column="2"  Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" />
+                        <local:SimplePanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,4,0">
+                            <Ellipse VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="CheckBorder" Width="16" Height="16"  Fill="{DynamicResource ButtonBackground}" Stroke="{DynamicResource ButtonBorder}" StrokeThickness="1"/>
+                            <Ellipse VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="CheckMark" Width="6" Height="6"  Fill="{TemplateBinding Foreground}" Visibility="Collapsed"/>
+                        </local:SimplePanel>
+                        
+                        <ContentPresenter Grid.Column="1"  Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
@@ -44,4 +46,5 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
 </ResourceDictionary>

@@ -2,6 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:DH.MUI.Controls">
 
+
+
     <Style x:Key="ScrollBarBaseRepeatButton" TargetType="RepeatButton">
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -63,10 +65,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource SecondaryTextBrush}"/>
+                            <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource ScrollBarThumbBackgroundHover}"/>
                         </Trigger>
                         <Trigger Property="IsDragging" Value="true">
-                            <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource PrimaryTextBrush}"/>
+                            <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource ScrollBarThumbBackgroundDragging}"/>
                         </Trigger>
                         <EventTrigger RoutedEvent="MouseEnter">
                             <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
@@ -127,10 +129,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource SecondaryTextBrush}"/>
+                            <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource ScrollBarThumbBackgroundHover}"/>
                         </Trigger>
                         <Trigger Property="IsDragging" Value="true">
-                            <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource PrimaryTextBrush}"/>
+                            <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource ScrollBarThumbBackgroundDragging}"/>
                         </Trigger>
                         <EventTrigger RoutedEvent="MouseEnter">
                             <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
@@ -147,8 +149,8 @@
     <Style x:Key="ScrollBarBaseStyle" TargetType="ScrollBar">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
-        <Setter Property="Foreground" Value="{DynamicResource ThirdlyTextBrush}"/>
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource ScrollBarThumbBorder}"/>
+        <Setter Property="Background" Value="{DynamicResource ScrollBarBackground}"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Width" Value="8"/>
@@ -237,7 +239,7 @@
             <ScrollBar x:Name="PART_HorizontalScrollBar" Opacity="0" Style="{StaticResource ScrollBarBaseStyle}" AutomationProperties.AutomationId="HorizontalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Orientation="Horizontal" Grid.Row="1" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}"/>
         </Grid>
         <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding IsMouseOver,RelativeSource={RelativeSource Self}}" Value="True">
+            <DataTrigger Binding="{Binding Path=IsMouseOver,RelativeSource={RelativeSource Self}}" Value="True">
                 <DataTrigger.EnterActions>
                     <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
                 </DataTrigger.EnterActions>
@@ -254,6 +256,61 @@
         <Setter Property="Template" Value="{StaticResource ScrollViewerNativeBaseControlTemplate}"/>
     </Style>
 
+   
+    <!--有上现箭头的-->
+    <Style x:Key="ScrollViewerUpDownRepeatButtonStyle" BasedOn="{StaticResource RepeatButtonIcon}" TargetType="RepeatButton">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Height" Value="10"/>
+        <Setter Property="Padding" Value="0,2"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+        <Setter Property="Visibility">
+            <Setter.Value>
+                <MultiBinding FallbackValue="Visibility.Collapsed" Converter="{StaticResource MenuScrollingVisibilityConverter}" ConverterParameter="0">
+                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ComputedVerticalScrollBarVisibility" />
+                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="VerticalOffset" />
+                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ExtentHeight" />
+                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ViewportHeight" />
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="ScrollViewerUpDownControlTemplate" TargetType="ScrollViewer">
+        <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <RepeatButton Style="{StaticResource ScrollViewerUpDownRepeatButtonStyle}" 
+                          CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" 
+                          Command="{x:Static ScrollBar.LineUpCommand}"/>
+            <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" 
+                                    CanContentScroll="{TemplateBinding CanContentScroll}" 
+                                    CanHorizontallyScroll="False" 
+                                    CanVerticallyScroll="False" 
+                                    ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                    Content="{TemplateBinding Content}" 
+                                    Grid.Column="0" 
+                                    Margin="{TemplateBinding Padding}"
+                                    Grid.Row="1"/>
+            <RepeatButton Style="{StaticResource ScrollViewerUpDownRepeatButtonStyle}"
+                          CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" 
+                          Grid.Row="2" 
+                          Command="{x:Static ScrollBar.LineDownCommand}"/>
+        </Grid>
+    </ControlTemplate>
+
+    <Style x:Key="ScrollViewerUpDown" TargetType="ScrollViewer">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template" Value="{StaticResource ScrollViewerUpDownControlTemplate}"/>
+    </Style>
+
+
+
+
+    <!--自定义的-->
     <ControlTemplate x:Key="ScrollViewerBaseControlTemplate" TargetType="controls:ScrollViewer">
         <ControlTemplate.Resources>
             <Storyboard x:Key="Storyboard1">
@@ -303,5 +360,11 @@
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Template" Value="{StaticResource ScrollViewerBaseControlTemplate}"/>
     </Style>
+
+
+    <!--default style-->
+    <Style BasedOn="{StaticResource ScrollViewerNativeBaseStyle}" TargetType="ScrollViewer"/>
+
+    <Style BasedOn="{StaticResource ScrollViewerBaseStyle}" TargetType="controls:ScrollViewer"/>
 
 </ResourceDictionary>

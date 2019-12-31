@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using DH.MUI.Controls.Helper;
 
 namespace DH.MUI.Controls
 {

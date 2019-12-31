@@ -1,4 +1,4 @@
-﻿namespace DH.MUI
+﻿namespace DH.MUI.Common
 {
     internal class AppName
     {

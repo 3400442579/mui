@@ -3,9 +3,9 @@
                     xmlns:controls="clr-namespace:DH.MUI.Controls">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/DH.MUI;component/Styles/Basic/Converters.xaml" />
-        <ResourceDictionary Source="/DH.MUI;component/Styles/Base/ButtonBaseStyle.xaml" />
-        <ResourceDictionary Source="/DH.MUI;component/Styles/TextBlock.xaml" />
+        <ResourceDictionary Source="Converters.xaml" />
+        <ResourceDictionary Source="MT.Button.xaml" />
+        <ResourceDictionary Source="MT.TextBlock.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace DH.MUI.Presentation
+namespace DH.MUI.Core
 {
     /// <summary>
     /// Manages the theme, font size and accent colors for a Modern UI application.

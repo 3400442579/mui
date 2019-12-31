@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DH.MUI.Presentation
+namespace DH.MUI.Core
 {
     /// <summary>
     /// Identifies the available font size.

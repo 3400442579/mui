@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace DH.MUI.Presentation
+namespace DH.MUI.Core
 {
     /// <summary>
     /// The base implementation of a command.

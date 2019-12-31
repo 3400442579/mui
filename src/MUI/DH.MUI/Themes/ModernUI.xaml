@@ -3,33 +3,33 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Localization/StringResources.zh.xaml" />
+        <ResourceDictionary Source="../Localization/StringResources.zh.xaml" />
         
-        <ResourceDictionary Source="Button.xaml" />
-        <ResourceDictionary Source="TextBlock.xaml" />
-        <ResourceDictionary Source="Calendar.xaml" />
-        <ResourceDictionary Source="CheckBox.xaml" />
-        <ResourceDictionary Source="ComboBox.xaml" />
-        <ResourceDictionary Source="ContextMenu.xaml" />
+        <ResourceDictionary Source="MT.Button.xaml" />
+        <ResourceDictionary Source="MT.TextBlock.xaml" />
+        <ResourceDictionary Source="MT.Calendar.xaml" />
+        <ResourceDictionary Source="MT.CheckBox.xaml" />
+        <ResourceDictionary Source="MT.ComboBox.xaml" />
+        <ResourceDictionary Source="MT.ContextMenu.xaml" />
         <!--<ResourceDictionary Source="DataGrid.xaml" />
         <ResourceDictionary Source="DatePicker.xaml" />-->
-        <ResourceDictionary Source="GridSplitter.xaml" />
-        <ResourceDictionary Source="Hyperlink.xaml" />
-        <ResourceDictionary Source="Label.xaml" />
-        <ResourceDictionary Source="ListBox.xaml" />
-        <ResourceDictionary Source="ListView.xaml" />
+        <ResourceDictionary Source="MT.GridSplitter.xaml" />
+        <ResourceDictionary Source="MT.Hyperlink.xaml" />
+        <ResourceDictionary Source="MT.Label.xaml" />
+        <ResourceDictionary Source="MT.ListBox.xaml" />
+        <ResourceDictionary Source="MT.ListView.xaml" />
         <!--<ResourceDictionary Source="ModernProgressRingStyles.xaml" />
         <ResourceDictionary Source="ModernWindowStyles.xaml" />-->
-        <ResourceDictionary Source="MenuItem.xaml" />
-        <ResourceDictionary Source="PasswordBox.xaml" />
+        <ResourceDictionary Source="MT.MenuItem.xaml" />
+        <ResourceDictionary Source="MT.PasswordBox.xaml" />
         <!--<ResourceDictionary Source="ProgressBar.xaml" />-->
-        <ResourceDictionary Source="RadioButton.xaml" />
-        <ResourceDictionary Source="ScrollViewer.xaml" />
-        <ResourceDictionary Source="Slider.xaml" />
-        <ResourceDictionary Source="TextBlock.xaml" />
-        <ResourceDictionary Source="TextBox.xaml" />
-        <ResourceDictionary Source="ToolTip.xaml" />
-        <ResourceDictionary Source="TreeView.xaml" />
+        <ResourceDictionary Source="MT.RadioButton.xaml" />
+        <ResourceDictionary Source="MT.ScrollViewer.xaml" />
+        <ResourceDictionary Source="MT.Slider.xaml" />
+        <ResourceDictionary Source="MT.TextBlock.xaml" />
+        <ResourceDictionary Source="MT.TextBox.xaml" />
+        <ResourceDictionary Source="MT.ToolTip.xaml" />
+        <ResourceDictionary Source="MT.TreeView.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- default accent colors and brushes -->

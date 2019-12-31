@@ -8,3 +8,6 @@ dotnet_diagnostic.CA2208.severity = none
 
 # CA1303: 请不要将文本作为本地化参数传递
 dotnet_diagnostic.CA1303.severity = none
+
+# WPF0102: Name of the event should match registered name.
+dotnet_diagnostic.WPF0102.severity = none
