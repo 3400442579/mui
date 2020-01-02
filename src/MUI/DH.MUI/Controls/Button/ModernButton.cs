@@ -19,7 +19,7 @@ namespace DH.MUI.Controls
         }
 
         /// <summary>Identifies the <see cref="Icon"/> dependency property.</summary>
-        public static readonly DependencyProperty IconProperty = DependencyProperty.Register(nameof(Icon), typeof(Canvas), typeof(ModernButton));
+        public static readonly DependencyProperty IconProperty = DependencyProperty.Register(nameof(Icon), typeof(PackIcon), typeof(ModernButton));
 
         /// <summary>
         /// Gets or sets the icon path data.
@@ -27,9 +27,9 @@ namespace DH.MUI.Controls
         /// <value>
         /// The icon path data.
         /// </value>
-        public Canvas Icon
+        public PackIcon Icon
         {
-            get { return (Canvas)GetValue(IconProperty); }
+            get { return (PackIcon)GetValue(IconProperty); }
             set { SetValue(IconProperty, value); }
         }
 

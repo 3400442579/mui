@@ -1,11 +1,11 @@
-﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:DH.MUI.Controls">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:DH.MUI.Controls">
 
 
     <ControlTemplate x:Key="MahApps.Templates.Button.WindowCommands" TargetType="{x:Type Button}">
         <Grid Background="{TemplateBinding Background}">
+            
             <controls:ContentControlEx x:Name="PART_ContentControlEx"
                                        Padding="{TemplateBinding Padding}"
                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -60,7 +60,7 @@
         <Setter Property="Template" Value="{StaticResource MahApps.Templates.Button.WindowCommands}" />
     </Style>
 
-    <!--<Style x:Key="MahApps.Styles.ToggleButton.WindowCommands"
+    <Style x:Key="MahApps.Styles.ToggleButton.WindowCommands"
            BasedOn="{StaticResource MahApps.Styles.Control.WindowCommands}"
            TargetType="{x:Type ToggleButton}">
         <Setter Property="Template" Value="{StaticResource MahApps.Templates.ToggleButton.WindowCommands}" />
@@ -182,7 +182,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>-->
+    </Style>
 
     <ControlTemplate x:Key="MahApps.Templates.WindowCommands" TargetType="controls:WindowCommands">
         <DockPanel>
@@ -236,6 +236,7 @@
                     <StackPanel HorizontalAlignment="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:WindowCommandsItem}}, Path=ParentWindowCommands.HorizontalContentAlignment, Mode=OneWay}"
                                 VerticalAlignment="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:WindowCommandsItem}}, Path=ParentWindowCommands.VerticalContentAlignment, Mode=OneWay}"
                                 Orientation="Horizontal">
+                        
                         <ContentPresenter x:Name="PART_ContentPresenter"
                                           Margin="{TemplateBinding Padding}"
                                           Content="{TemplateBinding Content}"
@@ -243,6 +244,7 @@
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
                                           ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        
                         <Rectangle x:Name="PART_Separator"
                                    Width="1"
                                    Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:WindowCommandsItem}}, Path=ParentWindowCommands.SeparatorHeight, Mode=OneWay}"
@@ -251,6 +253,7 @@
                                    Opacity="0.25"
                                    SnapsToDevicePixels="True"
                                    UseLayoutRounding="True" />
+                        
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSeparatorVisible" Value="False">
@@ -266,9 +269,9 @@
         <Style.Resources>
             <ResourceDictionary>
                 <Style BasedOn="{StaticResource MahApps.Styles.Button.WindowCommands}" TargetType="{x:Type Button}" />
-                <!--<Style BasedOn="{StaticResource MahApps.Styles.ToggleButton.WindowCommands}" TargetType="{x:Type ToggleButton}" />
+                <Style BasedOn="{StaticResource MahApps.Styles.ToggleButton.WindowCommands}" TargetType="{x:Type ToggleButton}" />
                 <Style BasedOn="{StaticResource MahApps.Styles.SplitButton.WindowCommands}" TargetType="{x:Type controls:SplitButton}" />
-                <Style BasedOn="{StaticResource MahApps.Styles.DropDownButton.WindowCommands}" TargetType="{x:Type controls:DropDownButton}" />-->
+                <Style BasedOn="{StaticResource MahApps.Styles.DropDownButton.WindowCommands}" TargetType="{x:Type controls:DropDownButton}" />
             </ResourceDictionary>
         </Style.Resources>
         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.TransparentWhite}" />
@@ -279,6 +282,7 @@
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template" Value="{StaticResource MahApps.Templates.WindowCommands}" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
     </Style>
 
     <Style x:Key="MahApps.Styles.WindowCommands"

@@ -26,14 +26,14 @@
                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                     Margin="{TemplateBinding Padding}"
                                     Orientation="Horizontal">
-                            <Viewbox Width="{TemplateBinding IconWidth}" VerticalAlignment="Center" >
-                                <ContentPresenter HorizontalAlignment="Left"
-                                                  VerticalAlignment="Center"
-                                                  Content="{TemplateBinding Icon}"
-                                                  Focusable="False"
-                                                  RecognizesAccessKey="True"
-                                                  UseLayoutRounding="False" />    
-                            </Viewbox>
+                            
+                            <ContentPresenter HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"
+                                              Content="{TemplateBinding Icon}"
+                                              Focusable="False"
+                                              RecognizesAccessKey="True"
+                                              UseLayoutRounding="True" />    
+                           
                             <ContentPresenter x:Name="PART_ButtonContent"
                                               VerticalAlignment="Center"
                                               Content="{TemplateBinding Content}"
