@@ -11,3 +11,6 @@ dotnet_diagnostic.CA1303.severity = none
 
 # WPF0102: Name of the event should match registered name.
 dotnet_diagnostic.WPF0102.severity = none
+
+# WPF0016: Default value is shared reference type.
+dotnet_diagnostic.WPF0016.severity = none

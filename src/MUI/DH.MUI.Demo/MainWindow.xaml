@@ -30,11 +30,13 @@
                     <StackPanel Orientation="Horizontal">
                         
                         <StackPanel>
-                        <Button  VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <mui:Ripple Focusable="False">
-                                <TextBlock Text="aaa"></TextBlock>
-                            </mui:Ripple>
-                        </Button>
+                            
+                            <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedLightButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedDarkButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedAccentButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+
 
                             <mui:ModernButton BorderThickness="1"   Content="测试"  Background="Green">
                                 <mui:ModernButton.Icon>
@@ -91,7 +93,7 @@
                                 <mui:PackIcon  Kind="AccessPoint"  />
                             </ToggleButton>
                             <ToggleButton Width="48" Height="48" Padding="0">
-                                <mui:PackIcon Kind="Battery"/>
+                                <mui:PackIcon Kind="AccountBadge"/>
                             </ToggleButton>
                         </StackPanel>
 
@@ -127,7 +129,10 @@
                                 <mui:PackIcon Kind="Babel"></mui:PackIcon>
                             </ComboBoxItem>
                         </ComboBox>
-                        
+
+                        <ProgressBar Value="50" />
+
+                        <ProgressBar Height="100" Width="100" IsIndeterminate="True" Value="90" Style="{StaticResource CircularProgressBar}" />
                         
                     </StackPanel>
                 </TabItem>

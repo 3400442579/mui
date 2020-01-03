@@ -258,7 +258,7 @@
 
    
     <!--有上现箭头的-->
-    <Style x:Key="ScrollViewerUpDownRepeatButtonStyle" BasedOn="{StaticResource RepeatButtonIcon}" TargetType="RepeatButton">
+    <!--<Style x:Key="ScrollViewerUpDownRepeatButtonStyle" BasedOn="{StaticResource RepeatButtonIcon}" TargetType="RepeatButton">
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="Height" Value="10"/>
         <Setter Property="Padding" Value="0,2"/>
@@ -305,7 +305,7 @@
         <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Template" Value="{StaticResource ScrollViewerUpDownControlTemplate}"/>
-    </Style>
+    </Style>-->
 
 
 

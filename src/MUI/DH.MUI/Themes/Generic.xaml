@@ -6,6 +6,7 @@
     <ResourceDictionary.MergedDictionaries>
         
         <ResourceDictionary Source="/DH.MUI;component/Themes/MT.Window.xaml" />
+        
         <ResourceDictionary Source="/DH.MUI;component/Themes/MT.ModernButton.xaml" />
         <ResourceDictionary Source="/DH.MUI;component/Themes/MT.SplitButton.xaml" />
         <ResourceDictionary Source="/DH.MUI;component/Themes/MT.DropDownButton.xaml" />
@@ -15,7 +16,6 @@
         <ResourceDictionary Source="/DH.MUI;component/Themes/MT.Ripple.xaml" />
         <ResourceDictionary Source="/DH.MUI;component/Themes/MT.PackIcon.xaml" />
         <ResourceDictionary Source="/DH.MUI;component/Themes/MT.ContentControlEx.xaml" />
-        
     </ResourceDictionary.MergedDictionaries>
 
     <Style BasedOn="{StaticResource MahApps.Styles.WindowCommandsItem}" TargetType="{x:Type local:WindowCommandsItem}" />

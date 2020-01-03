@@ -22,7 +22,7 @@
         <ResourceDictionary Source="ModernWindowStyles.xaml" />-->
         <ResourceDictionary Source="MT.MenuItem.xaml" />
         <ResourceDictionary Source="MT.PasswordBox.xaml" />
-        <!--<ResourceDictionary Source="ProgressBar.xaml" />-->
+        <ResourceDictionary Source="MT.ProgressBar.xaml" />
         <ResourceDictionary Source="MT.RadioButton.xaml" />
         <ResourceDictionary Source="MT.ScrollViewer.xaml" />
         <ResourceDictionary Source="MT.Slider.xaml" />
@@ -37,7 +37,7 @@
     <SolidColorBrush x:Key="Accent" Color="{DynamicResource AccentColor}" />
 
     <!-- font settings -->
-    <FontFamily x:Key="DefaultFontFamily">Segoe UI</FontFamily>
+    <FontFamily x:Key="DefaultFontFamily">Microsoft YaHei</FontFamily>
     <sys:Double x:Key="DefaultFontSize">13</sys:Double>
 
     <FontFamily x:Key="FixedFontFamily">Consolas</FontFamily>
@@ -66,4 +66,5 @@
     <Style x:Key="ContentRoot" TargetType="FrameworkElement">
         <Setter Property="Margin" Value="{StaticResource ContentMargin}" />
     </Style>
+    
 </ResourceDictionary>

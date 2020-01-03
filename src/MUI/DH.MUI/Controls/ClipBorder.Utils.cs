@@ -528,9 +528,7 @@ namespace DH.MUI.Controls
             }
 
             // Are both instances of ImageBrush
-            var imgBrushA = brush as ImageBrush;
-            var imgBrushB = otherBrush as ImageBrush;
-            if ((imgBrushA != null) && (imgBrushB != null))
+            if ((brush is ImageBrush imgBrushA) && (otherBrush is ImageBrush imgBrushB))
             {
                 var result = (imgBrushA.AlignmentX == imgBrushB.AlignmentX)
                               && (imgBrushA.AlignmentY == imgBrushB.AlignmentY)
