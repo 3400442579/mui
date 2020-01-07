@@ -7,12 +7,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MUI", "MUI", "{C5E311D4-9D1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DH.MUI", "src\mui\DH.MUI\DH.MUI.csproj", "{ABC61281-B99F-4763-B718-8CEFFDA54513}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{23375A52-9A24-4697-9138-1837A5A4E52D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Solution Items", "01 Solution Items", "{23375A52-9A24-4697-9138-1837A5A4E52D}"
 	ProjectSection(SolutionItems) = preProject
 		src\MUI\Directory.Build.Props = src\MUI\Directory.Build.Props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DH.MUI.Demo", "src\mui\DH.MUI.Demo\DH.MUI.Demo.csproj", "{5FF652F0-90BC-42A8-A102-6A34C1DF275D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZipExtractor", "src\ZipExtractor\ZipExtractor.csproj", "{88499B0B-A3AD-4E87-91D5-9A7643A6E86A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +30,10 @@ Global
 		{5FF652F0-90BC-42A8-A102-6A34C1DF275D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FF652F0-90BC-42A8-A102-6A34C1DF275D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FF652F0-90BC-42A8-A102-6A34C1DF275D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88499B0B-A3AD-4E87-91D5-9A7643A6E86A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88499B0B-A3AD-4E87-91D5-9A7643A6E86A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88499B0B-A3AD-4E87-91D5-9A7643A6E86A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88499B0B-A3AD-4E87-91D5-9A7643A6E86A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

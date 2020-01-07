@@ -1,0 +1,29 @@
+﻿<Window x:Class="ZipExtractor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowStyle="None" 
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Title="应用更新"
+        Style="{StaticResource win}"
+        ResizeMode="NoResize"
+        Closing="Window_Closing" 
+        Loaded="Window_Loaded"
+        SizeToContent="WidthAndHeight"
+        Margin="20,0,20,20" 
+        Background="Black">
+
+    <Grid Background="Black">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="labelInformation" Text="提取文件" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <ProgressBar x:Name="progressBar"  Grid.Row="1" Height="8"  MinHeight="8"
+                      Foreground="Green" Value="50" Background="White"/>
+    </Grid>
+</Window>
