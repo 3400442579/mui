@@ -16,6 +16,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DH.MUI.Demo", "src\mui\DH.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZipExtractor", "src\ZipExtractor\ZipExtractor.csproj", "{88499B0B-A3AD-4E87-91D5-9A7643A6E86A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Update", "Update", "{6A641FFE-C500-46F6-8144-3AF6E0E0E131}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{ABC61281-B99F-4763-B718-8CEFFDA54513} = {C5E311D4-9D15-4EA8-ABC6-5F4E42B7BA63}
 		{5FF652F0-90BC-42A8-A102-6A34C1DF275D} = {C5E311D4-9D15-4EA8-ABC6-5F4E42B7BA63}
+		{88499B0B-A3AD-4E87-91D5-9A7643A6E86A} = {6A641FFE-C500-46F6-8144-3AF6E0E0E131}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D836878-10E2-4135-9270-FFCC8ADAB0FB}

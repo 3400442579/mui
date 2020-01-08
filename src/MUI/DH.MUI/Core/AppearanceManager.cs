@@ -14,11 +14,11 @@ namespace DH.MUI.Core
         /// <summary>
         /// The location of the dark theme resource dictionary.
         /// </summary>
-        public static readonly Uri DarkThemeSource = new Uri("/DH.MUI;component/Themes/MUI.Dark.xaml", UriKind.Relative);
+        public static readonly Uri DarkThemeSource = new Uri("/DH.MUI;component/Themes/ModernUI.Dark.xaml", UriKind.Relative);
         /// <summary>
         /// The location of the light theme resource dictionary.
         /// </summary>
-        public static readonly Uri LightThemeSource = new Uri("/DH.MUI;component/Themes/MUI.Light.xaml", UriKind.Relative);
+        public static readonly Uri LightThemeSource = new Uri("/DH.MUI;component/Themes/ModernUI.Light.xaml", UriKind.Relative);
 
         /// <summary>
         /// The resource key for the accent color.

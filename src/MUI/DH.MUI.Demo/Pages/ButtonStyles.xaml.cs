@@ -1,6 +1,4 @@
-﻿using DH.MUI.Controls;
-using DH.MUI.Demo.Pages;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,22 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DH.MUI.Demo
+namespace DH.MUI.Demo.Pages
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// ButtonStyles.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : ModernWindow
+    public partial class ButtonStyles : UserControl
     {
-        public MainWindow()
+        public ButtonStyles()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            SettingsAppearance settingsAppearance = new SettingsAppearance();
-            settingsAppearance.ShowDialog();
         }
     }
 }

@@ -6,113 +6,28 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   mc:Ignorable="d" Icon="/icon.ico" Margin="1,0,1,5"
                   xmlns:models="clr-namespace:DH.MUI.Demo.Models"
+                  xmlns:pages="clr-namespace:DH.MUI.Demo.Pages"
                   Title="MainWindow" Height="450" Width="800" >
     
     <mui:ModernWindow.RightWindowCommands>
         <mui:WindowCommands ShowLastSeparator="False" ShowSeparators="False">
             <Button Content="abb" Background="Transparent"/>
             <Button Content="aa" Background="Transparent"/>
-            <Button Content="dd" Background="Transparent"/>
+            <Button Content="设置" Background="Transparent" Click="Button_Click" />
         </mui:WindowCommands>
     </mui:ModernWindow.RightWindowCommands>
 
     <ScrollViewer >
     
-    <Grid Focusable="False" FocusVisualStyle="{x:Null}" HorizontalAlignment="Left">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-
-            <TabControl>
-                
-                <TabItem Header="Button">
-                    <StackPanel Orientation="Horizontal">
-                        
-                        <StackPanel>
-                            
-                            <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedLightButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedDarkButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedAccentButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    <Grid Margin="20,0,20,0">
 
 
-
-                            <mui:ModernButton BorderThickness="1"   Content="测试"  Background="Green">
-                                <mui:ModernButton.Icon>
-                                    <mui:PackIcon Kind="Account" />
-                                </mui:ModernButton.Icon>
-                            </mui:ModernButton>
-
-                            <mui:DropDownButton DisplayMemberPath="Title"
-                                ItemsSource="{Binding Albums}">
-                            <mui:DropDownButton.Icon>
-                                <Image Margin="6" Source="/icon.ico"  Width="14"/>
-                            </mui:DropDownButton.Icon>
-                        </mui:DropDownButton>
-                        <mui:SplitButton Margin="5" Background="Gray"
-                            HorizontalContentAlignment="Left"
-                            DisplayMemberPath="Name"
-                            ItemsSource="{Binding Source={x:Static models:SampleData.Artists}}"
-                            SelectedIndex="2">
-                            <mui:SplitButton.Icon>
-                                <Image Margin="6" Source="/icon.ico"  Width="18"/>
-                            </mui:SplitButton.Icon>
-                        </mui:SplitButton>
-
-                        </StackPanel>
-
-                        <StackPanel>
-                            <RadioButton Content="E_nabled"  GroupName="1" />
-                            <RadioButton Content="Enabled"  GroupName="1"  IsChecked="True" />
-                            <RadioButton Content="Disabled" GroupName="2" IsEnabled="False" />
-                            <RadioButton Content="Disabled"  GroupName="2" IsChecked="True" IsEnabled="False" />
-                        </StackPanel>
-                        <StackPanel>
-                            <CheckBox Content="_Enabled" />
-                            <CheckBox Content="Enabled" IsChecked="True" />
-                            <CheckBox Content="Enabled" IsChecked="{x:Null}" IsThreeState="True" />
-                            <CheckBox Content="Disabled" IsEnabled="False" />
-                            <CheckBox Content="Disabled"
-                                       IsChecked="True"
-                                       IsEnabled="False" />
-                            <CheckBox  Content="Disabled"
-                                       IsChecked="{x:Null}"
-                                       IsEnabled="False"
-                                       IsThreeState="True" />
-                        </StackPanel>
-
-                        <StackPanel >
-                            <ToggleButton Width="48" Height="48" Padding="0" >
-                                <mui:PackIcon Padding="0"  Icon="M4.93,4.93C3.12,6.74 2,9.24 2,12C2,14.76 3.12,17.26 4.93,19.07L6.34,17.66C4.89,16.22 4,14.22 4,12C4,9.79 4.89,7.78 6.34,6.34L4.93,4.93M19.07,4.93L17.66,6.34C19.11,7.78 20,9.79 20,12C20,14.22 19.11,16.22 17.66,17.66L19.07,19.07C20.88,17.26 22,14.76 22,12C22,9.24 20.88,6.74 19.07,4.93M7.76,7.76C6.67,8.85 6,10.35 6,12C6,13.65 6.67,15.15 7.76,16.24L9.17,14.83C8.45,14.11 8,13.11 8,12C8,10.89 8.45,9.89 9.17,9.17L7.76,7.76M16.24,7.76L14.83,9.17C15.55,9.89 16,10.89 16,12C16,13.11 15.55,14.11 14.83,14.83L16.24,16.24C17.33,15.15 18,13.65 18,12C18,10.35 17.33,8.85 16.24,7.76M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10Z"/>
-                            </ToggleButton>
-                            <ToggleButton Width="48" Height="48" Padding="0">
-                                <mui:PackIcon Kind="Account"/>
-                            </ToggleButton>
-                            <ToggleButton Width="48" Height="48" Padding="0">
-                                <mui:PackIcon  Kind="AccessPoint"  />
-                            </ToggleButton>
-                            <ToggleButton Width="48" Height="48" Padding="0">
-                                <mui:PackIcon Kind="AccountBadge"/>
-                            </ToggleButton>
-                        </StackPanel>
-
-                        <StackPanel>
-                            <StackPanel.Resources>
-                                <BooleanToVisibilityConverter x:Key="btv" />
-                            </StackPanel.Resources>
-
-                            <ToggleButton IsEnabled="{Binding ElementName=enabledSwitch, Path=IsChecked}"
-                             Visibility="{Binding ElementName=visibleSwitch, Path=IsChecked, Converter={StaticResource btv}}" />
-
-                            <ToggleButton IsChecked="True" IsEnabled="False"/>
-                            <ToggleButton IsChecked="False" IsEnabled="False" />
-                            <ToggleButton IsChecked="False" IsEnabled="False" />
-                            <ToggleButton IsChecked="False" IsEnabled="False" />
-                            <ToggleButton IsChecked="False" IsEnabled="False" />
-                            <ToggleButton IsChecked="False" IsEnabled="False" />
-                        </StackPanel>
-                    </StackPanel>
+            <TabControl BorderThickness="0" Background="Transparent">
+                <TabItem Header="Button" >
+                    <pages:ButtonStyles/>
+                </TabItem>
+                <TabItem Header="Text">
+                    <pages:TextStyles/>
                 </TabItem>
 
                 <TabItem Header="From">
