@@ -2,7 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Color x:Key="WindowBackgroundColor">#252526</Color>
+
+    <Color x:Key="BgColor">#333333</Color>
+    <Color x:Key="BgHoverColor" >#3e3e42</Color>
+    <DynamicResource x:Key="BgPressedColor" ResourceKey="AccentColor"/>
     
+    <Color x:Key="BorderColor" >#333333</Color>
+    <Color x:Key="BorderHoverColor">#3e3e42</Color>
+    <DynamicResource x:Key="BorderPressedColor" ResourceKey="AccentColor"/>
+    
+    <Color x:Key="TextColor">#d1d1d1</Color>
+    <Color x:Key="TextHoverColor" >#d1d1d1</Color>
+    <Color x:Key="TextPressedColor">#d1d1d1</Color>
+    <Color x:Key="TextDisabledColor">#515151</Color>
+
     <SolidColorBrush x:Key="ButtonBackground" Color="#333333" />
     <SolidColorBrush x:Key="ButtonBackgroundHover" Color="#3e3e42" />
     <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource AccentColor}" />

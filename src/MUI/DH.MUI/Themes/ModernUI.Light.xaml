@@ -3,6 +3,7 @@
 
 
     <Color x:Key="WindowBackgroundColor">#ffffff</Color>
+    <Color x:Key="TextColor">#ffffff</Color>
     
     
     <SolidColorBrush x:Key="ButtonBackground" Color="#ffffff" />
