@@ -20,14 +20,24 @@ namespace DH.MUI.Core
         /// </summary>
         public static readonly Uri LightThemeSource = new Uri("/DH.MUI;component/Themes/ModernUI.Light.xaml", UriKind.Relative);
 
+
         /// <summary>
         /// The resource key for the accent color.
         /// </summary>
         public const string KeyAccentColor = "AccentColor";
+        public const string KeyAccentColor2 = "AccentColor2";
+        public const string KeyAccentColor3 = "AccentColor3";
+        public const string KeyAccentColor4 = "AccentColor4";
         /// <summary>
         /// The resource key for the accent brush.
         /// </summary>
         public const string KeyAccent = "Accent";
+        public const string KeyAccent2 = "Accent2";
+        public const string KeyAccent3 = "Accent3";
+        public const string KeyAccent4 = "Accent4";
+
+
+
         /// <summary>
         /// The resource key for the default font size.
         /// </summary>
@@ -107,15 +117,20 @@ namespace DH.MUI.Core
             var themeDict = new ResourceDictionary { Source = source };
 
             // if theme defines an accent color, use it
-            var accentColor = themeDict[KeyAccentColor] as Color?;
-            if (accentColor.HasValue) {
-                // remove from the theme dictionary and apply globally if useThemeAccentColor is true
-                themeDict.Remove(KeyAccentColor);
+            //var accentColor = themeDict[KeyAccentColor] as Color?;
+            //if (accentColor.HasValue) {
+            //    // remove from the theme dictionary and apply globally if useThemeAccentColor is true
+            //    themeDict.Remove(KeyAccentColor);
 
-                if (useThemeAccentColor) {
-                    ApplyAccentColor(accentColor.Value);
-                }
-            }
+            //    if (useThemeAccentColor) {
+            //        ApplyAccentColor(accentColor.Value);
+            //    }
+            //}
+            UpdateAccentColor(KeyAccentColor, themeDict, useThemeAccentColor);
+            UpdateAccentColor(KeyAccentColor2, themeDict, useThemeAccentColor);
+            UpdateAccentColor(KeyAccentColor3, themeDict, useThemeAccentColor);
+            UpdateAccentColor(KeyAccentColor4, themeDict, useThemeAccentColor);
+
 
             // add new before removing old theme to avoid dynamicresource not found warnings
             dictionaries.Add(themeDict);
@@ -127,12 +142,27 @@ namespace DH.MUI.Core
 
             OnPropertyChanged(nameof(ThemeSource));
         }
+        private void UpdateAccentColor(string KeyAccentColor, ResourceDictionary themeDict,bool useThemeAccentColor) {
+            var accentColor = themeDict[KeyAccentColor] as Color?;
+            if (accentColor.HasValue)
+            {
+                // remove from the theme dictionary and apply globally if useThemeAccentColor is true
+                themeDict.Remove(KeyAccentColor);
+                if (useThemeAccentColor)
+                {
+                    //ApplyAccentColor(accentColor.Value);
+                    Application.Current.Resources[KeyAccentColor] = accentColor.Value;
+                   // Application.Current.Resources[KeyAccentColor.Replace("Color", "")] = new SolidColorBrush(accentColor.Value);
+                }
+            }
+
+        }
 
         private static void ApplyAccentColor(Color accentColor)
         {
             // set accent color and brush resources
             Application.Current.Resources[KeyAccentColor] = accentColor;
-            Application.Current.Resources[KeyAccent] = new SolidColorBrush(accentColor);
+            //Application.Current.Resources[KeyAccent] = new SolidColorBrush(accentColor);
         }
 
         private static FontSize GetFontSize()
