@@ -14,7 +14,8 @@
                 <TextBlock Text="BUTTON" Style="{StaticResource Heading2}" Margin="0,0,0,8" />
                 <StackPanel HorizontalAlignment="Left" Width="140">
                     <Button Content="standard button" Margin="0,0,0,8" />
-                    <Button Content="disabled button" IsEnabled="False" Margin="0,0,0,32" />
+                    <Button Content="disabled button" Style="{DynamicResource AccentButton}" Margin="0,0,0,32" />
+                    <Button Content="disabled button" IsEnabled="False" Style="{DynamicResource AccentButton}" Margin="0,0,0,32" />
                 </StackPanel>
 
                 <TextBlock Text="CHECKBOX" Style="{StaticResource Heading2}" Margin="0,0,0,8"/>

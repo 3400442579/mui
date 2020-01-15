@@ -66,23 +66,9 @@
     </Style>
 
 
-    
-    
 
 
-    <Style x:Key="AlertButton" TargetType="ButtonBase" BasedOn="{StaticResource SystemButtonBase}">
-        <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Margin" Value="8"/>
-        <Setter Property="Padding" Value="4"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Opacity" Value=".7" />
-            </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Opacity" Value=".4" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
+    
 
    
   
@@ -146,7 +132,57 @@
            BasedOn="{StaticResource BaseButtonStyle}"
            TargetType="{x:Type Button}"/>
 
-
+    <Style x:Key="AccentButton" TargetType="ButtonBase" >
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="8"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="{DynamicResource Accent}"/>
+        <Setter Property="local:RippleAssist.Feedback" Value="{DynamicResource Accent}" />
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template" >
+            <Setter.Value>
+                <ControlTemplate TargetType="ButtonBase">
+                    <Border Name="Chrome"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+                        <local:Ripple Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Focusable="False"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Padding="{TemplateBinding Padding}"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                            <local:Ripple.Clip>
+                                <MultiBinding Converter="{x:Static converters:BorderClipConverter.Default}">
+                                    <Binding ElementName="border" Path="ActualWidth" />
+                                    <Binding ElementName="border" Path="ActualHeight" />
+                                    <Binding ElementName="border" Path="CornerRadius" />
+                                    <Binding ElementName="border" Path="BorderThickness" />
+                                </MultiBinding>
+                            </local:Ripple.Clip>
+                        </local:Ripple>
+                       
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" Value="{DynamicResource Accent4}" />
+                            <Setter Property="Foreground" Value="{DynamicResource ButtonTextDisabled}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource Accent2}" />
+                            <!--<Setter Property="Foreground" Value="{DynamicResource ButtonTextHover}"/>-->
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource Accent3}" />
+                            <!--<Setter Property="Foreground" Value="{DynamicResource ButtonTextPressed}"/>-->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+         
+    </Style>
 
 
     <Style x:Key="FocusVisual">

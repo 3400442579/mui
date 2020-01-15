@@ -25,9 +25,9 @@ namespace DH.MUI.Core
         /// The resource key for the accent color.
         /// </summary>
         public const string KeyAccentColor = "AccentColor";
-        public const string KeyAccentColor2 = "AccentColor2";
-        public const string KeyAccentColor3 = "AccentColor3";
-        public const string KeyAccentColor4 = "AccentColor4";
+        //public const string KeyAccentColor2 = "AccentColor2";
+        //public const string KeyAccentColor3 = "AccentColor3";
+        //public const string KeyAccentColor4 = "AccentColor4";
         /// <summary>
         /// The resource key for the accent brush.
         /// </summary>
@@ -108,7 +108,8 @@ namespace DH.MUI.Core
 
         private void SetThemeSource(Uri source, bool useThemeAccentColor)
         {
-            if (source == null) {
+            if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
             }
 
@@ -116,53 +117,46 @@ namespace DH.MUI.Core
             var dictionaries = Application.Current.Resources.MergedDictionaries;
             var themeDict = new ResourceDictionary { Source = source };
 
-            // if theme defines an accent color, use it
-            //var accentColor = themeDict[KeyAccentColor] as Color?;
-            //if (accentColor.HasValue) {
-            //    // remove from the theme dictionary and apply globally if useThemeAccentColor is true
-            //    themeDict.Remove(KeyAccentColor);
-
-            //    if (useThemeAccentColor) {
-            //        ApplyAccentColor(accentColor.Value);
-            //    }
-            //}
-            UpdateAccentColor(KeyAccentColor, themeDict, useThemeAccentColor);
-            UpdateAccentColor(KeyAccentColor2, themeDict, useThemeAccentColor);
-            UpdateAccentColor(KeyAccentColor3, themeDict, useThemeAccentColor);
-            UpdateAccentColor(KeyAccentColor4, themeDict, useThemeAccentColor);
-
-
-            // add new before removing old theme to avoid dynamicresource not found warnings
-            dictionaries.Add(themeDict);
-
-            // remove old theme
-            if (oldThemeDict != null) {
-                dictionaries.Remove(oldThemeDict);
-            }
-
-            OnPropertyChanged(nameof(ThemeSource));
-        }
-        private void UpdateAccentColor(string KeyAccentColor, ResourceDictionary themeDict,bool useThemeAccentColor) {
+            //// if theme defines an accent color, use it
             var accentColor = themeDict[KeyAccentColor] as Color?;
             if (accentColor.HasValue)
             {
                 // remove from the theme dictionary and apply globally if useThemeAccentColor is true
                 themeDict.Remove(KeyAccentColor);
+
                 if (useThemeAccentColor)
                 {
-                    //ApplyAccentColor(accentColor.Value);
-                    Application.Current.Resources[KeyAccentColor] = accentColor.Value;
-                   // Application.Current.Resources[KeyAccentColor.Replace("Color", "")] = new SolidColorBrush(accentColor.Value);
+                    ApplyAccentColor(accentColor.Value);
                 }
             }
+            
 
+            // add new before removing old theme to avoid dynamicresource not found warnings
+            dictionaries.Add(themeDict);
+
+            // remove old theme
+            if (oldThemeDict != null)
+            {
+                dictionaries.Remove(oldThemeDict);
+            }
+
+            OnPropertyChanged(nameof(ThemeSource));
         }
+
+       
 
         private static void ApplyAccentColor(Color accentColor)
         {
             // set accent color and brush resources
             Application.Current.Resources[KeyAccentColor] = accentColor;
-            //Application.Current.Resources[KeyAccent] = new SolidColorBrush(accentColor);
+            Application.Current.Resources[KeyAccent] = new SolidColorBrush(accentColor);
+            
+            accentColor.A = 204;
+            Application.Current.Resources[KeyAccent2] = new SolidColorBrush(accentColor);
+            accentColor.A = 153;
+            Application.Current.Resources[KeyAccent3] = new SolidColorBrush(accentColor);
+            accentColor.A = 102;
+            Application.Current.Resources[KeyAccent4] = new SolidColorBrush(accentColor);
         }
 
         private static FontSize GetFontSize()

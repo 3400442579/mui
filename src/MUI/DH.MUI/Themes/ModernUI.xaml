@@ -34,14 +34,12 @@
 
     <!-- default accent colors and brushes -->
     <Color x:Key="AccentColor">#ff1ba1e2</Color>
-    <Color x:Key="AccentColor2">#cc1ba1e2</Color>
-    <Color x:Key="AccentColor3">#991ba1e2</Color>
-    <Color x:Key="AccentColor4">#661ba1e2</Color>
-    
+   
+
     <SolidColorBrush x:Key="Accent" Color="{DynamicResource AccentColor}" />
-    <SolidColorBrush x:Key="Accent2" Color="{DynamicResource AccentColor2}" />
-    <SolidColorBrush x:Key="Accent3" Color="{DynamicResource AccentColor3}" />
-    <SolidColorBrush x:Key="Accent4" Color="{DynamicResource AccentColor4}" />
+    <SolidColorBrush x:Key="Accent2" Color="#cc1ba1e2" />
+    <SolidColorBrush x:Key="Accent3" Color="#991ba1e2" />
+    <SolidColorBrush x:Key="Accent4" Color="#661ba1e2" />
 
     <!-- font settings -->
     <FontFamily x:Key="DefaultFontFamily">Microsoft YaHei</FontFamily>
