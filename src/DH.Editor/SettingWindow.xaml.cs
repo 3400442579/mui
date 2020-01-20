@@ -10,28 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DH.Editor.ViewModels;
 using DH.MUI.Controls;
 
 namespace DH.Editor
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// SettingWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : ModernWindow
+    public partial class SettingWindow : ModernWindow
     {
-        public MainWindow()
+        public SettingWindow()
         {
             InitializeComponent();
-
-            this.DataContext = new RootViewModel();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

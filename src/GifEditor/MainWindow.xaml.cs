@@ -12,10 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DH.Editor.ViewModels;
 using DH.MUI.Controls;
 
-namespace DH.Editor
+namespace GifEditor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -25,13 +24,6 @@ namespace DH.Editor
         public MainWindow()
         {
             InitializeComponent();
-
-            this.DataContext = new RootViewModel();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

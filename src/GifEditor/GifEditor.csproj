@@ -4,17 +4,10 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
-    <AssemblyName>GifEditor</AssemblyName>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\logo.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
-    <PackageReference Include="SharpAvi" Version="2.1.2" />
+    <None Remove="logo.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZipExtractor", "src\ZipExtr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Update", "Update", "{6A641FFE-C500-46F6-8144-3AF6E0E0E131}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DH.Editor", "src\DH.Editor\DH.Editor.csproj", "{6DF702DE-3D0F-4236-B5DE-FA031C3D9128}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{88499B0B-A3AD-4E87-91D5-9A7643A6E86A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88499B0B-A3AD-4E87-91D5-9A7643A6E86A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88499B0B-A3AD-4E87-91D5-9A7643A6E86A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DF702DE-3D0F-4236-B5DE-FA031C3D9128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DF702DE-3D0F-4236-B5DE-FA031C3D9128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DF702DE-3D0F-4236-B5DE-FA031C3D9128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DF702DE-3D0F-4236-B5DE-FA031C3D9128}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

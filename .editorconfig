@@ -14,3 +14,6 @@ dotnet_diagnostic.WPF0102.severity = none
 
 # WPF0016: Default value is shared reference type.
 dotnet_diagnostic.WPF0016.severity = none
+
+# WPF0150: Use nameof() instead of literal.
+dotnet_diagnostic.WPF0150.severity = none

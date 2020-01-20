@@ -273,11 +273,11 @@
     </Style>
 
     <Style TargetType="{x:Type Controls:SplitButton}">
-        <Setter Property="ArrowBrush" Value="{DynamicResource MahApps.Brushes.BlackColor}" />
+        <Setter Property="ArrowBrush" Value="{DynamicResource ButtonText}" />
         <Setter Property="ArrowMouseOverBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
         <Setter Property="ArrowPressedBrush" Value="{DynamicResource MahApps.Brushes.BlackColor}" />
         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.WhiteColor}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.BlackColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorder}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="ButtonArrowStyle" Value="{DynamicResource MahApps.Styles.Button.SplitArrow}" />
         <Setter Property="ButtonStyle" Value="{DynamicResource MahApps.Styles.Button.Split}" />

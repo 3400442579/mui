@@ -62,12 +62,12 @@ namespace DH.MUI.Controls
 
 
         /// <summary>Identifies the <see cref="Orientation"/> dependency property.</summary>
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(  nameof(Orientation),  typeof(Orientation), typeof(ModernButton),
-                new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(  nameof(Orientation),  typeof(System.Windows.Controls.Orientation), typeof(ModernButton),
+                new FrameworkPropertyMetadata(System.Windows.Controls.Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure));
 
-        public Orientation Orientation
+        public System.Windows.Controls.Orientation Orientation
         {
-            get { return (Orientation)this.GetValue(OrientationProperty); }
+            get { return (System.Windows.Controls.Orientation)this.GetValue(OrientationProperty); }
             set { this.SetValue(OrientationProperty, value); }
         }
     }

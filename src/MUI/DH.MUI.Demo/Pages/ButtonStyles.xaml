@@ -6,6 +6,11 @@
              xmlns:local="clr-namespace:DH.MUI.Demo.Pages"
              xmlns:models="clr-namespace:DH.MUI.Demo.Models"
              xmlns:mui="http://dhmui.com/MUI"
+             TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        
+        FontFamily="微软雅黑" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -18,22 +23,32 @@
                     <Button Content="disabled button" IsEnabled="False" Style="{DynamicResource AccentButton}" Margin="0,0,0,32" />
                 </StackPanel>
 
-                <TextBlock Text="CHECKBOX" Style="{StaticResource Heading2}" Margin="0,0,0,8"/>
+                <!--<TextBlock Text="CHECKBOX" Style="{StaticResource Heading2}" Margin="0,0,0,8"/>
                 <CheckBox Content="standard checkbox" Margin="0,0,0,4"  />
                 <CheckBox Content="three state checkbox" IsThreeState="True" Margin="0,0,0,4"  />
                 <CheckBox Content="disabled checkbox" IsEnabled="False" Margin="0,0,0,4" />
-                <CheckBox Content="disabled checked checkbox" IsChecked="True" IsEnabled="False" Margin="0,0,0,32" />
+                <CheckBox Content="disabled checked checkbox" IsChecked="True" IsEnabled="False" Margin="0,0,0,32" />-->
 
-                <TextBlock Text="RADIOBUTTON" Style="{StaticResource Heading2}" Margin="0,0,0,8"/>
+                <!--<TextBlock Text="RADIOBUTTON" Style="{StaticResource Heading2}" Margin="0,0,0,8"/>
                 <RadioButton Content="option 1" Margin="0,0,0,4"  />
                 <RadioButton Content="option 2" Margin="0,0,0,4" />
                 <RadioButton Content="option 3, disabled" IsEnabled="False" Margin="0,0,0,4"/>
-                <RadioButton Content="another option, disabled and checked" IsEnabled="False" IsChecked="True" GroupName="Foo" />
+                <RadioButton Content="another option, disabled and checked" IsEnabled="False" IsChecked="True" GroupName="Foo" />-->
 
-                <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedLightButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedDarkButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <Button  Content="aa" Style="{StaticResource MaterialDesignRaisedAccentButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                
+                <Button  Content="FlatButton"  Style="{StaticResource FlatButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Button  Content="FlatAccentButton" Style="{StaticResource FlatAccentButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Button  Content="FlatAccentBgButton" Style="{StaticResource FlatAccentBgButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Button  Content="FlatLightBgButton" Style="{StaticResource FlatLightBgButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Button  Content="OutlinedButton" Style="{StaticResource OutlinedButton}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Button ToolTip="IconButton" Width="28" Height="28"
+                        Style="{StaticResource IconButton}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <mui:PackIcon  Kind="Play" Width="10" />
+                </Button>
+                <Button  ToolTip="IconForegroundButton" Style="{StaticResource IconForegroundButton}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <mui:PackIcon  Kind="Play" Margin="6,0,0,0" />
+                </Button>
+
 
 
 

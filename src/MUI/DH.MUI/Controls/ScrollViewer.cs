@@ -19,14 +19,14 @@ namespace DH.MUI.Controls
         ///     滚动方向
         /// </summary>
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(
-            nameof(Orientation), typeof(Orientation), typeof(ScrollViewer), new PropertyMetadata(Orientation.Vertical));
+            nameof(Orientation), typeof(System.Windows.Controls.Orientation), typeof(ScrollViewer), new PropertyMetadata(System.Windows.Controls.Orientation.Vertical));
 
         /// <summary>
         ///     滚动方向
         /// </summary>
-        public Orientation Orientation
+        public System.Windows.Controls.Orientation Orientation
         {
-            get => (Orientation)GetValue(OrientationProperty);
+            get => (System.Windows.Controls.Orientation)GetValue(OrientationProperty);
             set => SetValue(OrientationProperty, value);
         }
 
@@ -51,7 +51,7 @@ namespace DH.MUI.Controls
 
             if (!IsEnableInertia)
             {
-                if (Orientation == Orientation.Vertical)
+                if (Orientation == System.Windows.Controls.Orientation.Vertical)
                 {
                     base.OnMouseWheel(e);
                 }
@@ -66,7 +66,7 @@ namespace DH.MUI.Controls
             }
             e.Handled = true;
 
-            if (Orientation == Orientation.Vertical)
+            if (Orientation == System.Windows.Controls.Orientation.Vertical)
             {
                 if (!_isRunning)
                 {
