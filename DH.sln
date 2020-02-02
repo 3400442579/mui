@@ -20,14 +20,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Update", "Update", "{6A641F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DH.Editor", "src\DH.Editor\DH.Editor.csproj", "{6DF702DE-3D0F-4236-B5DE-FA031C3D9128}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIconWpf", "src\NotifyIconWpf\NotifyIconWpf.csproj", "{5F8D1033-4027-4719-970A-43AF09D60DD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ABC61281-B99F-4763-B718-8CEFFDA54513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABC61281-B99F-4763-B718-8CEFFDA54513}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABC61281-B99F-4763-B718-8CEFFDA54513}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{ABC61281-B99F-4763-B718-8CEFFDA54513}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{ABC61281-B99F-4763-B718-8CEFFDA54513}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABC61281-B99F-4763-B718-8CEFFDA54513}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5FF652F0-90BC-42A8-A102-6A34C1DF275D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{6DF702DE-3D0F-4236-B5DE-FA031C3D9128}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DF702DE-3D0F-4236-B5DE-FA031C3D9128}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DF702DE-3D0F-4236-B5DE-FA031C3D9128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F8D1033-4027-4719-970A-43AF09D60DD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F8D1033-4027-4719-970A-43AF09D60DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F8D1033-4027-4719-970A-43AF09D60DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F8D1033-4027-4719-970A-43AF09D60DD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

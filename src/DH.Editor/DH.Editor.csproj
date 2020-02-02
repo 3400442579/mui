@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\mui\DH.MUI\DH.MUI.csproj" />
+    <ProjectReference Include="..\NotifyIconWpf\NotifyIconWpf.csproj" />
   </ItemGroup>
 
   <ItemGroup>

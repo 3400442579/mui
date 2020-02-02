@@ -11,6 +11,8 @@ using System.Windows.Markup;
 )]
 
 [assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Core")]
+
+[assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Transitions")]
 [assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Controls")]
 [assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Converters")]
 [assembly: XmlnsDefinition("http://dhmui.com/MUI", "DH.MUI.Common")]
