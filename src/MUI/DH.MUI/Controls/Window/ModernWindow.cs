@@ -29,6 +29,10 @@ namespace DH.MUI.Controls
         /// <summary>Identifies the <see cref="ShowIcon"/> dependency property.</summary>
         public static readonly DependencyProperty ShowIconProperty = DependencyProperty.Register(nameof(ShowIcon), typeof(bool), typeof(ModernWindow), new PropertyMetadata(true));
 
+        /// <summary>Identifies the <see cref="UseNoneWindowStyle"/> dependency property.</summary>
+        public static readonly DependencyProperty UseNoneWindowStyleProperty = DependencyProperty.Register("UseNoneWindowStyle", typeof(bool), typeof(ModernWindow), new PropertyMetadata(false));
+
+        //public static readonly DependencyProperty ShowTitleBarProperty = DependencyProperty.Register("ShowTitleBar", typeof(bool), typeof(ModernWindow), new PropertyMetadata(true, OnShowTitleBarPropertyChangedCallback, OnShowTitleBarCoerceValueCallback));
 
 
         /// <summary>Identifies the <see cref="LeftWindowCommands"/> dependency property.</summary>
@@ -99,7 +103,17 @@ namespace DH.MUI.Controls
             get { return (bool)GetValue(ShowTitleProperty); }
             set { SetValue(ShowTitleProperty, value); }
         }
+        //public bool ShowTitleBar
+        //{
+        //    get { return (bool)GetValue(ShowTitleBarProperty); }
+        //    set { SetValue(ShowTitleBarProperty, value); }
+        //}
 
+        public bool UseNoneWindowStyle
+        {
+            get { return (bool)GetValue(UseNoneWindowStyleProperty); }
+            set { SetValue(UseNoneWindowStyleProperty, value); }
+        }
         /// <summary>
         /// 
         /// </summary>

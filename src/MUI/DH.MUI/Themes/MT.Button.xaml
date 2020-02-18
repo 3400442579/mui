@@ -68,8 +68,8 @@
 
 
 
-    
 
+    
    
   
     <Style x:Key="BaseButtonStyle" TargetType="{x:Type ButtonBase}">
@@ -424,8 +424,8 @@
  
     <Style x:Key="IconButton" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource FlatButton}">
         <Setter Property="Padding" Value="0"/>
-        <Setter Property="Width" Value="48" />
-        <Setter Property="Height" Value="48" />
+        <Setter Property="Width" Value="28" />
+        <Setter Property="Height" Value="28" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ButtonBase}">
@@ -435,23 +435,25 @@
                             <Setter Property="Height" Value="24"/>
                         </Style>
                     </ControlTemplate.Resources>
-                    <Grid>
-                        <Ellipse
-                            Fill="{TemplateBinding Background}"
-                            x:Name="border"
-                            RenderTransformOrigin="0.5, 0.5">
-                            <Ellipse.RenderTransform>
-                                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.0" ScaleY="1.0" x:Name="CheckedEllipseScale"/>
-                            </Ellipse.RenderTransform>
-                        </Ellipse>
-                        <local:Ripple Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Focusable="False"
-                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    Padding="{TemplateBinding Padding}"
-                                    Clip="{Binding ElementName=GeometryEllipse, Path=RenderedGeometry}" ClipToBounds="True"
-                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        <Ellipse x:Name="GeometryEllipse" Fill="Transparent" IsHitTestVisible="False" Focusable="False" />
-                    </Grid>
+                    <local:ClipBorder  CornerRadius="{TemplateBinding local:ControlsHelper.CornerRadius}"
+                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <Grid Width="24" Height="24">
+                            <Ellipse Fill="{TemplateBinding Background}"
+                                     x:Name="border"
+                                     RenderTransformOrigin="0.5, 0.5">
+                                <Ellipse.RenderTransform>
+                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.0" ScaleY="1.0" x:Name="CheckedEllipseScale"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                            <local:Ripple Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Focusable="False"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Padding="{TemplateBinding Padding}"
+                                        Clip="{Binding ElementName=GeometryEllipse, Path=RenderedGeometry}" ClipToBounds="True"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <Ellipse x:Name="GeometryEllipse" Fill="Transparent" IsHitTestVisible="False" Focusable="False" />
+                        </Grid>
+                    </local:ClipBorder>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Fill" TargetName="border" Value="{DynamicResource FlatButtonClick}" />

@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Controls="clr-namespace:DH.MUI.Controls">
+    
+    <Geometry x:Key="DownArrowGeometry">M 0 0 L 3.5 4 L 7 0 Z</Geometry>
 
     <ControlTemplate x:Key="MahApps.Templates.SplitButton.Horizontal" TargetType="{x:Type Controls:SplitButton}">
         <Grid UseLayoutRounding="True">
@@ -21,7 +23,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Button x:Name="PART_Button"
-                                Grid.Column="0"
+                                Grid.Column="0" BorderThickness="0"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
@@ -63,8 +65,8 @@
                             </StackPanel>
                         </Button>
                         <Button x:Name="PART_Expander"
-                                Grid.Column="1"
-                                Width="20"
+                                Grid.Column="1" 
+                                Width="20" BorderThickness="1,0,0,0"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 FocusVisualStyle="{TemplateBinding FocusVisualStyle}"
@@ -72,10 +74,16 @@
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                 Style="{TemplateBinding ButtonArrowStyle}">
                             <!--  Material - ChevronDown  -->
-                            <ContentControl Width="9"
+                            <!--<ContentControl Width="9"
                                             Height="9"
                                             Content="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
                                             Style="{DynamicResource MahApps.Styles.ContentControl.PathIcon}" />
+ -->
+                            <Path Margin="3,1,4,0"
+                                  Fill="{TemplateBinding Foreground}"
+                                  Data="{DynamicResource DownArrowGeometry}"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center" IsHitTestVisible="False"/>
                         </Button>
                     </Grid>
                 </Controls:ClipBorder>
@@ -200,10 +208,16 @@
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                 Style="{TemplateBinding ButtonArrowStyle}">
                             <!--  Material - ChevronDown  -->
-                            <ContentControl Width="9"
+                            <!--<ContentControl Width="9"
                                             Height="9"
                                             Content="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
                                             Style="{DynamicResource MahApps.Styles.ContentControl.PathIcon}" />
+ -->
+                            <Path Margin="3,1,4,0"
+                                  Fill="{TemplateBinding Foreground}"
+                                  Data="{DynamicResource DownArrowGeometry}"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center" IsHitTestVisible="False"/>
                         </Button>
                     </Grid>
                 </Controls:ClipBorder>
@@ -276,15 +290,16 @@
         <Setter Property="ArrowBrush" Value="{DynamicResource ButtonText}" />
         <Setter Property="ArrowMouseOverBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
         <Setter Property="ArrowPressedBrush" Value="{DynamicResource MahApps.Brushes.BlackColor}" />
-        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.WhiteColor}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorder}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="ButtonArrowStyle" Value="{DynamicResource MahApps.Styles.Button.SplitArrow}" />
         <Setter Property="ButtonStyle" Value="{DynamicResource MahApps.Styles.Button.Split}" />
         <Setter Property="FocusVisualStyle" Value="{StaticResource MahApps.Styles.FocusVisualStyle.ButtonSplit}" />
         <Setter Property="FontFamily" Value="{DynamicResource MahApps.Fonts.Family.Control}" />
         <Setter Property="FontSize" Value="{DynamicResource MahApps.Font.Size.Content}" />
-        <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.BlackColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource InputText}"/>
+        <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="MinHeight" Value="26" />
         <Setter Property="Padding" Value="2" />

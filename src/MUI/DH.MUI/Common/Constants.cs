@@ -2,7 +2,7 @@
 {
     internal class AppName
     {
-        public const string MuiApps = "MahApps.Metro";//Mui
+        public const string MuiApps = "DH";// "MahApps.Metro";//Mui
     }
 
 

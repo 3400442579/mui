@@ -116,7 +116,7 @@ namespace DH.MUI.Controls
                 {
                     var ft = new FormattedText((psuedoStartValue * MajorInterval).ToString(), System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface("Tahoma"), 10, Brushes.Black);
                     drawingContext.DrawText(ft, new Point(i * MajorInterval, 0));
-                    drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Red), 1), new Point(i * MajorInterval, MarkLength), new Point(i * MajorInterval, 0));
+                    //drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Red), 1), new Point(i * MajorInterval, MarkLength), new Point(i * MajorInterval, 0));
                     drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Green), 1),
                         new Point(i * MajorInterval + (MajorInterval / 2), MiddleMarkLength),
                         new Point(i * MajorInterval + (MajorInterval / 2), 0));
@@ -142,8 +142,8 @@ namespace DH.MUI.Controls
                 {
                     var ft = new FormattedText((psuedoStartValue * MajorInterval).ToString(), System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface("Tahoma"), 10, Brushes.Black);
                     drawingContext.DrawText(ft, new Point(0, i * MajorInterval));
-                    drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Red), 1), new Point(MarkLength, i * MajorInterval), new Point(0, i * MajorInterval));
-                    drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Red), 1), new Point(MarkLength, i * MajorInterval), new Point(0, i * MajorInterval));
+                    //drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Red), 1), new Point(MarkLength, i * MajorInterval), new Point(0, i * MajorInterval));
+                    //drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Red), 1), new Point(MarkLength, i * MajorInterval), new Point(0, i * MajorInterval));
                     drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Green), 1),
                         new Point(MiddleMarkLength, i * MajorInterval + (MajorInterval / 2)),
                         new Point(0, i * MajorInterval + (MajorInterval / 2)));

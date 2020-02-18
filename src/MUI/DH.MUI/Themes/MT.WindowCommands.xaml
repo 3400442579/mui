@@ -5,7 +5,6 @@
 
     <ControlTemplate x:Key="MahApps.Templates.Button.WindowCommands" TargetType="{x:Type Button}">
         <Grid Background="{TemplateBinding Background}">
-            
             <controls:ContentControlEx x:Name="PART_ContentControlEx"
                                        Padding="{TemplateBinding Padding}"
                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"

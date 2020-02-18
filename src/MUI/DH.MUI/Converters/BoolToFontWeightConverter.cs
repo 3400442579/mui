@@ -10,7 +10,7 @@ namespace DH.MUI.Converters
     [ValueConversion(typeof(bool?), typeof(FontWeight))]
     public sealed class BoolToFontWeightConverter : IValueConverter
     {
-        public static readonly BoolToFontWeightConverter Default = new BoolToFontWeightConverter();
+        public static BoolToFontWeightConverter Default { get; } = new BoolToFontWeightConverter();
 
         /// <summary>
         /// Converts a value.

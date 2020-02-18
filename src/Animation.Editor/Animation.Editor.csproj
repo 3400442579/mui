@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="images\logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\libs\ToastNotifications.Messages\ToastNotifications.Messages.csproj" />
+    <ProjectReference Include="..\Loc\Loc.csproj" />
+    <ProjectReference Include="..\mui\DH.MUI\DH.MUI.csproj" />
+    <ProjectReference Include="..\NotifyIconWpf\NotifyIconWpf.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ReactiveProperty" Version="6.2.0" />
+    <PackageReference Include="SharpAvi" Version="2.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controls\" />
+    <Folder Include="Utils\Gif\" />
+    <Folder Include="Utils\Apng\" />
+    <Folder Include="Utils\Psd\" />
+    <Folder Include="Utils\WebP\" />
+  </ItemGroup>
+
+</Project>
