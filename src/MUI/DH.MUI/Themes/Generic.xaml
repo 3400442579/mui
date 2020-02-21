@@ -32,8 +32,8 @@
                 <ControlTemplate TargetType="{x:Type local:RulerControl}">
                     <Grid>
                         <Grid.Children>
-                            <Line x:Name="verticalTrackLine" Stroke="Black" StrokeThickness="1" Visibility="Hidden" X1="300" Width="100" StrokeDashArray="3" StrokeDashOffset="3"/>
-                            <Line x:Name="horizontalTrackLine" Stroke="Black" StrokeThickness="1" Visibility="Hidden" Y1="300" Height="100"  StrokeDashArray="3" StrokeDashOffset="3"/>
+                            <Line x:Name="verticalTrackLine" Stroke="Black" StrokeThickness="1" Visibility="Hidden" X1="10" Width="10" StrokeDashArray="3" StrokeDashOffset="3"/>
+                            <Line x:Name="horizontalTrackLine" Stroke="Black" StrokeThickness="1" Visibility="Hidden" Y1="10" Height="10"  StrokeDashArray="3" StrokeDashOffset="3"/>
                         </Grid.Children>
                     </Grid>
 

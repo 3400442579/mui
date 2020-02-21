@@ -1374,7 +1374,7 @@ namespace Animation.Editor.Utils
         /// </summary>
         /// <param name="fileSource">The filename of the source.</param>
         /// <returns>The DPI.</returns>
-        public static double DpiOf(this string fileSource)
+        public static double DpiOf(string fileSource)
         {
             using (var stream = new FileStream(fileSource, FileMode.Open, FileAccess.Read))
             {
@@ -1412,7 +1412,7 @@ namespace Animation.Editor.Utils
         /// </summary>
         /// <param name="fileSource">The filename of the source.</param>
         /// <returns>The size of the image.</returns>
-        public static System.Windows.Size ScaledSize(this string fileSource)
+        public static System.Windows.Size ScaledSize(string fileSource)
         {
             using (var stream = new FileStream(fileSource, FileMode.Open, FileAccess.Read))
             {
@@ -1431,7 +1431,7 @@ namespace Animation.Editor.Utils
         /// </summary>
         /// <param name="fileSource">The filename of the source.</param>
         /// <returns>The size of the image.</returns>
-        public static System.Windows.Size NonScaledSize(this string fileSource)
+        public static System.Windows.Size NonScaledSize(string fileSource)
         {
             using (var stream = new FileStream(fileSource, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
@@ -1450,11 +1450,10 @@ namespace Animation.Editor.Utils
         /// </summary>
         /// <param name="fileSource">The file to open.</param>
         /// <returns>The open BitmapSource.</returns>
-        public static Size SizeOf(this string fileSource)
+        public static Size SizeOf(string fileSource)
         {
-            var bitmapAux = new Bitmap(fileSource);
-            var size = new Size(bitmapAux.Width, bitmapAux.Height);
-            bitmapAux.Dispose();
+            using Bitmap bitmapAux = new Bitmap(fileSource);
+            Size size = new Size(bitmapAux.Width, bitmapAux.Height);
 
             return size;
         }
@@ -1464,7 +1463,7 @@ namespace Animation.Editor.Utils
         /// </summary>
         /// <param name="imageSource">Image source pointing to an icon file (*.ico).</param>
         /// <returns>An icon object that can be used with the taskbar area.</returns>
-        public static Icon ToIcon(this ImageSource imageSource)
+        public static Icon ToIcon(ImageSource imageSource)
         {
             if (imageSource == null)
                 return null;
@@ -1492,21 +1491,5 @@ namespace Animation.Editor.Utils
         }
 
         #endregion
-
-        public static double GetDPI() {
-
-            
-            var dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
-
-            var dpiYProperty = typeof(SystemParameters).GetProperty("Dpi", BindingFlags.NonPublic | BindingFlags.Static);
-
-
-
-            var dpiX = (int)dpiXProperty.GetValue(null, null);
-
-            var dpiY = (int)dpiYProperty.GetValue(null, null);
-
-            return dpiX;
-        }
     }
 }

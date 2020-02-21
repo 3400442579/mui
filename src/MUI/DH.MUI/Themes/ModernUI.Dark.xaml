@@ -17,6 +17,8 @@
     <Color x:Key="TextPressedColor">#d1d1d1</Color>
     <Color x:Key="TextDisabledColor">#515151</Color>
 
+    <SolidColorBrush x:Key="TextColorBrush" Color="{DynamicResource TextColor}" />
+
     <SolidColorBrush x:Key="ButtonBackground" Color="#333333" />
     <SolidColorBrush x:Key="ButtonBackgroundHover" Color="#3e3e42" />
     <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource AccentColor}" />

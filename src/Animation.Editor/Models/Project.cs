@@ -53,18 +53,24 @@ namespace Animation.Editor.Models
         /// </summary>
         public string RedoStackPath => Path.Combine(FullPath, "ur", "R");
 
-        /// <summary>
-        /// Check if there's any frame on this project.
-        /// </summary>
-        public bool Any => Frames != null && Frames.Any();
+        ///// <summary>
+        ///// Check if there's any frame on this project.
+        ///// </summary>
+        //public bool Any => Frames != null && Frames.Any();
 
         /// <summary>
         /// The latest index of the current list of frames, or -1.
         /// </summary>
         public int LatestIndex => Frames?.Count - 1 ?? -1;
 
-
+        public static Project Empty() {
+            return new Project();
+        }
+        public bool IsEmpty() {
+            return Frames != null && Frames.Any();
+        }
         public static Project Create(string folder, ProjectByType? creator=null) {
+          
             string name = DateTime.Now.ToString("yyMMddHHmmss");
             Project project = new Project
             {
@@ -74,7 +80,6 @@ namespace Animation.Editor.Models
                 FullPath = Path.Combine(folder, "Project", name)
             };
             project.savePath = Path.Combine(project.FullPath, "info.json");
-
             //
             Directory.CreateDirectory(project.FullPath);
             if (!Directory.Exists(project.UndoStackPath))

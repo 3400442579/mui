@@ -1,16 +1,14 @@
 ﻿using Animation.Editor.Utils;
 using DH.MUI.Core;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Animation.Editor.Core
 {
     public class Config: NotifyPropertyChanged
     {
-        public static Config Exa { get; } = new Config();
+        public static Config Default { get; } = new Config();//Default
 
         public static string AppName = "Animation";
         static Config()
@@ -22,7 +20,7 @@ namespace Animation.Editor.Core
             {
                 try
                 {
-                    Exa = Json.DeserializeByFile<Config>(appData);
+                    Default = Json.DeserializeByFile<Config>(appData);
                 }
                 catch { }
             }
@@ -43,7 +41,7 @@ namespace Animation.Editor.Core
                 if (!string.IsNullOrWhiteSpace(folder1) && !Directory.Exists(folder1))
                     Directory.CreateDirectory(folder1);
 
-                Json.SerializeToFile(Exa, appData1);
+                Json.SerializeToFile(Default, appData1);
                  
             }
             catch (Exception e)

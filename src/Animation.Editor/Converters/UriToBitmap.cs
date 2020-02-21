@@ -11,11 +11,6 @@ namespace Animation.Editor.Converters
     {
         public static  UriToBitmap Default { get; } = new UriToBitmap();
 
-        static UriToBitmap()
-        {
-            Default = new UriToBitmap();
-        }
-
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var stringValue = value as string;

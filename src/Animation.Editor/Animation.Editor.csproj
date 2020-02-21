@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controls\" />
     <Folder Include="Utils\Gif\" />
     <Folder Include="Utils\Apng\" />
     <Folder Include="Utils\Psd\" />

@@ -13,6 +13,7 @@
     <Compile Remove="Common\LocalizationHelper.cs" />
     <Compile Remove="Controls\Icon\Icon.cs" />
     <Compile Remove="Controls\Icon\PackIconExtension.cs" />
+    <Compile Remove="Controls\ModernDialog.cs" />
     <Compile Remove="Converters\ShadowConverter.cs" />
   </ItemGroup>
 

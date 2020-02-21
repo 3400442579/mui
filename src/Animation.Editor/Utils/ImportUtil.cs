@@ -166,7 +166,7 @@ namespace Animation.Editor.Utils
 
             return GetFrameMetadata(decoder.Frames[frameIndex]);
         }
-        private  FrameMetadata GetFrameMetadata(BitmapFrame frame)
+        private FrameMetadata GetFrameMetadata(BitmapFrame frame)
         {
             var metadata = (BitmapMetadata)frame.Metadata;
             var delay = TimeSpan.FromMilliseconds(100);

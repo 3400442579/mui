@@ -1,40 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Animation.Editor.Core;
+﻿using Animation.Editor.Core;
 using Animation.Editor.Models;
 using Animation.Editor.Utils;
 using Loc;
-using System.Reactive.Concurrency; // using Namespace
-using System.Reactive.Linq;
 using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
-using System.Windows.Input;
-using DH.MUI.Core;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace Animation.Editor.ViewModel
 {
     public class MainViewModel //: INotifyPropertyChanged
     {
-
-        private Project project;
-
-        //预览
+        #region
+        //项目
+        private Project project = new Project();
+        //预览定时器
         private DispatcherTimer timer;
+        #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ReactiveProperty<string> Image { get; } = new ReactiveProperty<string>();
-        public ReactiveCollection<FrameView> Frames { get; set; } = new ReactiveCollection<FrameView>();
-        public ReactiveProperty<bool> IsInit { get;  } = new ReactiveProperty<bool>(false);
+        /// <summary>
+        /// 
+        /// </summary>
+        public ReactiveCollection<FrameView> Frames { get; } = new ReactiveCollection<FrameView>();
+        /// <summary>
+        /// 
+        /// </summary>
+        public ReactivePropertySlim<bool> IsInit { get; } = new ReactivePropertySlim<bool>(false);
+        /// <summary>
+        /// 当前帧
+        /// </summary>
+        public ReactivePropertySlim<FrameView> CurFrameView { get; set; } = new ReactivePropertySlim<FrameView>();
 
-        public ReactiveProperty<FrameView> CurFrameView { get; set; } = new ReactiveProperty<FrameView>();
+        /// <summary>
+        /// 画布宽度
+        /// </summary>
+        public ReactiveProperty<double> CanvasWidth { get; } = new ReactiveProperty<double>(0d);
+        /// <summary>
+        /// 画布高度
+        /// </summary>
+        public ReactiveProperty<double> CanvasHeight { get; } = new ReactiveProperty<double>(0d);
+        /// <summary>
+        /// 
+        /// </summary>
+        public ReactiveProperty<double> Zoom { get; set; } = new ReactiveProperty<double>(1d);
 
+
+
+        public MainViewModel()
+        {
+            #region 事件绑定
+            OpenSetting = new ReactiveCommand().WithSubscribe(() =>
+            {
+                new SkinWindow().ShowDialog();
+            });
+
+            DropCommand.Subscribe(e => DropAsync(e));
+            DragEnterCommand.Subscribe(e => DragEnter(e));
+
+            OpenFolderCommand.Subscribe(s => OpenFolder(s));
+            OpenImageCommand.Subscribe(s => OpenImage(s));
+
+            IObservable<bool> observable = Observable.Merge(IsInit.Select(o => o == true));
+            PlayStopCommand.Subscribe(b => PlayStop(b));
+            GoToFrameCommand.Subscribe(s => GoToFrame(s));
+
+           
+            ZoomCommand = IsInit.ToReactiveCommand<string>()
+                .WithSubscribe(s => Zooms(s));
+
+            #endregion
+
+            CurFrameView.Subscribe(fv => { if (fv != null) Image.Value = fv.Path; });
+        }
+
+        /// <summary>
+        /// 打开设置
+        /// </summary>
         public ReactiveCommand OpenSetting { get; }
 
         #region Drag 打开文件
@@ -51,26 +101,41 @@ namespace Animation.Editor.ViewModel
         /// <summary>
         /// Drag 打开文件 
         /// </summary>
-        public ReactiveCommand<DragEventArgs> DropCommand { get; }= new ReactiveCommand<DragEventArgs>();
-        private void Drop(DragEventArgs e) {
+        public AsyncReactiveCommand<DragEventArgs> DropCommand { get; } = new AsyncReactiveCommand<DragEventArgs>();
+        private async Task DropAsync(DragEventArgs e)
+        {
             if (!(e.Data.GetData(DataFormats.FileDrop) is string[] fileNames))
                 return;
 
             if (fileNames.Length == 0)
                 return;
 
-            var r = ChekFile(fileNames);
-            if (!r.b)
+            var (b, err) = ChekFile(fileNames);
+            if (!b)
                 return;
 
             ImportUtil import = new ImportUtil(Dpi.GetDpiBySystemParameters(false).X);
 
-            string d = Path.Combine(Config.Exa.TemporaryFolderResolved, Config.AppName);
-            project = Project.Create(d);
-            project.Frames = import.FromGif(fileNames[0], project.FullPath, 0);
+            if (project.IsEmpty())
+            {
+                string d = Path.Combine(Config.Default.TemporaryFolderResolved, Config.AppName);
+                project = Project.Create(d);
+            }
+            else { 
+            
+            }
+
+
+            var frames = await Task.Factory.StartNew(() => import.FromGif(fileNames[0], project.FullPath, 0));
+            var s1 = ImageUtil.SizeOf(project.Frames[0].Path);
+            project.Width = s1.Width;
+            project.Height = s1.Height;
+
 
             Image.Value = project.Frames[0].Path;
 
+            CanvasWidth.Value = project.Width;
+            CanvasHeight.Value = project.Height;
             foreach (var i in project.Frames)
                 Frames.Add(new FrameView { Delay = i.Delay, Path = i.Path, Index = i.Index });
 
@@ -78,9 +143,12 @@ namespace Animation.Editor.ViewModel
         }
         #endregion
 
-        #region frame list view event
+        #region 帧列表 相关事件
 
         private int delay = 0, frameIndex;
+        /// <summary>
+        /// 
+        /// </summary>
         public ReactiveCommand<bool?> PlayStopCommand { get; } = new ReactiveCommand<bool?>();
         private void PlayStop(bool? strat)
         {
@@ -88,8 +156,8 @@ namespace Animation.Editor.ViewModel
             {
                 if (timer != null)
                 {
-                    timer.Stop(); 
-                     timer = null;
+                    timer.Stop();
+                    timer = null;
                 }
             }
             else
@@ -116,7 +184,8 @@ namespace Animation.Editor.ViewModel
                 frameIndex = 0;
             CurFrameView.Value = Frames.ElementAt(frameIndex);
 
-            if (delay != CurFrameView.Value.Delay) {
+            if (delay != CurFrameView.Value.Delay)
+            {
                 timer.Stop();
                 timer = new DispatcherTimer();
                 timer.Tick += Timer_Tick;
@@ -127,6 +196,9 @@ namespace Animation.Editor.ViewModel
             timer.Start();
         }
 
+        /// <summary>
+        /// 跳到指定帧
+        /// </summary>
         public ReactiveCommand<string> GoToFrameCommand { get; } = new ReactiveCommand<string>();
         private void GoToFrame(string type)
         {
@@ -161,47 +233,45 @@ namespace Animation.Editor.ViewModel
             CurFrameView.Value = Frames.ElementAt(frameIndex);
         }
 
-
         /// <summary>
         /// 打开目录
         /// </summary>
-        public ReactiveCommand<string> OpenFolderCommand { get; }=new ReactiveCommand<string>();
-        private void OpenFolder(string s) {
+        public ReactiveCommand<string> OpenFolderCommand { get; } = new ReactiveCommand<string>();
+        private void OpenFolder(string s)
+        {
             try
             {
                 Process.Start("explorer.exe", $"/select,\"{s}\"");
             }
             catch (Exception ex)
             {
-                
+
             }
         }
+        /// <summary>
+        /// 打开图片
+        /// </summary>
         public ReactiveCommand<string> OpenImageCommand { get; } = new ReactiveCommand<string>();
-        private void OpenImage(string s) {
+        private void OpenImage(string s)
+        {
             Process.Start(s);
         }
         #endregion
 
-        public MainViewModel()
-        {
-            OpenSetting = new ReactiveCommand().WithSubscribe(() =>
+        public ReactiveCommand<string> ZoomCommand { get; }
+        private void Zooms(string s) {
+            if (s=="+")
             {
-                new SkinWindow().ShowDialog();
-            });
-
-            DropCommand.Subscribe<DragEventArgs>(e => Drop(e));
-            DragEnterCommand.Subscribe(e => DragEnter(e));
-
-            OpenFolderCommand.Subscribe(s => OpenFolder(s));
-            OpenImageCommand.Subscribe(s => OpenImage(s));
-
-            IObservable<bool> observable = Observable.Merge(IsInit.Select(o=>o==true));
-            PlayStopCommand.Subscribe(b => PlayStop(b));
-            GoToFrameCommand.Subscribe(s => GoToFrame(s));
-
-            CurFrameView.Subscribe(fv => { if (fv != null) Image.Value = fv.Path; });
+                Zoom.Value += 0.1d;
+                if (Zoom.Value > 5d)
+                    Zoom.Value = 5d;
+            }
+            else { 
+                Zoom.Value -= 0.1d;
+                if (Zoom.Value < 0.1d)
+                    Zoom.Value = 0.1d;
+            }
         }
-
 
 
         /// <summary>
@@ -209,8 +279,8 @@ namespace Animation.Editor.ViewModel
         /// </summary>
         /// <param name="fileNames"></param>
         /// <returns></returns>
-        private (bool b, string err) ChekFile(string[] fileNames) {
-
+        private (bool b, string err) ChekFile(string[] fileNames)
+        {
             var extensionList = fileNames.Select(s => Path.GetExtension(s).ToLowerInvariant()).ToList();
             var media = new[] { ".jpg", ".jpeg", ".gif", ".bmp", ".png" };//, ".avi", ".mp4", ".wmv" };
 
@@ -221,13 +291,14 @@ namespace Animation.Editor.ViewModel
                 return (false, LangManager.Instance["FileFormatError"]);
 
             if (projectCount != 0 && mediaCount != 0)
-                return (false, LangManager.Instance["ProjectImportError"] );
+                return (false, LangManager.Instance["ProjectImportError"]);
 
             return (true, string.Empty);
         }
 
-        private void ShowLoading() { 
-        
+        private void ShowLoading()
+        {
+
         }
         private void CloseLoading()
         {

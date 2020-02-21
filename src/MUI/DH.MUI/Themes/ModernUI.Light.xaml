@@ -4,7 +4,8 @@
 
 
     <Color x:Key="WindowBackgroundColor">#ffffff</Color>
-    <Color x:Key="TextColor">#ffffff</Color>
+    <Color x:Key="TextColor">#333333</Color>
+    <SolidColorBrush x:Key="TextColorBrush" Color="{DynamicResource TextColor}" />
 
 
 
