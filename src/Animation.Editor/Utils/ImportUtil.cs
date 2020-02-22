@@ -8,7 +8,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 
 namespace Animation.Editor.Utils
 {
@@ -20,42 +19,42 @@ namespace Animation.Editor.Utils
             Dpi = dpi;
         }
 
-        //public List<Frame> From(string source, string tempPath)
-        //{
-        //    List<Frame> frames;
+        public List<Fi> From(string source, string tempPath)
+        {
+            List<Fi> frames;
 
-        //    try
-        //    {
-        //        switch (Path.GetExtension(source).ToLowerInvariant())
-        //        {
-        //            case ".stg":
-        //            case ".zip":
-        //                frames = FromProject(source, tempPath);
-        //                break;
-        //            case ".gif":
-        //                frames = FromGif(source, tempPath);
-        //                break;
-        //            case ".mp4":
-        //            case ".wmv":
-        //            case ".avi":
-        //                frames = FromVideo(source, tempPath);
-        //                break;
-        //            default:
-        //                frames = FromImage(source, tempPath);
-        //                break;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        frames = new List<Frame>();
-        //    }
-        //    return frames;
-        //}
+            try
+            {
+                switch (Path.GetExtension(source).ToLowerInvariant())
+                {
+                    case ".stg":
+                    case ".zip":
+                        frames = FromProject(source, tempPath);
+                        break;
+                    case ".gif":
+                        frames = FromGif(source, tempPath);
+                        break;
+                    //case ".mp4":
+                    //case ".wmv":
+                    //case ".avi":
+                    //    frames = FromVideo(source, tempPath);
+                    //    break;
+                    default:
+                        frames = FromImage(source, tempPath);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                frames = new List<Fi>();
+            }
+            return frames;
+        }
 
         #region From Gif Import
-        public List<Frame> FromGif(string source, string tempPath, int sIndex)
+        public List<Fi> FromGif(string source, string tempPath)
         {
-            List<Frame> frames = new List<Frame>();
+            List<Fi> frames = new List<Fi>();
 
             var decoder = GetDecoder(source, out var gifMetadata) as GifBitmapDecoder;
 
@@ -67,7 +66,6 @@ namespace Animation.Editor.Utils
             var fullSize = GetFullSize(decoder, gifMetadata);
             int index = 0;
 
-            int stratIndex = sIndex;
             BitmapSource baseFrame = null;
             foreach (var rawFrame in decoder.Frames)
             {
@@ -76,7 +74,6 @@ namespace Animation.Editor.Utils
                 var bitmapSource = MakeFrame(fullSize, rawFrame, metadata, baseFrame);
 
                 #region Disposal Method
-
                 switch (metadata.DisposalMethod)
                 {
                     case FrameDisposalMethod.None:
@@ -90,39 +87,22 @@ namespace Animation.Editor.Utils
                         //Reuse same base frame.
                         break;
                 }
-
                 #endregion
 
                 #region Each Frame
 
-                var fileName = Path.Combine(tempPath, $"{stratIndex+index}_{DateTime.Now:hh-mm-ss-ffff}.png");
+                string fileName = Path.Combine(tempPath, $"{DateTime.Now:HHmmssffff}.png");
 
-                using (var stream = new FileStream(fileName, FileMode.Create))
-                {
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-                    encoder.Save(stream);
-                    stream.Close();
-                }
+                using FileStream stream = new FileStream(fileName, FileMode.Create);
+                var encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+                encoder.Save(stream);
+                stream.Close();
 
                 if (rawFrame.DpiX != Dpi)
-                {
-                    var sf = new System.Drawing.Bitmap(fileName);
-                    using var bm = new System.Drawing.Bitmap(sf.Width, sf.Height);
-                    using (var gr = System.Drawing.Graphics.FromImage(bm))
-                    {
-                        gr.DrawImage(sf, new System.Drawing.RectangleF(0, 0, sf.Width, sf.Height));
-                        sf.Dispose();
-                    }
+                    SetImageDpi(fileName, fileName, Dpi);
 
-                    bm.SetResolution((float)Dpi, (float)Dpi);
-                    bm.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
-                }
-
-                
-                //It should not throw a overflow exception because of the maximum value for the milliseconds.
-
-                frames.Add(new Frame(fileName, (int)metadata.Delay.TotalMilliseconds, stratIndex + index));
+                frames.Add(new Fi(fileName, (int)metadata.Delay.TotalMilliseconds));
 
                 // UpdateProgress(index);
 
@@ -192,7 +172,6 @@ namespace Animation.Editor.Utils
         private  FrameMetadata GetFrameMetadata(GifFrame gifMetadata)
         {
             var d = gifMetadata.Descriptor;
-
             var frameMetadata = new FrameMetadata
             {
                 Left = d.Left,
@@ -217,7 +196,6 @@ namespace Animation.Editor.Utils
         }
         private BitmapSource MakeFrame(System.Drawing.Size fullSize, BitmapSource rawFrame, FrameMetadata metadata, BitmapSource baseFrame)
         {
-             
             var visual = new DrawingVisual();
             using (var context = visual.RenderOpen())
             {
@@ -290,44 +268,34 @@ namespace Animation.Editor.Utils
         #endregion
 
 
-        public List<Frame> FromImage(string source, string tempPath,int sindex)
+        public List<Fi> FromImage(string source, string tempPath)
         {
-            var fileName = Path.Combine(tempPath, $"{sindex}_{DateTime.Now:hh-mm-ss-ffff}.png");
+            List<Fi> frames = new List<Fi>();
+            var fileName = Path.Combine(tempPath, $"{DateTime.Now:HHmmssffff}.png");
 
-            
-            //BitmapSource bitmap = new BitmapImage(new Uri(sourceFileName));
-
-            //if (bitmap.Format != PixelFormats.Bgra32)
-            //    bitmap = new FormatConvertedBitmap(bitmap, PixelFormats.Bgra32, null, 0);
-
-            //using (var stream = new FileStream(fileName, FileMode.Create))
-            //{
-            //    var encoder = new PngBitmapEncoder();
-            //    encoder.Frames.Add(BitmapFrame.Create(bitmap));
-            //    encoder.Save(stream);
-            //    stream.Close();
-            //}
-
-            using (var sf = new System.Drawing.Bitmap(source))
-            {
-                using var bm = new System.Drawing.Bitmap(sf.Width, sf.Height);
-                using (var gr = System.Drawing.Graphics.FromImage(bm))
-                {
-                    //gr.Clear(System.Drawing.Color.Red);
-                    gr.DrawImage(sf, new System.Drawing.RectangleF(0, 0, sf.Width, sf.Height));
-                }
-                bm.SetResolution((float)Dpi, (float)Dpi);
-                bm.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
-            }
-
+            if (SetImageDpi(source, fileName, Dpi))
+                frames.Add(new Fi(fileName, 66));
             GC.Collect();
 
-            
-
-            return new List<Frame> { new Frame(fileName, 66, sindex) };
+            return frames;
         }
-        
 
+        private bool SetImageDpi(string source, string savefile, double dpi)
+        {
+            try
+            {
+                using var sf = new System.Drawing.Bitmap(source);
+                using var bm = new System.Drawing.Bitmap(sf.Width, sf.Height);
+                using var gr = System.Drawing.Graphics.FromImage(bm);
+                gr.DrawImage(sf, new System.Drawing.RectangleF(0, 0, sf.Width, sf.Height));
+                bm.SetResolution((float)dpi, (float)dpi);
+                bm.Save(savefile, System.Drawing.Imaging.ImageFormat.Png);
+                return true;
+            }
+            catch {
+                return false;
+            }
+        }
 
         //public List<Frame> FromVideo(string source, string tempPath)
         //{
@@ -347,7 +315,7 @@ namespace Animation.Editor.Utils
 
         //    //return frameList ?? new List<Frame>();
 
-           
+
 
         //    if (frameList == null)
         //        return new List<Frame>();
@@ -358,7 +326,7 @@ namespace Animation.Editor.Utils
 
         //    var frames = new List<Frame>();
         //    var count = 0;
-            
+
         //    foreach (var frame in frameList)
         //    {
         //        var frameName = Path.Combine(tempPath, $"{count} {DateTime.Now:hh-mm-ss-ffff}.png");
@@ -389,16 +357,15 @@ namespace Animation.Editor.Utils
         //}
 
 
-
-        public List<Frame> FromProject(string source, string tempPath)
+        public List<Fi> FromProject(string source, string tempPath)
         {
             try
             {
                 ZipFile.ExtractToDirectory(source, tempPath);
 
-                if (File.Exists(Path.Combine(tempPath, "Project.json")))
+                if (File.Exists(Path.Combine(tempPath, "pro.json")))
                 {
-                    Project project = Json.DeserializeByFile<Project>(Path.Combine(tempPath, "info.json"));
+                    Fis project = Json.DeserializeByFile<Fis>(Path.Combine(tempPath, "info.json"));
                     
                     //ShowProgress("Importing Frames", list.Count);
 
@@ -416,19 +383,13 @@ namespace Animation.Editor.Utils
                 }
                 else
                 {
-                    if (File.Exists(Path.Combine(tempPath, "List.sb")))
-                        throw new Exception("Project not compatible with this version");
-
-                    throw new FileNotFoundException("Impossible to open project.", "List.sb");
+                    throw new FileNotFoundException("无法打开项目。", "pro.json");
                 }
-
-                
             }
             catch (Exception ex)
             {
-                //LogWriter.Log(ex, "Importing project");
-                // Dispatcher.Invoke(() => Dialog.Ok("GifMake", "Impossible to load project", ex.Message));
-                return new List<Frame>();
+                // Dispatcher.Invoke(() => Dialog.Ok("Animation.Editor", "无法加载项目", ex.Message));
+                return new List<Fi>();
             }
         }
     }

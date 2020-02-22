@@ -72,9 +72,5 @@ namespace Animation.Editor.Utils
             return first.Y + first.Height >= second.Y + second.Height;
         }
 
-      
-        
-
-
     }
 }

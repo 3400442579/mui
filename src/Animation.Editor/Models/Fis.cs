@@ -1,10 +1,10 @@
 ﻿using Animation.Editor.Utils;
+using DH.MUI.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
-using System.Text;
 using System.Threading;
 
 namespace Animation.Editor.Models
@@ -18,10 +18,12 @@ namespace Animation.Editor.Models
         Editor = 4,
     }
 
-    public class Project
+    /// <summary>
+    /// 项目
+    /// </summary>
+    public class Fis
     {
         private static Dictionary<string, Mutex> All { get; set; } = new Dictionary<string, Mutex>();
-
 
         //Full path to the serialized project file. 
         private string savePath;
@@ -30,11 +32,12 @@ namespace Animation.Editor.Models
         public int Height { get; set; }
 
         public string ProjectName { get;private set; }
+
         public DateTime CreateTime { get; private set; } 
 
         public ProjectByType CreatedBy { get; private set; }
 
-        public List<Frame> Frames { get; set; }
+        public List<Fi> Frames { get; set; }
 
 
         /// <summary>
@@ -52,40 +55,38 @@ namespace Animation.Editor.Models
         /// 重做文件夹的完整路径
         /// </summary>
         public string RedoStackPath => Path.Combine(FullPath, "ur", "R");
-
-        ///// <summary>
-        ///// Check if there's any frame on this project.
-        ///// </summary>
-        //public bool Any => Frames != null && Frames.Any();
+        public bool Any => Frames != null && Frames.Any();
 
         /// <summary>
         /// The latest index of the current list of frames, or -1.
         /// </summary>
         public int LatestIndex => Frames?.Count - 1 ?? -1;
 
-        public static Project Empty() {
-            return new Project();
+        public static Fis Empty() {
+            return new Fis { Frames=new List<Fi>() };
         }
-        public bool IsEmpty() {
-            return Frames != null && Frames.Any();
-        }
-        public static Project Create(string folder, ProjectByType? creator=null) {
+        public bool IsEmpty => Frames == null || Frames.Count == 0;
+        
+        public static Fis Create(string folder, ProjectByType? creator=null) {
           
             string name = DateTime.Now.ToString("yyMMddHHmmss");
-            Project project = new Project
+            Fis project = new Fis
             {
                 ProjectName = name,
                 CreatedBy = creator ?? ProjectByType.Unknown,
                 CreateTime = DateTime.Now,
                 FullPath = Path.Combine(folder, "Project", name)
             };
-            project.savePath = Path.Combine(project.FullPath, "info.json");
+            project.savePath = Path.Combine(project.FullPath, "pro.json");
+            project.Frames = new List<Fi>();
             //
             Directory.CreateDirectory(project.FullPath);
             if (!Directory.Exists(project.UndoStackPath))
                 Directory.CreateDirectory(project.UndoStackPath);
             if (!Directory.Exists(project.RedoStackPath))
                 Directory.CreateDirectory(project.RedoStackPath);
+
+            ActionStack.Project = project;
 
             project.CreateMutex();
 

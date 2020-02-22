@@ -49,6 +49,7 @@
     </mui:ModernWindow.RightWindowCommands>
     <Window.InputBindings>
         <KeyBinding Gesture="Alt+P" Command="{Binding PlayStopCommand}" />
+        <KeyBinding Key="Delete" Command="{Binding RemoveFrameCommand}" />
         <!--<KeyBinding Key="Home" Command="{Binding GoToFrameCommand}" CommandParameter="first"/>
         <KeyBinding Key="End" Command="{Binding GoToFrameCommand}" CommandParameter="last"/>-->
         <!--<KeyBinding Key="Up" Command="{Binding GoToFrameCommand}" />-->
@@ -93,7 +94,7 @@
             <Border Background="{DynamicResource ButtonBackground}"
                     BorderThickness="0,1,0,0" 
                     BorderBrush="{DynamicResource ButtonBackgroundHover}">
-                <Grid >
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition/>
@@ -105,7 +106,8 @@
                         <Button Style="{StaticResource FlatAccentButton}">
                             <mui:PackIcon Icon="M0.7,0 L5,4.3 L9.3,0 L10,0.7 L5.7,5 L10,9.3 L9.3,10 L5,5.7 L0.7,10 L0,9.3 L4.3,5 L0,0.7 z"/>
                         </Button>
-                        <Button Style="{StaticResource FlatAccentButton}">
+                        <Button Style="{StaticResource FlatAccentButton}"
+                                Command="{Binding RemoveFrameCommand}">
                             <mui:PackIcon Kind="Delete"/>
                         </Button>
                         <Button Style="{StaticResource FlatAccentButton}">
@@ -113,28 +115,74 @@
                         </Button>
                     </StackPanel>
                     <Border BorderBrush="{DynamicResource ButtonBackgroundHover}" Margin="1,0" BorderThickness="0,0,0,1"/>
-                    <ListView Grid.Row="1"  
+                    <ListView Grid.Row="1" 
                               ItemsSource="{Binding Frames}"
-                              SelectedItem="{Binding CurFrameView.Value}">
+                              SelectedIndex="{Binding SelectIndex.Value}">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal"  IsItemsHost="True"/>
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Image MaxHeight="80" MaxWidth="100" Stretch="Uniform"
-                                   Source="{Binding Path,UpdateSourceTrigger=PropertyChanged,Converter={x:Static conv:UriToBitmap.Default},ConverterParameter=80}"/>
-                                    <TextBlock Text="{Binding Index,UpdateSourceTrigger=PropertyChanged}" FontSize="10"/>
-                                    <TextBlock Grid.Row="1" Text="{Binding Delay,StringFormat={}{0}ms,UpdateSourceTrigger=PropertyChanged}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                <Setter Property="IsSelected" Value="{Binding Selected,Mode=TwoWay}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition Height="auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Border x:Name="border" Grid.RowSpan="2" />
+                                                <Image MaxHeight="80" MaxWidth="100" Stretch="Uniform" Source="{Binding Path,UpdateSourceTrigger=PropertyChanged,Converter={x:Static conv:UriToBitmap.Default},ConverterParameter=80}"/>
+                                                <TextBlock Text="{Binding Index,UpdateSourceTrigger=PropertyChanged}" FontSize="10"/>
+                                                <TextBlock Grid.Row="1" Text="{Binding Delay,StringFormat={}{0}ms,UpdateSourceTrigger=PropertyChanged}"/>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="IsMouseOver" Value="True"/>
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource Item.SelectedInactive.Background}"/>
+                                                    <Setter Property="Foreground" Value="#19E3C1"/>
+                                                </MultiTrigger>
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                                        <Condition Property="IsSelected" Value="True"/>
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter Property="Foreground" Value="#19E3C1"/>
+                                                    <!--<Setter Property="Background" TargetName="Bd" Value="{DynamicResource Item.SelectedInactive.Background}"/>-->
+                                                    <Setter Property="BorderBrush" TargetName="border" Value="#19E3C1"/>
+                                                </MultiTrigger>
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                                        <Condition Property="IsSelected" Value="True"/>
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter Property="Foreground" Value="#19E3C1"/>
+                                                    <!--<Setter Property="Background" TargetName="Bd" Value="{DynamicResource Item.SelectedActive.Background}"/>-->
+                                                    <Setter Property="BorderBrush" TargetName="border" Value="#19E3C1"/>
+                                                </MultiTrigger>
+
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Opacity" Value="0.7"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="SelectionChanged" >
+                                <behaviors:InvokeCommandAction Command="{Binding SelectionChangedCommand}" PassEventArgsToCommand="True"/>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
                     </ListView>
                 </Grid>
             </Border>
@@ -145,7 +193,7 @@
                     DockPanel.Dock="Left" 
                     Width="70" 
                     Orientation="Vertical" 
-                    Background="{DynamicResource ButtonBackground}">
+                    Background="Transparent">
 
             <ToolBarTray Orientation="Vertical" Background="Transparent">
                 <ToolBar ToolBarTray.IsLocked="False" Background="Transparent">

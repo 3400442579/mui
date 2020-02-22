@@ -98,7 +98,7 @@ namespace Animation.Editor.Controls
 
             Typeface typeface = new Typeface("Verdana");
             Brush foreBrush = this.Foreground;
-            foreBrush.Opacity = 20;
+           
             Pen line_Pen = new Pen(foreBrush, 1);
             double pixelsPerDip = VisualTreeHelper.GetDpi(this).PixelsPerDip;
 

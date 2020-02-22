@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Animation.Editor
 {
-    public class ServiceLocator
+    public static class ServiceLocator
     {
+        
     }
 }

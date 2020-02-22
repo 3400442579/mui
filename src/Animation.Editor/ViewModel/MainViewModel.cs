@@ -4,12 +4,14 @@ using Animation.Editor.Utils;
 using Loc;
 using Reactive.Bindings;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace Animation.Editor.ViewModel
@@ -17,12 +19,14 @@ namespace Animation.Editor.ViewModel
     public class MainViewModel //: INotifyPropertyChanged
     {
         #region
-        //项目
-        private Project project = new Project();
+       
         //预览定时器
         private DispatcherTimer timer;
         #endregion
 
+        //项目
+        public Fis Project { get; private set; } = Fis.Empty();
+        public ReactivePropertySlim<bool> IsDoing { get; } = new ReactivePropertySlim<bool>(false);
         /// <summary>
         /// 
         /// </summary>
@@ -30,7 +34,7 @@ namespace Animation.Editor.ViewModel
         /// <summary>
         /// 
         /// </summary>
-        public ReactiveCollection<FrameView> Frames { get; } = new ReactiveCollection<FrameView>();
+        public ReactiveCollection<Fi> Frames { get; } = new ReactiveCollection<Fi>();
         /// <summary>
         /// 
         /// </summary>
@@ -38,16 +42,17 @@ namespace Animation.Editor.ViewModel
         /// <summary>
         /// 当前帧
         /// </summary>
-        public ReactivePropertySlim<FrameView> CurFrameView { get; set; } = new ReactivePropertySlim<FrameView>();
-
+        public ReactivePropertySlim<int?> SelectIndex { get; set; } = new ReactivePropertySlim<int?>();
+       
         /// <summary>
         /// 画布宽度
         /// </summary>
-        public ReactiveProperty<double> CanvasWidth { get; } = new ReactiveProperty<double>(0d);
+        public ReactivePropertySlim<double> CanvasWidth { get; } = new ReactivePropertySlim<double>(0d);
         /// <summary>
         /// 画布高度
         /// </summary>
-        public ReactiveProperty<double> CanvasHeight { get; } = new ReactiveProperty<double>(0d);
+        public ReactivePropertySlim<double> CanvasHeight { get; } = new ReactivePropertySlim<double>(0d);
+        
         /// <summary>
         /// 
         /// </summary>
@@ -72,15 +77,21 @@ namespace Animation.Editor.ViewModel
             IObservable<bool> observable = Observable.Merge(IsInit.Select(o => o == true));
             PlayStopCommand.Subscribe(b => PlayStop(b));
             GoToFrameCommand.Subscribe(s => GoToFrame(s));
+            SelectionChangedCommand.Subscribe(s => SelectionChanged(s));
 
-           
-            ZoomCommand = IsInit.ToReactiveCommand<string>()
-                .WithSubscribe(s => Zooms(s));
+            IObservable<bool> observable1 = Observable.Merge(SelectIndex.Select(o => o >= 0),IsDoing.Select(o=>!o));
+            RemoveFrameCommand = observable1.ToReactiveCommand()
+                .WithSubscribe(() => RemoveFrames());
+
+            ZoomCommand = SelectIndex.Select(o => o >= 0).ToReactiveCommand<string>()
+               .WithSubscribe(s => Zooms(s));
 
             #endregion
 
-            CurFrameView.Subscribe(fv => { if (fv != null) Image.Value = fv.Path; });
+            SelectIndex.Subscribe(s => UpdateImage(s));
         }
+
+       
 
         /// <summary>
         /// 打开设置
@@ -114,38 +125,60 @@ namespace Animation.Editor.ViewModel
             if (!b)
                 return;
 
-            ImportUtil import = new ImportUtil(Dpi.GetDpiBySystemParameters(false).X);
-
-            if (project.IsEmpty())
+            
+            bool proIsEmpty = Project.IsEmpty;
+            if (proIsEmpty)
             {
                 string d = Path.Combine(Config.Default.TemporaryFolderResolved, Config.AppName);
-                project = Project.Create(d);
+                Project = Fis.Create(d);
+                Project.CreateMutex();
             }
-            else { 
-            
+           
+            ImportUtil import = new ImportUtil(Dpi.GetDpiBySystemParameters(false).X);
+
+            List<Fi> addFrames = new List<Fi>();
+            foreach (string f in fileNames)
+            {
+                List<Fi> frames = await Task.Factory.StartNew(() => import.From(f, Project.FullPath));
+                if (frames.Count > 0)
+                    addFrames.AddRange(frames);
             }
 
+            if (proIsEmpty)
+            {
+                foreach (var i in addFrames)
+                {
+                    Frames.Add(i);
+                    Project.Frames.Add(i);
+                }
+                var s1 = ImageUtil.SizeOf(addFrames[0].Path);
+                Project.Width = s1.Width;
+                Project.Height = s1.Height;
+                CanvasWidth.Value = Project.Width;
+                CanvasHeight.Value = Project.Height;
+                SelectIndex.Value = 0;
+                IsInit.Value = true;
+            }
+            else {
+                int index;
+                if (SelectIndex.Value.HasValue)
+                    index = SelectIndex.Value.Value;
+                else
+                    index = Frames.Count;
 
-            var frames = await Task.Factory.StartNew(() => import.FromGif(fileNames[0], project.FullPath, 0));
-            var s1 = ImageUtil.SizeOf(project.Frames[0].Path);
-            project.Width = s1.Width;
-            project.Height = s1.Height;
-
-
-            Image.Value = project.Frames[0].Path;
-
-            CanvasWidth.Value = project.Width;
-            CanvasHeight.Value = project.Height;
-            foreach (var i in project.Frames)
-                Frames.Add(new FrameView { Delay = i.Delay, Path = i.Path, Index = i.Index });
-
-            IsInit.Value = true;
+                foreach (var i in addFrames) {
+                    Frames.Insert(index, i);
+                    Project.Frames.Insert(index, i);
+                    index++;
+                }
+            }
+            Project.Persist();
         }
         #endregion
 
         #region 帧列表 相关事件
 
-        private int delay = 0, frameIndex;
+        private int odelay = 0;
         /// <summary>
         /// 
         /// </summary>
@@ -158,42 +191,42 @@ namespace Animation.Editor.ViewModel
                 {
                     timer.Stop();
                     timer = null;
+                    IsDoing.Value = false;
                 }
             }
             else
             {
-                if (CurFrameView.Value == null)
-                {
-                    frameIndex = 0;
-                    CurFrameView.Value = Frames.ElementAt(frameIndex);
-                }
-                else
-                    frameIndex = CurFrameView.Value.Index;
+                IsDoing.Value = true;
+                if (SelectIndex.Value == null)
+                    SelectIndex.Value = 0;
+                
+                Fi frame = Frames[SelectIndex.Value.Value];
+                odelay = frame.Delay;
 
                 timer = new DispatcherTimer();
                 timer.Tick += Timer_Tick;
-                timer.Interval = TimeSpan.FromMilliseconds(CurFrameView.Value.Delay);
-                delay = CurFrameView.Value.Delay;
+                timer.Interval = TimeSpan.FromMilliseconds(frame.Delay);
                 timer.Start();
             }
         }
         private void Timer_Tick(object sender, EventArgs e)
         {
-            ++frameIndex;
-            if (frameIndex == Frames.Count)
-                frameIndex = 0;
-            CurFrameView.Value = Frames.ElementAt(frameIndex);
-
-            if (delay != CurFrameView.Value.Delay)
+            int n = SelectIndex.Value.Value + 1;
+            if (n == Frames.Count)
+                n = 0;
+            SelectIndex.Value = n;
+            Fi frame = Frames[SelectIndex.Value.Value];
+            if (odelay != frame.Delay)
             {
                 timer.Stop();
                 timer = new DispatcherTimer();
                 timer.Tick += Timer_Tick;
-                timer.Interval = TimeSpan.FromMilliseconds(CurFrameView.Value.Delay);
-                delay = CurFrameView.Value.Delay;
+                timer.Interval = TimeSpan.FromMilliseconds(frame.Delay);
+                odelay = frame.Delay;
+                timer.Start();
             }
 
-            timer.Start();
+            //Image.Value = frame.Path;
         }
 
         /// <summary>
@@ -202,35 +235,37 @@ namespace Animation.Editor.ViewModel
         public ReactiveCommand<string> GoToFrameCommand { get; } = new ReactiveCommand<string>();
         private void GoToFrame(string type)
         {
-            if (CurFrameView.Value == null)
-                frameIndex = 0;
-            else
-                frameIndex = CurFrameView.Value.Index;
-
             switch (type)
             {
                 case "first":
-                    frameIndex = 0;
+                    SelectIndex.Value = 0;
                     break;
                 case "last":
-                    frameIndex = Frames.Count - 1;
+                    SelectIndex.Value = Frames.Count - 1;
                     break;
                 case "forward":
 
-                    if (frameIndex == 0)
-                        frameIndex = Frames.Count - 1;
+                    if (SelectIndex.Value == 0)
+                        SelectIndex.Value = Frames.Count - 1;
                     else
-                        frameIndex -= 1;
+                        SelectIndex.Value -= 1;
                     break;
                 case "backward":
-                    if (frameIndex == Frames.Count - 1)
-                        frameIndex = 0;
+                    if (SelectIndex.Value == Frames.Count - 1)
+                        SelectIndex.Value = 0;
                     else
-                        frameIndex += 1;
+                        SelectIndex.Value += 1;
                     break;
             }
+            //Image.Value = Frames[SelectIndex.Value.Value].Path;
+        }
 
-            CurFrameView.Value = Frames.ElementAt(frameIndex);
+        public ReactiveCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; } = new ReactiveCommand<SelectionChangedEventArgs>();
+        private void SelectionChanged(SelectionChangedEventArgs e) {
+            if (e.AddedItems.Count > 0)
+                Image.Value = ((Fi)e.AddedItems[^1]).Path;
+            else
+                Image.Value = "";
         }
 
         /// <summary>
@@ -258,6 +293,8 @@ namespace Animation.Editor.ViewModel
         }
         #endregion
 
+
+        //画布缩放
         public ReactiveCommand<string> ZoomCommand { get; }
         private void Zooms(string s) {
             if (s=="+")
@@ -273,7 +310,63 @@ namespace Animation.Editor.ViewModel
             }
         }
 
+        //删除帧
+        public ReactiveCommand RemoveFrameCommand { get; }
+        private void RemoveFrames()
+        {
+            IsDoing.Value = true;
+            var r = SelectFrameAndIndex();
+            try
+            {
+                ActionStack.SaveState(ActionStack.EditAction.Remove, r.Frames, r.Indexs);
 
+                foreach (var f in r.Frames)
+                {
+                    Frames.Remove(f);
+                    Project.Frames.Remove(f);
+                    try { File.Delete(f.Path); }
+                    catch { }
+                }
+            }
+            catch (Exception e)
+            {
+            }
+
+            //更新图片
+            if (Frames.Count > 0)
+            {
+                int n = r.Indexs.Min()-1;
+                if (n < 0)
+                    n = 0;
+                SelectIndex.Value = n;
+            }
+            else
+                SelectIndex.Value = null;
+
+            IsDoing.Value = false;
+        }
+
+        
+        /// <summary>
+        /// 获取先中帧
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        private List<Fi> SelectFrame()
+        {
+            return Frames.Where(o => o.Selected).ToList();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private (List<Fi> Frames, List<int> Indexs) SelectFrameAndIndex()
+        {
+            return (
+                Frames.Where(o => o.Selected).ToList(),
+                Frames.Where(o => o.Selected).Select(o => Frames.IndexOf(o)).ToList()
+            );
+        }
         /// <summary>
         /// 文件验证
         /// </summary>
@@ -296,10 +389,29 @@ namespace Animation.Editor.ViewModel
             return (true, string.Empty);
         }
 
+        /// <summary>
+        /// 更新Image
+        /// </summary>
+        /// <param name="index"></param>
+        private void UpdateImage(int? index)
+        {
+            if (index == null || index.Value < 0)
+                Image.Value = "";
+            else
+                Image.Value = Frames[index.Value].Path;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         private void ShowLoading()
         {
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         private void CloseLoading()
         {
 
