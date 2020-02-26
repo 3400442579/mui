@@ -9,7 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModel\CapturaViewModel.cs" />
+    <Compile Remove="ViewModel\SkinViewModel.cs" />
+    <Compile Remove="Windows\CapturaWindow.xaml.cs" />
+    <Compile Remove="Windows\SkinWindow.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="images\logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Windows\CapturaWindow.xaml" />
+    <Page Remove="Windows\SkinWindow.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReactiveProperty" Version="6.2.0" />
+    <PackageReference Include="MvvmLightStd10" Version="5.4.1.2" />
     <PackageReference Include="SharpAvi" Version="2.1.2" />
   </ItemGroup>
 

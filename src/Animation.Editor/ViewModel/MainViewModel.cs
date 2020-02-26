@@ -2,14 +2,15 @@
 using Animation.Editor.Models;
 using Animation.Editor.Utils;
 using DH.MUI.Controls;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Loc;
-using Reactive.Bindings;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,7 +21,7 @@ using ToastNotifications.Position;
 
 namespace Animation.Editor.ViewModel
 {
-    public class MainViewModel //: INotifyPropertyChanged
+    public class MainViewModel : ViewModelBase
     {
         #region
         private readonly Notifier _notifier;
@@ -31,39 +32,90 @@ namespace Animation.Editor.ViewModel
 
         //项目
         public Fis Project { get; private set; } = Fis.Empty();
-        public ReactiveProperty<bool> IsDoing { get; } = new ReactiveProperty<bool>(false);
+
+        private bool isDoing = false;
+        public bool IsDoing
+        {
+            get => isDoing;
+            set => Set(ref isDoing, value);
+        }
+
+
+        private string image;
+        public string Image
+        {
+            get => image;
+            set => Set(ref image, value);
+        }
         /// <summary>
         /// 
         /// </summary>
-        public ReactiveProperty<string> Image { get; } = new ReactiveProperty<string>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public ReactiveCollection<Fi> Frames { get; } = new ReactiveCollection<Fi>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public ReactivePropertySlim<bool> IsInit { get; } = new ReactivePropertySlim<bool>(false);
+        public ObservableCollection<Fi> Frames { get; } = new ObservableCollection<Fi>();
+
+        private bool isInit = false;
+        public bool IsInit
+        {
+            get => isInit;
+            set {
+                if (isInit != value)
+                {
+                    isInit = value;
+                    RaisePropertyChanged("IsInit");
+                     
+                   // RemoveFrameCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
         /// <summary>
         /// 当前帧
         /// </summary>
-        public ReactivePropertySlim<int?> SelectIndex { get; set; } = new ReactivePropertySlim<int?>();
-       
+        private int? selectIndex;
+        public int? SelectIndex
+        {
+            get => selectIndex;
+            set
+            {
+                if (selectIndex != value)
+                {
+                    selectIndex = value;
+                    RaisePropertyChanged("SelectIndex");
+                    UpdateImage(selectIndex);
+
+                    //RemoveFrameCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
         /// <summary>
         /// 画布宽度
         /// </summary>
-        public ReactivePropertySlim<double> CanvasWidth { get; } = new ReactivePropertySlim<double>(0d);
+        private double canvasWidth = 0d;
+        public double CanvasWidth
+        {
+            get => canvasWidth;
+            set => Set(ref canvasWidth, value);
+        }
+
         /// <summary>
         /// 画布高度
         /// </summary>
-        public ReactivePropertySlim<double> CanvasHeight { get; } = new ReactivePropertySlim<double>(0d);
+        private double canvasHeight=0d;
+        public double CanvasHeight
+        {
+            get => canvasHeight;
+            set => Set(ref canvasHeight, value);
+        }
         
         /// <summary>
         /// 
         /// </summary>
-        public ReactiveProperty<double> Zoom { get; set; } = new ReactiveProperty<double>(1d);
+        private double zoom = 1d;
+        public double Zoom
+        {
+            get => zoom;
+            set => Set(ref zoom, value);
+        }
 
-      
 
         public MainViewModel()
         {
@@ -86,32 +138,27 @@ namespace Animation.Editor.ViewModel
             });
 
             #region 事件绑定
-            OpenSetting = new ReactiveCommand().WithSubscribe(() =>
-            {
-                new SkinWindow().ShowDialog();
-            });
+            //OpenSetting = new RelayCommand(() => new SkinWindow().ShowDialog());
 
-            DropCommand.Subscribe(e => DropAsync(e));
-            DragEnterCommand.Subscribe(e => DragEnter(e));
+            DropCommand = new RelayCommand<DragEventArgs>(async e => await DropAsync(e));
+            DropCommand = new RelayCommand<DragEventArgs>(async e => await DropAsync(e));
 
-            OpenFolderCommand.Subscribe(s => OpenFolder(s));
-            OpenImageCommand.Subscribe(s => OpenImage(s));
+            OpenFolderCommand = new RelayCommand<string>(s => OpenFolder(s));
+            OpenImageCommand = new RelayCommand<string>(s => OpenImage(s));
 
-            IObservable<bool> observable = Observable.Merge(IsInit.Select(o => o == true));
-            PlayStopCommand= IsInit.ToReactiveCommand<bool?>().WithSubscribe(b => PlayStop(b));
-            GoToFrameCommand= IsInit.ToReactiveCommand<string>().WithSubscribe(s => GoToFrame(s));
-            SelectionChangedCommand.Subscribe(s => SelectionChanged(s));
+            //IObservable<bool> observable = Observable.Merge(IsInit.Select(o => o == true));
+            PlayStopCommand = new RelayCommand<bool?>(b => PlayStop(b), canExecute: (b) => IsInit);
+            GoToFrameCommand = new RelayCommand<string>(s => GoToFrame(s), canExecute: (b) => IsInit);
+            SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(s => SelectionChanged(s));
 
-            IObservable<bool> observable1 = Observable.Merge(SelectIndex.Select(o => o >= 0),IsDoing.Select(o=>!o));
-            RemoveFrameCommand = observable1.ToReactiveCommand()
-                .WithSubscribe(async () => await RemoveFramesAsync());
+            //IObservable<bool> observable1 = Observable.Merge(SelectIndex.Select(o => o >= 0),IsDoing.Select(o=>!o));
+            RemoveFrameCommand = new RelayCommand(
+                execute: async () => await RemoveFramesAsync());//,
+               // canExecute: () => SelectIndex.HasValue && !IsDoing);
 
-            ZoomCommand = SelectIndex.Select(o => o >= 0).ToReactiveCommand<string>()
-               .WithSubscribe(s => Zooms(s));
+            ZoomCommand = new RelayCommand<string>(s => Zooms(s), canExecute: b => SelectIndex.HasValue);
 
             #endregion
-
-            SelectIndex.Subscribe(s => UpdateImage(s));
         }
 
        
@@ -119,13 +166,13 @@ namespace Animation.Editor.ViewModel
         /// <summary>
         /// 打开设置
         /// </summary>
-        public ReactiveCommand OpenSetting { get; }
+        public RelayCommand OpenSetting { get; private set; }
 
         #region Drag 打开文件
         /// <summary>
         /// DragEnter
         /// </summary>
-        public ReactiveCommand<DragEventArgs> DragEnterCommand { get; } = new ReactiveCommand<DragEventArgs>();
+        public RelayCommand<DragEventArgs> DragEnterCommand { get; private set; }
         private void DragEnter(DragEventArgs e)
         {
             e.Effects = e.Data.GetDataPresent(DataFormats.FileDrop)
@@ -135,7 +182,7 @@ namespace Animation.Editor.ViewModel
         /// <summary>
         /// Drag 打开文件 
         /// </summary>
-        public AsyncReactiveCommand<DragEventArgs> DropCommand { get; } = new AsyncReactiveCommand<DragEventArgs>();
+        public RelayCommand<DragEventArgs> DropCommand { get; private set; } 
         private async Task DropAsync(DragEventArgs e)
         {
             if (!(e.Data.GetData(DataFormats.FileDrop) is string[] fileNames))
@@ -177,15 +224,15 @@ namespace Animation.Editor.ViewModel
                 var s1 = ImageUtil.SizeOf(addFrames[0].Path);
                 Project.Width = s1.Width;
                 Project.Height = s1.Height;
-                CanvasWidth.Value = Project.Width;
-                CanvasHeight.Value = Project.Height;
-                SelectIndex.Value = 0;
-                IsInit.Value = true;
+                CanvasWidth = Project.Width;
+                CanvasHeight = Project.Height;
+                SelectIndex = 0;
+                IsInit = true;
             }
             else {
                 int index;
-                if (SelectIndex.Value.HasValue)
-                    index = SelectIndex.Value.Value;
+                if (SelectIndex.HasValue)
+                    index = SelectIndex.Value;
                 else
                     index = Frames.Count;
 
@@ -205,7 +252,7 @@ namespace Animation.Editor.ViewModel
         /// <summary>
         /// 
         /// </summary>
-        public ReactiveCommand<bool?> PlayStopCommand { get; }
+        public RelayCommand<bool?> PlayStopCommand { get; }
         private void PlayStop(bool? strat)
         {
             if (!strat.HasValue || strat == false)
@@ -214,16 +261,16 @@ namespace Animation.Editor.ViewModel
                 {
                     timer.Stop();
                     timer = null;
-                    IsDoing.Value = false;
+                    IsDoing = false;
                 }
             }
             else
             {
-                IsDoing.Value = true;
-                if (SelectIndex.Value == null)
-                    SelectIndex.Value = 0;
+                IsDoing = true;
+                if (SelectIndex == null)
+                    SelectIndex = 0;
                 
-                Fi frame = Frames[SelectIndex.Value.Value];
+                Fi frame = Frames[SelectIndex.Value];
                 odelay = frame.Delay;
 
                 timer = new DispatcherTimer();
@@ -234,11 +281,11 @@ namespace Animation.Editor.ViewModel
         }
         private void Timer_Tick(object sender, EventArgs e)
         {
-            int n = SelectIndex.Value.Value + 1;
+            int n = SelectIndex.Value + 1;
             if (n == Frames.Count)
                 n = 0;
-            SelectIndex.Value = n;
-            Fi frame = Frames[SelectIndex.Value.Value];
+            SelectIndex = n;
+            Fi frame = Frames[SelectIndex.Value];
             if (odelay != frame.Delay)
             {
                 timer.Stop();
@@ -255,46 +302,46 @@ namespace Animation.Editor.ViewModel
         /// <summary>
         /// 跳到指定帧
         /// </summary>
-        public ReactiveCommand<string> GoToFrameCommand { get; } 
+        public RelayCommand<string> GoToFrameCommand { get; } 
         private void GoToFrame(string type)
         {
             switch (type)
             {
                 case "first":
-                    SelectIndex.Value = 0;
+                    SelectIndex = 0;
                     break;
                 case "last":
-                    SelectIndex.Value = Frames.Count - 1;
+                    SelectIndex = Frames.Count - 1;
                     break;
                 case "forward":
 
                     if (SelectIndex.Value == 0)
-                        SelectIndex.Value = Frames.Count - 1;
+                        SelectIndex = Frames.Count - 1;
                     else
-                        SelectIndex.Value -= 1;
+                        SelectIndex -= 1;
                     break;
                 case "backward":
                     if (SelectIndex.Value == Frames.Count - 1)
-                        SelectIndex.Value = 0;
+                        SelectIndex = 0;
                     else
-                        SelectIndex.Value += 1;
+                        SelectIndex += 1;
                     break;
             }
             //Image.Value = Frames[SelectIndex.Value.Value].Path;
         }
 
-        public ReactiveCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; } = new ReactiveCommand<SelectionChangedEventArgs>();
+        public RelayCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; }
         private void SelectionChanged(SelectionChangedEventArgs e) {
             if (e.AddedItems.Count > 0)
-                Image.Value = ((Fi)e.AddedItems[^1]).Path;
+                Image = ((Fi)e.AddedItems[^1]).Path;
             else
-                Image.Value = "";
+                Image = "";
         }
 
         /// <summary>
         /// 打开目录
         /// </summary>
-        public ReactiveCommand<string> OpenFolderCommand { get; } = new ReactiveCommand<string>();
+        public RelayCommand<string> OpenFolderCommand { get; } 
         private void OpenFolder(string s)
         {
             try
@@ -309,7 +356,7 @@ namespace Animation.Editor.ViewModel
         /// <summary>
         /// 打开图片
         /// </summary>
-        public ReactiveCommand<string> OpenImageCommand { get; } = new ReactiveCommand<string>();
+        public RelayCommand<string> OpenImageCommand { get; }
         private void OpenImage(string s)
         {
             Process.Start(s);
@@ -318,38 +365,38 @@ namespace Animation.Editor.ViewModel
 
 
         //画布缩放
-        public ReactiveCommand<string> ZoomCommand { get; }
+        public RelayCommand<string> ZoomCommand { get; }
         private void Zooms(string s) {
             if (s=="+")
             {
-                Zoom.Value += 0.1d;
-                if (Zoom.Value > 5d)
-                    Zoom.Value = 5d;
+                Zoom += 0.1d;
+                if (Zoom > 5d)
+                    Zoom = 5d;
             }
             else { 
-                Zoom.Value -= 0.1d;
-                if (Zoom.Value < 0.1d)
-                    Zoom.Value = 0.1d;
+                Zoom -= 0.1d;
+                if (Zoom < 0.1d)
+                    Zoom = 0.1d;
             }
         }
 
         /// <summary>
         /// 修改帧的延迟时间
         /// </summary>
-        public ReactiveCommand ChangeDelayCommand { get; } = new ReactiveCommand();
+        public RelayCommand ChangeDelayCommand { get; }
         private void ChangeDelay()
         {
 
         }
 
         //添加帧
-        public ReactiveCommand AddFrameCommand { get; } = new ReactiveCommand();
+        public RelayCommand AddFrameCommand { get; } 
         private void AddFrame() { 
         
         }
 
         //删除帧
-        public ReactiveCommand RemoveFrameCommand { get; }
+        public RelayCommand RemoveFrameCommand { get; private set; }
         private async Task RemoveFramesAsync()
         {
             //var dlg = new ModernDialog{ Title = Lang.Data.DeleteTitle,   Content = Lang.Data.ConfirmDelete};
@@ -363,40 +410,34 @@ namespace Animation.Editor.ViewModel
             if (messageResult != MessageBoxResult.Yes)
                 return;
 
-            IsDoing.Value = true;
+            IsDoing = true;
 
             await Task.Factory.StartNew(async () =>
                   {
                       var r = SelectFrameAndIndex();
-                      await Task.Delay(1000);
-                      try
+                      await Task.Delay(2000);
+                      ActionStack.SaveState(ActionStack.EditAction.Remove, r.Frames, r.Indexs);
+                      foreach (var f in r.Frames)
                       {
-                          ActionStack.SaveState(ActionStack.EditAction.Remove, r.Frames, r.Indexs);
-                          foreach (var f in r.Frames)
-                          {
-                              Application.Current.Dispatcher.Invoke(() => Frames.Remove(f));
-                              //Frames.Remove(f);
-                              Project.Frames.Remove(f);
-                              try { File.Delete(f.Path); }
-                              catch { }
-                          }
+                          Application.Current.Dispatcher.Invoke(() => Frames.Remove(f));
+                          //Frames.Remove(f);
+                          Project.Frames.Remove(f);
+                          try { File.Delete(f.Path); }
+                          catch { }
+                      }
 
-                          //更新图片
-                          if (Frames.Count > 0)
-                          {
-                              int n = r.Indexs.Min() - 1;
-                              if (n < 0)
-                                  n = 0;
-                              SelectIndex.Value = n;
-                          }
-                          else
-                              SelectIndex.Value = null;
-                      }
-                      catch (Exception e)
+                      //更新图片
+                      if (Frames.Count > 0)
                       {
+                          int n = r.Indexs.Min() - 1;
+                          if (n < 0)
+                              n = 0;
+                          SelectIndex = n;
                       }
-                      //Application.Current.Dispatcher.Invoke(() => IsDoing.Value = false);
-                      IsDoing.Value = false;
+                      else
+                          SelectIndex = null;
+
+                      IsDoing = false;
                   });
 
         }
@@ -451,9 +492,9 @@ namespace Animation.Editor.ViewModel
         private void UpdateImage(int? index)
         {
             if (index == null || index.Value < 0)
-                Image.Value = "";
+                Image = "";
             else
-                Image.Value = Frames[index.Value].Path;
+                Image = Frames[index.Value].Path;
         }
 
         /// <summary>

@@ -5,10 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:Animation.Editor.ViewModel"
     xmlns:conv="clr-namespace:Animation.Editor.Converters"
     xmlns:conv2="http://dhmui.com/MUI"
     xmlns:local="clr-namespace:Animation.Editor.Controls"
+    xmlns:vm="clr-namespace:Animation.Editor"
     xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
     mc:Ignorable="d"
   
@@ -24,11 +24,10 @@
     MinWidth="800"
     Height="450" 
     Width="800" 
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="CenterScreen"
+    DataContext="{Binding Source={x:Static vm:ServiceLocator.Main}}">
     
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
+   
      
     <mui:ModernWindow.LeftWindowCommands>
         <mui:WindowCommands ShowLastSeparator="False" ShowSeparators="False" VerticalAlignment="Center">
@@ -104,12 +103,12 @@
                 </behaviors:EventTrigger>
             </behaviors:Interaction.Triggers>
 
-            <Grid Visibility="{Binding IsInit.Value,Converter={x:Static mui:BoolToVisibilityConverter.Default}}">
+            <Grid Visibility="{Binding IsInit,Converter={x:Static mui:BoolToVisibilityConverter.Default}}">
 
-                <local:CustomImage CanvasWidth="{Binding CanvasWidth.Value,UpdateSourceTrigger=PropertyChanged}"
-                                   CanvasHeight="{Binding CanvasHeight.Value,UpdateSourceTrigger=PropertyChanged}"  
-                                   Zoom="{Binding Zoom.Value,UpdateSourceTrigger=PropertyChanged}"
-                                   Source="{Binding Image.Value,UpdateSourceTrigger=PropertyChanged}"
+                <local:CustomImage CanvasWidth="{Binding CanvasWidth,UpdateSourceTrigger=PropertyChanged}"
+                                   CanvasHeight="{Binding CanvasHeight,UpdateSourceTrigger=PropertyChanged}"  
+                                   Zoom="{Binding Zoom,UpdateSourceTrigger=PropertyChanged}"
+                                   Source="{Binding Image,UpdateSourceTrigger=PropertyChanged}"
                                    >
                 </local:CustomImage>
 
@@ -119,7 +118,7 @@
 
 
         <Grid Grid.Row="2" Grid.ColumnSpan="2"  
-              Visibility="{Binding IsInit.Value,Converter={x:Static mui:BoolToVisibilityConverter.Default}}">
+              Visibility="{Binding IsInit,Converter={x:Static mui:BoolToVisibilityConverter.Default}}">
             <Border Background="{DynamicResource ButtonBackground}"
                     BorderThickness="0,1,0,0" 
                     BorderBrush="{DynamicResource ButtonBackgroundHover}">
@@ -180,7 +179,7 @@
                     
                     <ListView Grid.Row="2" Style="{StaticResource framesListView}"
                               ItemsSource="{Binding Frames}" 
-                              SelectedIndex="{Binding SelectIndex.Value}">
+                              SelectedIndex="{Binding SelectIndex}">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="SelectionChanged" >
                                 <behaviors:InvokeCommandAction Command="{Binding SelectionChangedCommand}" PassEventArgsToCommand="True"/>
@@ -243,7 +242,7 @@
                                 Command="{Binding ZoomCommand}" CommandParameter="+">
                             <mui:PackIcon Kind="MagnifyPlus"/>
                         </Button>
-                        <TextBlock VerticalAlignment="Center" Text="{Binding Zoom.Value,StringFormat={}{0}%,Converter={x:Static conv:ZoomConverter.Default}}" Margin="0,0,10,0"/>
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Zoom,StringFormat={}{0}%,Converter={x:Static conv:ZoomConverter.Default}}" Margin="0,0,10,0"/>
                     </StackPanel>
                 </StatusBarItem>
             </StatusBar>
@@ -252,7 +251,7 @@
 
         <Grid  Background="#22000000" 
                Grid.ColumnSpan="2" Grid.RowSpan="4"
-               Visibility="{Binding IsDoing.Value, Converter={x:Static conv2:BoolToVisibilityConverter.Default}}">
+               Visibility="{Binding IsDoing, Converter={x:Static conv2:BoolToVisibilityConverter.Default}}">
             <ProgressBar Style="{StaticResource CircularProgressBar}" Foreground="{DynamicResource Accent}" 
                          Width="100" Height="100"
                          HorizontalAlignment="Center" 
