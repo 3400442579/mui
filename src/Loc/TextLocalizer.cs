@@ -6,7 +6,7 @@
         {
             this.LocalizationKey = LocalizationKey;
 
-            LangManager.Instance.LanguageChanged += L => RaisePropertyChanged(nameof(Display));
+            Lang.Data.LanguageChanged += L => RaisePropertyChanged(nameof(Display));
         }
 
         string _key;
@@ -26,6 +26,6 @@
 
         public string Display => ToString();
 
-        public override string ToString() => LangManager.Instance[_key];
+        public override string ToString() => Lang.Data[_key];
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Animation.Editor.Core;
 using Animation.Editor.Models;
 using Animation.Editor.Utils;
+using DH.MUI.Controls;
 using Loc;
 using Reactive.Bindings;
 using System;
@@ -13,20 +14,24 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Position;
 
 namespace Animation.Editor.ViewModel
 {
     public class MainViewModel //: INotifyPropertyChanged
     {
         #region
-       
+        private readonly Notifier _notifier;
+
         //预览定时器
         private DispatcherTimer timer;
         #endregion
 
         //项目
         public Fis Project { get; private set; } = Fis.Empty();
-        public ReactivePropertySlim<bool> IsDoing { get; } = new ReactivePropertySlim<bool>(false);
+        public ReactiveProperty<bool> IsDoing { get; } = new ReactiveProperty<bool>(false);
         /// <summary>
         /// 
         /// </summary>
@@ -58,10 +63,28 @@ namespace Animation.Editor.ViewModel
         /// </summary>
         public ReactiveProperty<double> Zoom { get; set; } = new ReactiveProperty<double>(1d);
 
-
+      
 
         public MainViewModel()
         {
+            _notifier = new Notifier(cfg =>
+            {
+                cfg.PositionProvider = new WindowPositionProvider(
+                    parentWindow: Application.Current.MainWindow,
+                    corner: Corner.BottomRight,
+                    offsetX: 25,
+                    offsetY: 100);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(6),
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(6));
+
+                cfg.Dispatcher = Application.Current.Dispatcher;
+
+                cfg.DisplayOptions.TopMost = false;
+                cfg.DisplayOptions.Width = 250;
+            });
+
             #region 事件绑定
             OpenSetting = new ReactiveCommand().WithSubscribe(() =>
             {
@@ -75,13 +98,13 @@ namespace Animation.Editor.ViewModel
             OpenImageCommand.Subscribe(s => OpenImage(s));
 
             IObservable<bool> observable = Observable.Merge(IsInit.Select(o => o == true));
-            PlayStopCommand.Subscribe(b => PlayStop(b));
-            GoToFrameCommand.Subscribe(s => GoToFrame(s));
+            PlayStopCommand= IsInit.ToReactiveCommand<bool?>().WithSubscribe(b => PlayStop(b));
+            GoToFrameCommand= IsInit.ToReactiveCommand<string>().WithSubscribe(s => GoToFrame(s));
             SelectionChangedCommand.Subscribe(s => SelectionChanged(s));
 
             IObservable<bool> observable1 = Observable.Merge(SelectIndex.Select(o => o >= 0),IsDoing.Select(o=>!o));
             RemoveFrameCommand = observable1.ToReactiveCommand()
-                .WithSubscribe(() => RemoveFrames());
+                .WithSubscribe(async () => await RemoveFramesAsync());
 
             ZoomCommand = SelectIndex.Select(o => o >= 0).ToReactiveCommand<string>()
                .WithSubscribe(s => Zooms(s));
@@ -182,7 +205,7 @@ namespace Animation.Editor.ViewModel
         /// <summary>
         /// 
         /// </summary>
-        public ReactiveCommand<bool?> PlayStopCommand { get; } = new ReactiveCommand<bool?>();
+        public ReactiveCommand<bool?> PlayStopCommand { get; }
         private void PlayStop(bool? strat)
         {
             if (!strat.HasValue || strat == false)
@@ -232,7 +255,7 @@ namespace Animation.Editor.ViewModel
         /// <summary>
         /// 跳到指定帧
         /// </summary>
-        public ReactiveCommand<string> GoToFrameCommand { get; } = new ReactiveCommand<string>();
+        public ReactiveCommand<string> GoToFrameCommand { get; } 
         private void GoToFrame(string type)
         {
             switch (type)
@@ -310,40 +333,72 @@ namespace Animation.Editor.ViewModel
             }
         }
 
+        /// <summary>
+        /// 修改帧的延迟时间
+        /// </summary>
+        public ReactiveCommand ChangeDelayCommand { get; } = new ReactiveCommand();
+        private void ChangeDelay()
+        {
+
+        }
+
+        //添加帧
+        public ReactiveCommand AddFrameCommand { get; } = new ReactiveCommand();
+        private void AddFrame() { 
+        
+        }
+
         //删除帧
         public ReactiveCommand RemoveFrameCommand { get; }
-        private void RemoveFrames()
+        private async Task RemoveFramesAsync()
         {
+            //var dlg = new ModernDialog{ Title = Lang.Data.DeleteTitle,   Content = Lang.Data.ConfirmDelete};
+            //dlg.Buttons = new Button[] { dlg.CreateButton(MessageBoxResult.OK, Lang.Data.Ok,true) ,dlg.YesButton, dlg.CancelButton };
+            //dlg.ShowDialog()
+
+            var messageResult = ModernDialog.ShowMessage(Lang.Data.DeleteTitle,
+                 Lang.Data.ConfirmDelete,
+                 MessageBoxButton.YesNo,
+                 new Dictionary<string, string> { { "Yes", Lang.Data.Yes }, { "No", Lang.Data.No } });
+            if (messageResult != MessageBoxResult.Yes)
+                return;
+
             IsDoing.Value = true;
-            var r = SelectFrameAndIndex();
-            try
-            {
-                ActionStack.SaveState(ActionStack.EditAction.Remove, r.Frames, r.Indexs);
 
-                foreach (var f in r.Frames)
-                {
-                    Frames.Remove(f);
-                    Project.Frames.Remove(f);
-                    try { File.Delete(f.Path); }
-                    catch { }
-                }
-            }
-            catch (Exception e)
-            {
-            }
+            await Task.Factory.StartNew(async () =>
+                  {
+                      var r = SelectFrameAndIndex();
+                      await Task.Delay(1000);
+                      try
+                      {
+                          ActionStack.SaveState(ActionStack.EditAction.Remove, r.Frames, r.Indexs);
+                          foreach (var f in r.Frames)
+                          {
+                              Application.Current.Dispatcher.Invoke(() => Frames.Remove(f));
+                              //Frames.Remove(f);
+                              Project.Frames.Remove(f);
+                              try { File.Delete(f.Path); }
+                              catch { }
+                          }
 
-            //更新图片
-            if (Frames.Count > 0)
-            {
-                int n = r.Indexs.Min()-1;
-                if (n < 0)
-                    n = 0;
-                SelectIndex.Value = n;
-            }
-            else
-                SelectIndex.Value = null;
+                          //更新图片
+                          if (Frames.Count > 0)
+                          {
+                              int n = r.Indexs.Min() - 1;
+                              if (n < 0)
+                                  n = 0;
+                              SelectIndex.Value = n;
+                          }
+                          else
+                              SelectIndex.Value = null;
+                      }
+                      catch (Exception e)
+                      {
+                      }
+                      //Application.Current.Dispatcher.Invoke(() => IsDoing.Value = false);
+                      IsDoing.Value = false;
+                  });
 
-            IsDoing.Value = false;
         }
 
         
@@ -381,10 +436,10 @@ namespace Animation.Editor.ViewModel
             var mediaCount = extensionList.Count(x => !string.IsNullOrEmpty(x) && media.Contains(Path.GetExtension(x)));
 
             if (mediaCount == 0 && projectCount == 0)
-                return (false, LangManager.Instance["FileFormatError"]);
+                return (false, Lang.Data["FileFormatError"]);
 
             if (projectCount != 0 && mediaCount != 0)
-                return (false, LangManager.Instance["ProjectImportError"]);
+                return (false, Lang.Data["ProjectImportError"]);
 
             return (true, string.Empty);
         }
@@ -415,6 +470,9 @@ namespace Animation.Editor.ViewModel
         private void CloseLoading()
         {
 
+        }
+        ~MainViewModel() {
+            _notifier.Dispose();
         }
     }
 }

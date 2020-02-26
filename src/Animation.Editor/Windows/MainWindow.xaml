@@ -7,9 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:Animation.Editor.ViewModel"
     xmlns:conv="clr-namespace:Animation.Editor.Converters"
+    xmlns:conv2="http://dhmui.com/MUI"
     xmlns:local="clr-namespace:Animation.Editor.Controls"
     xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
-    
     mc:Ignorable="d"
   
     ResizeMode="CanResize"
@@ -55,169 +55,46 @@
         <!--<KeyBinding Key="Up" Command="{Binding GoToFrameCommand}" />-->
         <!--<KeyBinding Key="Down" Command="{Binding GoToFrameCommand}" CommandParameter="backward"/>-->
     </Window.InputBindings>
-    <DockPanel LastChildFill="True">
-        <StackPanel x:Name="top" DockPanel.Dock="Top" Height="1" Background="{DynamicResource ButtonBackgroundHover}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
+       
+        <StackPanel Height="0" Grid.ColumnSpan="2" Background="{DynamicResource ButtonBackgroundHover}">
 
         </StackPanel>
         
-        <StackPanel Height="auto" DockPanel.Dock="Bottom">
-            <StatusBar Height="26" Background="Transparent" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource ButtonBackgroundHover}">
-                <StatusBarItem HorizontalAlignment="Center">
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="first"  Command="{Binding GoToFrameCommand}" CommandParameter="first"/>
-                        <Button x:Name="forward" Command="{Binding GoToFrameCommand}" CommandParameter="forward"/>
-                        <ToggleButton x:Name="playstop" Command="{Binding PlayStopCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}" />
-                        <Button x:Name="backward" Command="{Binding GoToFrameCommand}" CommandParameter="backward"/>
-                        <Button x:Name="last" Command="{Binding GoToFrameCommand}" CommandParameter="last"/>
-                    </StackPanel>
-                </StatusBarItem>
-                <StatusBarItem HorizontalAlignment="Right">
-                    <StackPanel Orientation="Horizontal">
-                        <Button Style="{StaticResource FlatAccentButton}" 
-                                VerticalAlignment="Center" Padding="4"
-                                Command="{Binding ZoomCommand}" CommandParameter="-">
-                            <mui:PackIcon Kind="MagnifyMinus"/>
-                        </Button>
+    
+        <StackPanel Grid.Column="0" Grid.Row="1">
 
-                        <Button Style="{StaticResource FlatAccentButton}"
-                                VerticalAlignment="Center" Padding="4"
-                                Command="{Binding ZoomCommand}" CommandParameter="+">
-                            <mui:PackIcon Kind="MagnifyPlus"/>
-                        </Button>
-                        <TextBlock VerticalAlignment="Center" Text="{Binding Zoom.Value,StringFormat={}{0}%,Converter={x:Static conv:ZoomConverter.Default}}" Margin="0,0,10,0"/>
-                    </StackPanel>
-                </StatusBarItem>
-            </StatusBar>
+            <WrapPanel Orientation="Horizontal" Margin="5" Width="50">
+                <ToggleButton ToolTip="Text" 
+                              Style="{StaticResource IconButton}">
+                    <mui:PackIcon  Kind="Texture" />
+                </ToggleButton>
+                <ToggleButton  Style="{StaticResource IconButton}">
+                    <mui:PackIcon  Kind="Earth" />
+                </ToggleButton>
+                <ToggleButton  Style="{StaticResource IconButton}">
+                    <mui:PackIcon  Kind="Account" />
+                </ToggleButton>
+                <ToggleButton  Style="{StaticResource IconButton}">
+                    <mui:PackIcon  Kind="BabyFace" />
+                </ToggleButton>
+            </WrapPanel>
+
         </StackPanel>
-        
-        <Grid x:Name="buttom" DockPanel.Dock="Bottom">
-            <Border Background="{DynamicResource ButtonBackground}"
-                    BorderThickness="0,1,0,0" 
-                    BorderBrush="{DynamicResource ButtonBackgroundHover}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Style="{StaticResource FlatAccentButton}">
-                            <mui:PackIcon Kind="Plus"/>
-                        </Button>
-                        <Button Style="{StaticResource FlatAccentButton}">
-                            <mui:PackIcon Icon="M0.7,0 L5,4.3 L9.3,0 L10,0.7 L5.7,5 L10,9.3 L9.3,10 L5,5.7 L0.7,10 L0,9.3 L4.3,5 L0,0.7 z"/>
-                        </Button>
-                        <Button Style="{StaticResource FlatAccentButton}"
-                                Command="{Binding RemoveFrameCommand}">
-                            <mui:PackIcon Kind="Delete"/>
-                        </Button>
-                        <Button Style="{StaticResource FlatAccentButton}">
-                            <mui:PackIcon Kind="Timer"/>
-                        </Button>
-                    </StackPanel>
-                    <Border BorderBrush="{DynamicResource ButtonBackgroundHover}" Margin="1,0" BorderThickness="0,0,0,1"/>
-                    <ListView Grid.Row="1" 
-                              ItemsSource="{Binding Frames}"
-                              SelectedIndex="{Binding SelectIndex.Value}">
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal"  IsItemsHost="True"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}">
-                                <Setter Property="SnapsToDevicePixels" Value="True"/>
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="IsSelected" Value="{Binding Selected,Mode=TwoWay}"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition/>
-                                                    <RowDefinition Height="auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Border x:Name="border" Grid.RowSpan="2" />
-                                                <Image MaxHeight="80" MaxWidth="100" Stretch="Uniform" Source="{Binding Path,UpdateSourceTrigger=PropertyChanged,Converter={x:Static conv:UriToBitmap.Default},ConverterParameter=80}"/>
-                                                <TextBlock Text="{Binding Index,UpdateSourceTrigger=PropertyChanged}" FontSize="10"/>
-                                                <TextBlock Grid.Row="1" Text="{Binding Delay,StringFormat={}{0}ms,UpdateSourceTrigger=PropertyChanged}"/>
-                                            </Grid>
-                                            <ControlTemplate.Triggers>
-                                                <MultiTrigger>
-                                                    <MultiTrigger.Conditions>
-                                                        <Condition Property="IsMouseOver" Value="True"/>
-                                                    </MultiTrigger.Conditions>
-                                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource Item.SelectedInactive.Background}"/>
-                                                    <Setter Property="Foreground" Value="#19E3C1"/>
-                                                </MultiTrigger>
-                                                <MultiTrigger>
-                                                    <MultiTrigger.Conditions>
-                                                        <Condition Property="Selector.IsSelectionActive" Value="False"/>
-                                                        <Condition Property="IsSelected" Value="True"/>
-                                                    </MultiTrigger.Conditions>
-                                                    <Setter Property="Foreground" Value="#19E3C1"/>
-                                                    <!--<Setter Property="Background" TargetName="Bd" Value="{DynamicResource Item.SelectedInactive.Background}"/>-->
-                                                    <Setter Property="BorderBrush" TargetName="border" Value="#19E3C1"/>
-                                                </MultiTrigger>
-                                                <MultiTrigger>
-                                                    <MultiTrigger.Conditions>
-                                                        <Condition Property="Selector.IsSelectionActive" Value="True"/>
-                                                        <Condition Property="IsSelected" Value="True"/>
-                                                    </MultiTrigger.Conditions>
-                                                    <Setter Property="Foreground" Value="#19E3C1"/>
-                                                    <!--<Setter Property="Background" TargetName="Bd" Value="{DynamicResource Item.SelectedActive.Background}"/>-->
-                                                    <Setter Property="BorderBrush" TargetName="border" Value="#19E3C1"/>
-                                                </MultiTrigger>
-
-                                                <Trigger Property="IsEnabled" Value="False">
-                                                    <Setter Property="Opacity" Value="0.7"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <behaviors:Interaction.Triggers>
-                            <behaviors:EventTrigger EventName="SelectionChanged" >
-                                <behaviors:InvokeCommandAction Command="{Binding SelectionChangedCommand}" PassEventArgsToCommand="True"/>
-                            </behaviors:EventTrigger>
-                        </behaviors:Interaction.Triggers>
-                    </ListView>
-                </Grid>
-            </Border>
-        </Grid>
 
 
-        <StackPanel x:Name="tool" Margin="0,1,0,1" 
-                    DockPanel.Dock="Left" 
-                    Width="70" 
-                    Orientation="Vertical" 
-                    Background="Transparent">
-
-            <ToolBarTray Orientation="Vertical" Background="Transparent">
-                <ToolBar ToolBarTray.IsLocked="False" Background="Transparent">
-                    <WrapPanel Orientation="Vertical" Margin="5">
-                        <ToggleButton ToolTip="Text" >
-                            <mui:PackIcon  Kind="Texture" />
-                        </ToggleButton>
-                        <ToggleButton >
-                            <mui:PackIcon  Kind="Earth" />
-                        </ToggleButton>
-                        <ToggleButton  Style="{StaticResource IconButton}">
-                            <mui:PackIcon  Kind="Account" />
-                        </ToggleButton>
-                        <ToggleButton  Style="{StaticResource IconButton}">
-                            <mui:PackIcon  Kind="BabyFace" />
-                        </ToggleButton>
-                    </WrapPanel>
-                </ToolBar>
-
-            </ToolBarTray>
-           </StackPanel>
-
-
-        <Grid AllowDrop="True" Background="Transparent" >
+        <Grid Grid.Row="1" Grid.Column="1" AllowDrop="True" Background="Transparent" >
             <behaviors:Interaction.Triggers>
                 <behaviors:EventTrigger EventName="DragEnter">
                     <behaviors:InvokeCommandAction Command="{Binding DragEnterCommand}" PassEventArgsToCommand="True" />
@@ -238,10 +115,149 @@
 
             </Grid>
 
-
         </Grid>
 
 
+        <Grid Grid.Row="2" Grid.ColumnSpan="2"  
+              Visibility="{Binding IsInit.Value,Converter={x:Static mui:BoolToVisibilityConverter.Default}}">
+            <Border Background="{DynamicResource ButtonBackground}"
+                    BorderThickness="0,1,0,0" 
+                    BorderBrush="{DynamicResource ButtonBackgroundHover}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource FlatAccentButton}"
+                                ToolTip="添加图片"
+                                Command="{Binding AddFrameCommand}">
+                            <mui:PackIcon Kind="Plus"/>
+                        </Button>
+                        <Button ToolTip="删除帧" Style="{StaticResource FlatAccentButton}"
+                                Command="{Binding RemoveFrameCommand}">
+                            <mui:PackIcon Kind="Delete"/>
+                        </Button>
+                        <Button ToolTip="修改帧的时间" 
+                                Command="{Binding ChangeDelayCommand}"
+                                Style="{StaticResource FlatAccentButton}">
+                            <mui:PackIcon Kind="Timer"/>
+                        </Button>
+                        
+                        
+                        <Button ToolTip="帧向左移动" 
+                                Command="{Binding ChangeDelayCommand}"
+                                Style="{StaticResource FlatAccentButton}">
+                            <mui:PackIcon Kind="ArrowLeft"/>
+                        </Button>
+                        <Button ToolTip="帧向右移动" 
+                                Command="{Binding ChangeDelayCommand}"
+                                Style="{StaticResource FlatAccentButton}">
+                            <mui:PackIcon Kind="ArrowRight"/>
+                        </Button>
+                        <Button ToolTip="复制帧" 
+                                Command="{Binding ChangeDelayCommand}"
+                                Style="{StaticResource FlatAccentButton}">
+                            <mui:PackIcon Kind="ContentCopy"/>
+                        </Button>
+                        <Button ToolTip="粘贴帧" 
+                                Command="{Binding ChangeDelayCommand}"
+                                Style="{StaticResource FlatAccentButton}">
+                            <mui:PackIcon Kind="ContentPaste"/>
+                        </Button>
 
-    </DockPanel>
+                        
+                        
+                        <Button Style="{StaticResource FlatAccentButton}">
+                            <mui:PackIcon Icon="M0.7,0 L5,4.3 L9.3,0 L10,0.7 L5.7,5 L10,9.3 L9.3,10 L5,5.7 L0.7,10 L0,9.3 L4.3,5 L0,0.7 z"/>
+                        </Button>
+                    </StackPanel>
+                    
+                    <Border Grid.Row="1" 
+                            BorderBrush="{DynamicResource ButtonBackgroundHover}" 
+                            BorderThickness="0,0,0,1"/>
+                    
+                    <ListView Grid.Row="2" Style="{StaticResource framesListView}"
+                              ItemsSource="{Binding Frames}" 
+                              SelectedIndex="{Binding SelectIndex.Value}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="SelectionChanged" >
+                                <behaviors:InvokeCommandAction Command="{Binding SelectionChangedCommand}" PassEventArgsToCommand="True"/>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </ListView>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
+            <StatusBar Height="26" Background="Transparent" Padding="0" Margin="0"
+                       BorderThickness="0,1,0,0" 
+                       BorderBrush="{DynamicResource ButtonBackgroundHover}">
+                <StatusBarItem HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="first"  
+                                Style="{StaticResource SystemButton}"
+                                Command="{Binding GoToFrameCommand}"
+                                CommandParameter="first">
+                            <mui:PackIcon Kind="PageFirst"/>
+                        </Button>
+                        <Button x:Name="forward"
+                                Style="{StaticResource SystemButton}"
+                                Command="{Binding GoToFrameCommand}" 
+                                CommandParameter="forward">
+                            <mui:PackIcon Kind="PagePrevious"/>
+                        </Button>
+                        <ToggleButton x:Name="playstop" Style="{StaticResource SystemButton}"
+                                      Command="{Binding PlayStopCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}" >
+                            <Grid>
+                                <mui:PackIcon Kind="Play" Visibility="{Binding IsChecked, ElementName=playstop,Converter={x:Static conv2:BoolToVisibilityConverter.Inverse}}"/>
+                                <mui:PackIcon Kind="Stop" Visibility="{Binding IsChecked, ElementName=playstop,Converter={x:Static conv2:BoolToVisibilityConverter.Default}}"/>
+                            </Grid>
+                        </ToggleButton>
+                        <Button x:Name="backward"
+                                Style="{StaticResource SystemButton}"
+                                Command="{Binding GoToFrameCommand}" 
+                                CommandParameter="backward">
+                            <mui:PackIcon Kind="PageNext"/>
+                        </Button>
+                        <Button x:Name="last"  
+                                Style="{StaticResource SystemButton}"
+                                Command="{Binding GoToFrameCommand}"
+                                CommandParameter="last">
+                            <mui:PackIcon Kind="PageLast"/>
+                        </Button>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource FlatAccentButton}" 
+                                VerticalAlignment="Center" Padding="4"
+                                Command="{Binding ZoomCommand}" CommandParameter="-">
+                            <mui:PackIcon Kind="MagnifyMinus"/>
+                        </Button>
+
+                        <Button Style="{StaticResource FlatAccentButton}"
+                                VerticalAlignment="Center" Padding="4"
+                                Command="{Binding ZoomCommand}" CommandParameter="+">
+                            <mui:PackIcon Kind="MagnifyPlus"/>
+                        </Button>
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Zoom.Value,StringFormat={}{0}%,Converter={x:Static conv:ZoomConverter.Default}}" Margin="0,0,10,0"/>
+                    </StackPanel>
+                </StatusBarItem>
+            </StatusBar>
+        </StackPanel>
+
+
+        <Grid  Background="#22000000" 
+               Grid.ColumnSpan="2" Grid.RowSpan="4"
+               Visibility="{Binding IsDoing.Value, Converter={x:Static conv2:BoolToVisibilityConverter.Default}}">
+            <ProgressBar Style="{StaticResource CircularProgressBar}" Foreground="{DynamicResource Accent}" 
+                         Width="100" Height="100"
+                         HorizontalAlignment="Center" 
+                         VerticalAlignment="Center" IsIndeterminate="True"  Value="10" />
+        </Grid>
+        
+    </Grid>
 </mui:ModernWindow>

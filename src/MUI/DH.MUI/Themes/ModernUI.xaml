@@ -30,6 +30,7 @@
         <ResourceDictionary Source="MT.TextBox.xaml" />
         <ResourceDictionary Source="MT.ToolTip.xaml" />
         <ResourceDictionary Source="MT.TreeView.xaml" />
+        <ResourceDictionary Source="MT.Dialog.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- default accent colors and brushes -->

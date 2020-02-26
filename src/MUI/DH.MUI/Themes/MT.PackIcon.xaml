@@ -84,7 +84,7 @@
                                 <TransformGroup>
                                     <ScaleTransform x:Name="FlipTransform"
                                                     ScaleX="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Flip, Mode=OneWay, Converter={x:Static converter:FlipToScaleXValueConverter.Default}}"
-                                                    ScaleY="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Flip, Mode=OneWay, Converter={x:Static  converter:FlipToScaleYValueConverter.Default}}" />
+                                                    ScaleY="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Flip, Mode=OneWay, Converter={x:Static converter:FlipToScaleYValueConverter.Default}}" />
                                     <RotateTransform x:Name="RotationTransform"
                                                      Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RotationAngle, Mode=OneWay}" />
                                     <RotateTransform x:Name="SpinTransform" />

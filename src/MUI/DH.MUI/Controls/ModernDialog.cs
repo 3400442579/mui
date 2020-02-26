@@ -20,16 +20,11 @@ namespace DH.MUI.Controls
         /// Identifies the Buttons dependency property.
         /// </summary>
         public static readonly DependencyProperty ButtonsProperty = DependencyProperty.Register("Buttons", typeof(IEnumerable<Button>), typeof(ModernDialog));
-
-        private ICommand closeCommand;
-
         private Button okButton;
         private Button cancelButton;
         private Button yesButton;
         private Button noButton;
         private Button closeButton;
-
-        private MessageBoxResult messageBoxResult = MessageBoxResult.None;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModernDialog"/> class.
@@ -39,10 +34,10 @@ namespace DH.MUI.Controls
             this.DefaultStyleKey = typeof(ModernDialog);
             this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
-            this.closeCommand = new RelayCommand(o => {
+            this.CloseCommand = new RelayCommand(o => {
                 var result = o as MessageBoxResult?;
                 if (result.HasValue) {
-                    this.messageBoxResult = result.Value;
+                    this.MessageBoxResult = result.Value;
 
                     // sets the Window.DialogResult as well
                     if (result.Value == MessageBoxResult.OK || result.Value == MessageBoxResult.Yes) {
@@ -83,9 +78,11 @@ namespace DH.MUI.Controls
         /// <summary>
         /// Gets the close window command.
         /// </summary>
-        public ICommand CloseCommand
+        public ICommand CloseCommand { get; }
+
+        public Button CreateButton(MessageBoxResult messageBoxResult, string content, bool isDefault = false, bool isCancel = false)
         {
-            get { return this.closeCommand; }
+            return CreateCloseDialogButton(content, isDefault, isCancel, messageBoxResult);
         }
 
         /// <summary>
@@ -96,7 +93,7 @@ namespace DH.MUI.Controls
             get
             {
                 if (this.okButton == null) {
-                    this.okButton = CreateCloseDialogButton(FirstFloor.ModernUI.Resources.Ok, true, false, MessageBoxResult.OK);
+                    this.okButton = CreateCloseDialogButton("确定", true, false, MessageBoxResult.OK);
                 }
                 return this.okButton;
             }
@@ -110,7 +107,7 @@ namespace DH.MUI.Controls
             get
             {
                 if (this.cancelButton == null) {
-                    this.cancelButton = CreateCloseDialogButton(FirstFloor.ModernUI.Resources.Cancel, false, true, MessageBoxResult.Cancel);
+                    this.cancelButton = CreateCloseDialogButton("取消", false, true, MessageBoxResult.Cancel);
                 }
                 return this.cancelButton;
             }
@@ -124,7 +121,7 @@ namespace DH.MUI.Controls
             get
             {
                 if (this.yesButton == null) {
-                    this.yesButton = CreateCloseDialogButton(FirstFloor.ModernUI.Resources.Yes, true, false, MessageBoxResult.Yes);
+                    this.yesButton = CreateCloseDialogButton("是", true, false, MessageBoxResult.Yes);
                 }
                 return this.yesButton;
             }
@@ -138,7 +135,7 @@ namespace DH.MUI.Controls
             get
             {
                 if (this.noButton == null) {
-                    this.noButton = CreateCloseDialogButton(FirstFloor.ModernUI.Resources.No, false, true, MessageBoxResult.No);
+                    this.noButton = CreateCloseDialogButton("否", false, true, MessageBoxResult.No);
                 }
                 return this.noButton;
             }
@@ -152,7 +149,7 @@ namespace DH.MUI.Controls
             get
             {
                 if (this.closeButton == null) {
-                    this.closeButton = CreateCloseDialogButton(FirstFloor.ModernUI.Resources.Close, true, false, MessageBoxResult.None);
+                    this.closeButton = CreateCloseDialogButton("Close", true, false, MessageBoxResult.None);
                 }
                 return this.closeButton;
             }
@@ -182,10 +179,7 @@ namespace DH.MUI.Controls
         /// <value>
         /// The message box result.
         /// </value>
-        public MessageBoxResult MessageBoxResult
-        {
-            get { return this.messageBoxResult; }
-        }
+        public MessageBoxResult MessageBoxResult { get; private set; } = MessageBoxResult.None;
 
         /// <summary>
         /// Displays a messagebox.
@@ -195,11 +189,11 @@ namespace DH.MUI.Controls
         /// <param name="button">The button.</param>
         /// <param name="owner">The window owning the messagebox. The messagebox will be located at the center of the owner.</param>
         /// <returns></returns>
-        public static MessageBoxResult ShowMessage(string text, string title, MessageBoxButton button, Window owner = null)
+        public static MessageBoxResult ShowMessage(string text, string title, MessageBoxButton button,Dictionary<string,string> buttonTexts=null, Window owner = null)
         {
             var dlg = new ModernDialog {
                 Title = title,
-                Content = new BBCodeBlock { BBCode = text, Margin = new Thickness(0, 0, 0, 8) },
+                Content = text,// new BBCodeBlock { BBCode = text, Margin = new Thickness(0, 0, 0, 8) },
                 MinHeight = 0,
                 MinWidth = 0,
                 MaxHeight = 480,
@@ -209,26 +203,56 @@ namespace DH.MUI.Controls
                 dlg.Owner = owner;
             }
 
-            dlg.Buttons = GetButtons(dlg, button);
+            dlg.Buttons = GetButtons(dlg, button, buttonTexts);
+
             dlg.ShowDialog();
-            return dlg.messageBoxResult;
+            return dlg.MessageBoxResult;
         }
 
-        private static IEnumerable<Button> GetButtons(ModernDialog owner, MessageBoxButton button)
+        private static IEnumerable<Button> GetButtons(ModernDialog owner, MessageBoxButton button,Dictionary<string,string> buttontexts=null)
         {
-            if (button == MessageBoxButton.OK) {
+            if (button == MessageBoxButton.OK)
+            {
+                if (buttontexts != null && buttontexts.ContainsKey("Ok"))
+                    owner.OkButton.Content = buttontexts["Ok"];
                 yield return owner.OkButton;
             }
-            else if (button == MessageBoxButton.OKCancel) {
+            else if (button == MessageBoxButton.OKCancel)
+            {
+                if (buttontexts != null)
+                {
+                    if (buttontexts.ContainsKey("Ok"))
+                        owner.OkButton.Content = buttontexts["Ok"];
+                    if (buttontexts.ContainsKey("Cancel"))
+                        owner.CancelButton.Content = buttontexts["Cancel"];
+                }
                 yield return owner.OkButton;
                 yield return owner.CancelButton;
             }
-            else if (button == MessageBoxButton.YesNo) {
+            else if (button == MessageBoxButton.YesNo)
+            {
+                if (buttontexts != null)
+                {
+                    if (buttontexts.ContainsKey("Yes"))
+                        owner.YesButton.Content = buttontexts["Yes"];
+                    if (buttontexts.ContainsKey("No"))
+                        owner.NoButton.Content = buttontexts["No"];
+                }
                 yield return owner.YesButton;
                 yield return owner.NoButton;
             }
-            else if (button == MessageBoxButton.YesNoCancel) {
-                yield return owner.YesButton;
+            else if (button == MessageBoxButton.YesNoCancel)
+            {
+                if (buttontexts != null)
+                {
+                    if (buttontexts.ContainsKey("Yes"))
+                        owner.YesButton.Content = buttontexts["Yes"];
+                    if (buttontexts.ContainsKey("No"))
+                        owner.NoButton.Content = buttontexts["No"];
+                    if (buttontexts.ContainsKey("Cancel"))
+                        owner.CancelButton.Content = buttontexts["Cancel"];
+                }
+                    yield return owner.YesButton;
                 yield return owner.NoButton;
                 yield return owner.CancelButton;
             }

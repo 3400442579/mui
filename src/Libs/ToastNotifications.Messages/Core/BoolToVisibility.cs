@@ -3,22 +3,22 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace DH.MUI.Converters
+namespace ToastNotifications.Messages.Core
 {
     /// <summary>
     /// Converts boolean to visibility values.
     /// </summary>
     [ValueConversion(typeof(bool?), typeof(Visibility))]
-    public sealed class BoolToVisibilityConverter : IValueConverter
+    public sealed class BoolToVisibility : IValueConverter
     {
         /// <summary> Gets the default instance </summary>
-        public static BoolToVisibilityConverter Default { get; } = new BoolToVisibilityConverter();
+        public static BoolToVisibility Default { get; } = new BoolToVisibility();
 
-        public static BoolToVisibilityConverter Inverse { get; } = new BoolToVisibilityConverter { IsInverse = true };
+        public static BoolToVisibility Inverse { get; } = new BoolToVisibility { IsInverse = true };
 
         public bool IsInverse { get; set; }
 
-        public BoolToVisibilityConverter()
+        public BoolToVisibility()
         {
             IsInverse = false;
         }

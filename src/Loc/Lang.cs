@@ -6,15 +6,15 @@ using System.Text.Json;
 
 namespace Loc
 {
-    public class LangManager : LangFields
+    public class Lang : LangFields
     {
         readonly Dictionary<string,string> _defaultLanguage;
         Dictionary<string, string> _currentLanguage;
         readonly string _langDir;
 
-        public static LangManager Instance { get; } = new LangManager();
+        public static Lang Data { get; } = new Lang();
 
-        LangManager()
+        Lang()
         {
             var appDir = AppDomain.CurrentDomain.BaseDirectory;
 

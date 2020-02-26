@@ -10,10 +10,11 @@
                 <ResourceDictionary Source="/DH.MUI;component/Themes/ModernUI.Light.xaml" />
                 <ResourceDictionary Source="/DH.MUI;component/Themes/ModernUI.xaml" />
                 <ResourceDictionary Source="/Resources/TaskbarIcon.xaml" />
-                
+                <ResourceDictionary Source="/Resources/Style.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
 
-            <x:Static x:Key="Loc" Member="loc:LangManager.Instance"/>
+            <x:Static x:Key="Loc" Member="loc:Lang.Data"/>
             
         </ResourceDictionary>
     </Application.Resources>

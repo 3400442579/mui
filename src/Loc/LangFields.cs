@@ -27,6 +27,50 @@ namespace Loc
 
         public virtual event Action<CultureInfo> LanguageChanged;
 
+        public string Yes
+        {
+            get => Get();
+            set => Set(value);
+        }
+        public string No
+        {
+            get => Get();
+            set => Set(value);
+        }
+        public string Ok
+        {
+            get => Get();
+            set => Set(value);
+        }
+        public string Cancel
+        {
+            get => Get();
+            set => Set(value);
+        }
+
+        public string ProjectImportError
+        {
+            get => Get();
+            set => Set(value);
+        }
+        public string FileFormatError
+        {
+            get => Get();
+            set => Set(value);
+        }
+        public string ConfirmDelete
+        {
+            get => Get();
+            set => Set(value);
+        }
+        public string DeleteTitle
+        {
+            get => Get();
+            set => Set(value);
+        }
+
+       
+
         public string About
         {
             get => Get();
@@ -525,12 +569,7 @@ namespace Loc
             set => Set(value);
         }
 
-        public string No
-        {
-            get => Get();
-            set => Set(value);
-        }
-
+       
         public string None
         {
             get => Get();
@@ -555,11 +594,7 @@ namespace Loc
             set => Set(value);
         }
 
-        public string Ok
-        {
-            get => Get();
-            set => Set(value);
-        }
+       
 
         public string OnlyAudio
         {
@@ -964,12 +999,6 @@ namespace Loc
         }
 
         public string WindowScreenShotTransparency
-        {
-            get => Get();
-            set => Set(value);
-        }
-
-        public string Yes
         {
             get => Get();
             set => Set(value);
