@@ -25,9 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loc", "src\Loc\Loc.csproj",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{68AC8141-B37F-4C8A-B536-91A12966BFBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToastNotifications", "src\libs\ToastNotifications\ToastNotifications.csproj", "{AE9D5673-FE72-4F8B-895C-336867896994}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToastNotifications", "src\libs\ToastNotifications\ToastNotifications.csproj", "{AE9D5673-FE72-4F8B-895C-336867896994}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToastNotifications.Messages", "src\libs\ToastNotifications.Messages\ToastNotifications.Messages.csproj", "{89FD3D92-01FB-400B-9E22-3AF162343FA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToastNotifications.Messages", "src\libs\ToastNotifications.Messages\ToastNotifications.Messages.csproj", "{89FD3D92-01FB-400B-9E22-3AF162343FA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ant.Wpf", "Ant\Ant.Wpf.csproj", "{293AF9FB-FAA7-46D5-94B5-EE011EAF7CE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{89FD3D92-01FB-400B-9E22-3AF162343FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89FD3D92-01FB-400B-9E22-3AF162343FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89FD3D92-01FB-400B-9E22-3AF162343FA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{293AF9FB-FAA7-46D5-94B5-EE011EAF7CE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{293AF9FB-FAA7-46D5-94B5-EE011EAF7CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{293AF9FB-FAA7-46D5-94B5-EE011EAF7CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{293AF9FB-FAA7-46D5-94B5-EE011EAF7CE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{5F8D1033-4027-4719-970A-43AF09D60DD6} = {68AC8141-B37F-4C8A-B536-91A12966BFBC}
 		{AE9D5673-FE72-4F8B-895C-336867896994} = {68AC8141-B37F-4C8A-B536-91A12966BFBC}
 		{89FD3D92-01FB-400B-9E22-3AF162343FA7} = {68AC8141-B37F-4C8A-B536-91A12966BFBC}
+		{293AF9FB-FAA7-46D5-94B5-EE011EAF7CE6} = {C5E311D4-9D15-4EA8-ABC6-5F4E42B7BA63}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D836878-10E2-4135-9270-FFCC8ADAB0FB}

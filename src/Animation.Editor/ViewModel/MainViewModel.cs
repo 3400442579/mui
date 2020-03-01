@@ -61,7 +61,7 @@ namespace Animation.Editor.ViewModel
                 {
                     isInit = value;
                     RaisePropertyChanged("IsInit");
-                     
+                   
                    // RemoveFrameCommand.RaiseCanExecuteChanged();
                 }
             }
@@ -80,7 +80,7 @@ namespace Animation.Editor.ViewModel
                     selectIndex = value;
                     RaisePropertyChanged("SelectIndex");
                     UpdateImage(selectIndex);
-
+                    
                     //RemoveFrameCommand.RaiseCanExecuteChanged();
                 }
             }
@@ -152,9 +152,7 @@ namespace Animation.Editor.ViewModel
             SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(s => SelectionChanged(s));
 
             //IObservable<bool> observable1 = Observable.Merge(SelectIndex.Select(o => o >= 0),IsDoing.Select(o=>!o));
-            RemoveFrameCommand = new RelayCommand(
-                execute: async () => await RemoveFramesAsync());//,
-               // canExecute: () => SelectIndex.HasValue && !IsDoing);
+            RemoveFrameCommand = new RelayCommand(async () => await RemoveFramesAsync(), canExecuteRemoveFrames);
 
             ZoomCommand = new RelayCommand<string>(s => Zooms(s), canExecute: b => SelectIndex.HasValue);
 
@@ -442,7 +440,11 @@ namespace Animation.Editor.ViewModel
 
         }
 
-        
+        private bool canExecuteRemoveFrames()
+        {
+            return SelectIndex.HasValue && !IsDoing;
+        }
+
         /// <summary>
         /// 获取先中帧
         /// </summary>

@@ -1,10 +1,10 @@
-﻿using DH.MUI.Core;
+﻿using Ant.Wpf.Core;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace DH.MUI.Controls
+namespace Ant.Wpf.Controls
 {
     /// <summary>
     /// Represents a Modern UI styled dialog window.
