@@ -4,26 +4,22 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
-    <AssemblyName>GifEditor</AssemblyName>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\logo.ico" />
+    <None Remove="Resources\Img\logo.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
-    <PackageReference Include="SharpAvi" Version="2.1.2" />
+    <PackageReference Include="HandyControl" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\mui\DH.MUI\DH.MUI.csproj" />
-    <ProjectReference Include="..\NotifyIconWpf\NotifyIconWpf.csproj" />
+    <Resource Include="Resources\Img\logo.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\logo.ico" />
+    <Folder Include="Tools\" />
   </ItemGroup>
 
 </Project>
