@@ -8,7 +8,7 @@ namespace Loc
 {
     public class Lang : LangFields
     {
-        readonly Dictionary<string,string> _defaultLanguage;
+        readonly Dictionary<string, string> _defaultLanguage;
         Dictionary<string, string> _currentLanguage;
         readonly string _langDir;
 
@@ -127,5 +127,9 @@ namespace Loc
         }
 
         protected override string GetValue(string PropertyName) => this[PropertyName];
+    }
+
+    public static class Langs{
+    
     }
 }

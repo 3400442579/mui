@@ -5,7 +5,7 @@ using HandyControl.Data;
 using HandyControl.Tools;
 
 
-namespace DH.Editor.UserControl
+namespace DH.Editor.UC
 {
     public partial class NoUserContent
     {
@@ -29,7 +29,7 @@ namespace DH.Editor.UserControl
             //}
         }
 
-        private void ButtonConfig_OnClick(object sender, RoutedEventArgs e) => PopupConfig.IsOpen = true;
+        //private void ButtonConfig_OnClick(object sender, RoutedEventArgs e) => PopupConfig.IsOpen = true;
 
         private void ButtonSkins_OnClick(object sender, RoutedEventArgs e)
         {

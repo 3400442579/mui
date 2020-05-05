@@ -7,11 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UC\SettingUc.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\Img\logo.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="UC\SettingUc.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="HandyControl" Version="2.4.0" />
+    <PackageReference Include="ReactiveUI.Fody" Version="11.3.8" />
+    <PackageReference Include="ReactiveUI.WPF" Version="11.3.8" />
+    <PackageReference Include="System.Text.Json" Version="4.7.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Tools\" />
+    <Folder Include="Tools\Extension\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Loc\Loc.csproj" />
   </ItemGroup>
 
 </Project>
