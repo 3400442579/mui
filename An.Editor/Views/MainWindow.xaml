@@ -30,7 +30,7 @@
                     ContHeight="{Binding #mainImg.Bounds.Height}"/>
 
     <UniformGrid Grid.Row="1" Grid.Column="1"  Background="Gray">
-      <Image Name="mainImg" Source="/Assets/400X200.png" Stretch="None">
+      <Image Name="mainImg" Source="/Assets/400X200.png" Stretch="None" RenderTransformOrigin="50%,50%">
         <Image.RenderTransform >
           <ScaleTransform ScaleX="{Binding Scale,Converter={x:Static conv:PercentageConverter.Default}}" 
                           ScaleY="{Binding Scale,Converter={x:Static conv:PercentageConverter.Default}}"/>
