@@ -1,0 +1,84 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:An.Editor.ViewModels;assembly=AvaloniaApplication1"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:control="clr-namespace:An.Editor.Controls"
+        xmlns:conv="clr-namespace:An.Editor.Converters"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="An.Editor.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="AvaloniaApplication1"
+        UseLayoutRounding="True"
+        Background="White"
+        >
+
+  <Design.DataContext>
+      <vm:MainWindowViewModel/>
+  </Design.DataContext>
+  
+
+
+  <Grid ColumnDefinitions="20,*"  RowDefinitions="20,*,auto" Margin="0,0,1,0" >
+    
+    <control:Ruler Foreground="Red" 
+                    Grid.ColumnSpan="2" Grid.RowSpan="2"
+                    Grid.Row="0" Grid.Column="0"
+                    Name="rc"
+                    Scale="{Binding Scale}"
+                    ContWidth="{Binding #mainImg.Bounds.Width}"
+                    ContHeight="{Binding #mainImg.Bounds.Height}"/>
+
+    <UniformGrid Grid.Row="1" Grid.Column="1"  Background="Gray">
+      <Image Name="mainImg" Source="/Assets/400X200.png" Stretch="None">
+        <Image.RenderTransform >
+          <ScaleTransform ScaleX="{Binding Scale,Converter={x:Static conv:PercentageConverter.Default}}" 
+                          ScaleY="{Binding Scale,Converter={x:Static conv:PercentageConverter.Default}}"/>
+        </Image.RenderTransform>
+      </Image>
+    </UniformGrid>
+
+    <TextBlock Grid.Row="1" Grid.Column="1" FontFamily="Arial Black" Margin="100" FontSize="64" Foreground="Moccasin" >
+      Text Transforms 测试
+      <TextBlock.RenderTransform>
+        <RotateTransform Angle="90" />
+      </TextBlock.RenderTransform>
+    </TextBlock>
+
+
+    <TextBlock Grid.Row="1" Grid.Column="1"  Foreground="Red" Text="{Binding #mainImg.ActualHeight}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+    <Slider Width="200" Grid.Row="1" Grid.Column="1" Name="slider" Value="15" Maximum="32" Minimum="0" IsSnapToTickEnabled="True"  TickFrequency="1" LargeChange="1" SmallChange="1" />
+
+    <ComboBox Name="cmbScale" Items="{Binding #rc.Scales}"
+              SelectedItem="{Binding ScaleValue}"
+              HorizontalAlignment="Left" Width="100" 
+              Background="White" 
+              BorderThickness="1" 
+              BorderBrush="Aqua"  VerticalAlignment="Top" 
+              Grid.Row="1" Grid.Column="1"/>
+
+
+    <Grid Grid.ColumnSpan="2" Grid.Row="2" RowDefinitions="auto,*" Height="100">
+      
+      <WrapPanel Height="30">
+        
+      </WrapPanel>
+
+    
+    </Grid>
+    
+    <TabStrip Height="30" Grid.ColumnSpan="2" Grid.Row="2">
+      <TabStripItem>
+        <TextBlock Text="{Binding Scale,StringFormat={}{0}% }" />
+      </TabStripItem>
+      <TabStripItem>
+        <Slider Width="100" Value="15" Maximum="32" Minimum="0" IsSnapToTickEnabled="True"  TickFrequency="1" LargeChange="1" SmallChange="1" />
+      </TabStripItem>
+    </TabStrip>
+    
+    
+    
+  </Grid>
+   
+</Window>

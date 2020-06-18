@@ -1,0 +1,45 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="clr-namespace:An.Editor.Controls"
+    xmlns:System="clr-namespace:System;assembly=mscorlib">
+
+  <Style Selector="Controls|Ruler">
+    <Setter Property="Foreground" Value="Green" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Grid ColumnDefinitions="20,*" RowDefinitions="20,*" IsVisible="True">
+            <!--
+            <Rectangle Fill="White" Grid.ColumnSpan="2"/>
+            <Rectangle Fill="White" Grid.RowSpan="2"/>
+            <Path Stroke="Black" StrokeThickness="1"  UseLayoutRounding="True"
+                  Data="M 10,0 v20 z M 20,0 v20 M 30,0 v20" 
+                  Grid.Column="1" />
+            -->
+            <TextBlock Text="{TemplateBinding UnitName}" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Center" />
+            
+            <Canvas Name="Canvas" Grid.ColumnSpan="2" Grid.RowSpan="2">
+              <Line StartPoint="0,0" EndPoint="0,20" 
+                    Name="mouseVerticalTrackLine"
+                    StrokeDashArray="3,1" 
+                    StrokeThickness="1" 
+                    Stroke="{TemplateBinding Highlight}" 
+                    Canvas.Left="{TemplateBinding ValueX}" 
+                    Canvas.Top="0"/>
+              <Line StartPoint="0,0" EndPoint="20,0" 
+                    Name="mouseHorizontalTrackLine"
+                    StrokeDashArray="3,1"
+                    StrokeThickness="1" 
+                    Stroke="{TemplateBinding Highlight}"
+                    Canvas.Left="0" 
+                    Canvas.Top="{TemplateBinding ValueY}"/>
+            </Canvas>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</Styles>
