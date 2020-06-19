@@ -1,6 +1,6 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:An.Editor.ViewModels;assembly=AvaloniaApplication1"
+        xmlns:vm="clr-namespace:An.Editor.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:control="clr-namespace:An.Editor.Controls"
@@ -8,16 +8,14 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="An.Editor.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaApplication1"
-        UseLayoutRounding="True"
+        Title="test"
         Background="White"
         >
 
   <Design.DataContext>
       <vm:MainWindowViewModel/>
   </Design.DataContext>
-  
-
+ 
 
   <Grid ColumnDefinitions="20,*"  RowDefinitions="20,*,auto" Margin="0,0,1,0" >
     
@@ -38,7 +36,8 @@
       </Image>
     </UniformGrid>
 
-    <TextBlock Grid.Row="1" Grid.Column="1" FontFamily="Arial Black" Margin="100" FontSize="64" Foreground="Moccasin" >
+    <TextBlock Grid.Row="1" Grid.Column="1" FontFamily="Arial Black" Margin="100" FontSize="64" 
+               Foreground="Moccasin">
       Text Transforms 测试
       <TextBlock.RenderTransform>
         <RotateTransform Angle="90" />
