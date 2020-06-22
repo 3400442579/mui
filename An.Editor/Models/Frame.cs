@@ -7,16 +7,16 @@ namespace An.Editor.ViewModels
 {
     public class Frame : ReactiveObject
     {
-        private string souce;
-        public string Souce
+        private string source;
+        public string Source
         {
-            get { return souce; }
+            get { return source; }
             set
             {
-                if (souce != value)
+                if (source != value)
                 {
-                    souce = value;
-                    this.RaisePropertyChanged(nameof(Souce));
+                    source = value;
+                    this.RaisePropertyChanged(nameof(Source));
                 }
             }
         }

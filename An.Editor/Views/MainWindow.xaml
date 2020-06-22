@@ -3,6 +3,8 @@
         xmlns:vm="clr-namespace:An.Editor.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+        xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
         xmlns:control="clr-namespace:An.Editor.Controls"
         xmlns:conv="clr-namespace:An.Editor.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -17,7 +19,7 @@
   </Design.DataContext>
  
 
-  <Grid ColumnDefinitions="20,*"  RowDefinitions="20,*,auto" Margin="0,0,1,0" >
+  <Grid ColumnDefinitions="20,*"  RowDefinitions="20,*,auto,auto" Margin="0,0,1,0" >
     
     <control:Ruler Foreground="Red" 
                     Grid.ColumnSpan="2" Grid.RowSpan="2"
@@ -28,7 +30,7 @@
                     ContHeight="{Binding #mainImg.Bounds.Height}"/>
 
     <UniformGrid Grid.Row="1" Grid.Column="1"  Background="Gray">
-      <Image Name="mainImg" Source="/Assets/400X200.png" Stretch="None" RenderTransformOrigin="50%,50%">
+      <Image Name="mainImg" Source="{Binding SelectedFrame.Source,Converter={x:Static conv:UriToBitmapConverter.Instance}}" Stretch="None" RenderTransformOrigin="50%,50%">
         <Image.RenderTransform >
           <ScaleTransform ScaleX="{Binding Scale,Converter={x:Static conv:PercentageConverter.Default}}" 
                           ScaleY="{Binding Scale,Converter={x:Static conv:PercentageConverter.Default}}"/>
@@ -36,19 +38,17 @@
       </Image>
     </UniformGrid>
 
-    <TextBlock Grid.Row="1" Grid.Column="1" FontFamily="Arial Black" Margin="100" FontSize="64" 
-               Foreground="Moccasin">
-      Text Transforms 测试
-      <TextBlock.RenderTransform>
-        <RotateTransform Angle="90" />
-      </TextBlock.RenderTransform>
-    </TextBlock>
+    <UniformGrid Grid.Row="1" Grid.Column="1" AllowDrop="True"  Background="Transparent">
+      <i:Interaction.Behaviors>
+        <ia:EventTriggerBehavior EventName="Drop" SourceObject="{Binding #changePropertyButton}">
+          <ia:ChangePropertyAction TargetObject="{Binding #textBox}" PropertyName="Text" Value="World"/>
+        </ia:EventTriggerBehavior>
+      </i:Interaction.Behaviors>
+    </UniformGrid>
 
 
-    <TextBlock Grid.Row="1" Grid.Column="1"  Foreground="Red" Text="{Binding #mainImg.ActualHeight}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-    <Slider Width="200" Grid.Row="1" Grid.Column="1" Name="slider" Value="15" Maximum="32" Minimum="0" IsSnapToTickEnabled="True"  TickFrequency="1" LargeChange="1" SmallChange="1" />
-
+   
+  
     <ComboBox Name="cmbScale" Items="{Binding #rc.Scales}"
               SelectedItem="{Binding ScaleValue}"
               HorizontalAlignment="Left" Width="100" 
@@ -61,21 +61,47 @@
     <Grid Grid.ColumnSpan="2" Grid.Row="2" RowDefinitions="auto,*" Height="100">
       
       <WrapPanel Height="30">
-        
+        <Button Classes="icon" Content="del"/>
+        <Button Classes="icon" Content="up"/>
+        <Button Classes="icon" Content="down"/>
       </WrapPanel>
 
+      <ListBox Grid.Row="1" Items="{Binding Project.Frames}" 
+               SelectedItem="{Binding SelectedFrame}"
+               SelectionMode="Multiple" BorderThickness="0"
+               ScrollViewer.HorizontalScrollBarVisibility="Auto">
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <StackPanel Orientation="Horizontal"/>
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.DataTemplates>
+          <DataTemplate>
+            <Grid Width="80" RowDefinitions="70,auto" ColumnDefinitions="*,*">
+              <Image Source="{Binding Path=Source,Converter={x:Static conv:UriToBitmapConverter.Instance}}" Stretch="Fill" Height="70" Width="70" Grid.ColumnSpan="2"/>
+              <TextBlock Text="{Binding Delay,StringFormat={}{0}ms }" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1"/>
+              <TextBlock Text="{Binding Index}"  Grid.Column="0" Grid.Row="1"/>
+            </Grid>
+          </DataTemplate>
+        </ListBox.DataTemplates>
+      </ListBox>
     
     </Grid>
     
-    <TabStrip Height="30" Grid.ColumnSpan="2" Grid.Row="2">
-      <TabStripItem>
-        <TextBlock Text="{Binding Scale,StringFormat={}{0}% }" />
-      </TabStripItem>
-      <TabStripItem>
-        <Slider Width="100" Value="15" Maximum="32" Minimum="0" IsSnapToTickEnabled="True"  TickFrequency="1" LargeChange="1" SmallChange="1" />
-      </TabStripItem>
-    </TabStrip>
-    
+
+
+    <DockPanel Grid.ColumnSpan="2" Grid.Row="3" Background="AliceBlue">
+
+
+      <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+        <TextBlock Text="{Binding ScaleValue,StringFormat={}{0}% }" VerticalAlignment="Center"/>
+        <Slider Width="100" VerticalAlignment="Center"
+                Name="slider" Value="15" Maximum="32" Minimum="0" 
+                IsSnapToTickEnabled="True" 
+                TickFrequency="1" 
+                LargeChange="1" SmallChange="1" />
+      </StackPanel>
+    </DockPanel>
     
     
   </Grid>

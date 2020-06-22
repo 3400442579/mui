@@ -16,6 +16,10 @@ namespace An.Editor.ViewModels
             {
                 Scale = (int)o;
             });
+
+            Project = new Project { Width = 500, Height = 400, Name = "aa"  };
+            Project.Frames.Add(new Frame { Index = 0, Delay = 100, Source = @"C:\Users\jxw\Desktop\17\1.png" });
+            Project.Frames.Add(new Frame { Index = 1, Delay = 110, Source = @"C:\Users\jxw\Desktop\17\2.png" });
         }
 
         public string Greeting => "Welcome to Avalonia!";
@@ -71,6 +75,20 @@ namespace An.Editor.ViewModels
             get
             {
                 return project;
+            }
+        }
+
+        private Frame selectedFrame;
+        public Frame SelectedFrame
+        {
+            set
+            {
+                selectedFrame = value;
+                this.RaisePropertyChanged(nameof(SelectedFrame));
+            }
+            get
+            {
+                return selectedFrame;
             }
         }
     }
