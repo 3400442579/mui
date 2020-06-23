@@ -30,7 +30,9 @@
                     ContHeight="{Binding #mainImg.Bounds.Height}"/>
 
     <UniformGrid Grid.Row="1" Grid.Column="1"  Background="Gray">
-      <Image Name="mainImg" Source="{Binding SelectedFrame.Source,Converter={x:Static conv:UriToBitmapConverter.Instance}}" Stretch="None" RenderTransformOrigin="50%,50%">
+      <Image Name="mainImg" 
+             Source="{Binding SelectedFrame.Source,Converter={x:Static conv:UriToBitmapConverter.Instance}}" 
+             Stretch="None" RenderTransformOrigin="50%,50%">
         <Image.RenderTransform >
           <ScaleTransform ScaleX="{Binding Scale,Converter={x:Static conv:PercentageConverter.Default}}" 
                           ScaleY="{Binding Scale,Converter={x:Static conv:PercentageConverter.Default}}"/>
@@ -38,15 +40,11 @@
       </Image>
     </UniformGrid>
 
-    <UniformGrid Grid.Row="1" Grid.Column="1" AllowDrop="True"  Background="Transparent">
-      <i:Interaction.Behaviors>
-        <ia:EventTriggerBehavior EventName="Drop" SourceObject="{Binding #changePropertyButton}">
-          <ia:ChangePropertyAction TargetObject="{Binding #textBox}" PropertyName="Text" Value="World"/>
-        </ia:EventTriggerBehavior>
-      </i:Interaction.Behaviors>
-    </UniformGrid>
 
 
+    <Grid Grid.Row="1" Grid.Column="1"  DragDrop.AllowDrop="True"  Background="Red" >
+     
+    </Grid>
    
   
     <ComboBox Name="cmbScale" Items="{Binding #rc.Scales}"

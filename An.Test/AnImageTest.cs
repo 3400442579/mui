@@ -12,7 +12,7 @@ namespace An.Test
         [Test]
         public void Test1()
         {
-            An.Image.Util.ToPngAsync(@"C:\Users\jxw\Desktop\gif问题\鱼\002_00000.png");
+            //An.Image.Util.ToPngAsync(@"C:\Users\jxw\Desktop\gif问题\鱼\002_00000.png");
             Assert.Pass();
         }
     }

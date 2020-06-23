@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <!--<TargetFramework>netcoreapp3.1</TargetFramework>-->
-    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
     <ApplicationIcon></ApplicationIcon>
   </PropertyGroup>
@@ -15,6 +15,7 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\**" />
+    <Folder Include="Pages\" />
     <Folder Include="Properties\" />
     <Folder Include="ImageUtil\" />
   </ItemGroup>
@@ -25,6 +26,7 @@
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.9.9" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\An.Image\An.Image.csproj" />
     <ProjectReference Include="..\Loc\Loc.csproj" />
   </ItemGroup>
 </Project>

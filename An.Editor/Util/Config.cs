@@ -2,25 +2,25 @@
 using System.IO;
 using System.Reflection;
 
-namespace DH.Editor.Core
+namespace An.Editor.Util
 {
     public class Config
     {
         private static readonly string appData = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config.json");
 
-        public static Config Instance { get; private set; } = new Config();
+        public static Config All { get; private set; } = new Config();
 
         static Config()
         {
             //Loads AppData settings.
             if (File.Exists(appData))
             {
-                string s=  File.ReadAllText(appData);
+                string s = File.ReadAllText(appData);
                 if (!string.IsNullOrWhiteSpace(s))
                 {
                     try
                     {
-                        Instance = System.Text.Json.JsonSerializer.Deserialize<Config>(s);
+                        All = System.Text.Json.JsonSerializer.Deserialize<Config>(s);
                     }
                     catch { }
                 }
@@ -35,7 +35,7 @@ namespace DH.Editor.Core
             #region Create folder
 
 
-            File.WriteAllText(appData, System.Text.Json.JsonSerializer.Serialize(Instance,
+            File.WriteAllText(appData, System.Text.Json.JsonSerializer.Serialize(All,
                 new System.Text.Json.JsonSerializerOptions { IgnoreNullValues = true, AllowTrailingCommas = true }
                 ));
 
@@ -59,6 +59,15 @@ namespace DH.Editor.Core
         /// 
         /// </summary>
         public string Lang { get; set; }
+
+
+        /// <summary>
+        /// 撤销操作记录限制
+        /// </summary>
+        public int HistoryLimit { get; set; } = 0;
+
+
+        public string TemporaryFolderResolved { get; set; }
 
     }
 }
