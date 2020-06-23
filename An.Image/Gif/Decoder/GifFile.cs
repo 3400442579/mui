@@ -34,10 +34,18 @@ namespace An.Image.Gif.Decoder
         private GifFile()
         {}
 
-        internal static GifFile ReadGifFile(Stream stream, bool metadataOnly)
+        public static GifFile ReadGifFile(Stream stream, bool metadataOnly)
         {
             var file = new GifFile();
             file.Read(stream, metadataOnly);
+            return file;
+        }
+
+        public static GifFile ReadGifFile(string fileName, bool metadataOnly)
+        {
+            var file = new GifFile();
+            using (var stream = new FileStream(fileName, FileMode.Open))
+                file.Read(stream, metadataOnly);
             return file;
         }
 
@@ -92,6 +100,13 @@ namespace An.Image.Gif.Decoder
 
             Frames = frames.AsReadOnly();
             Extensions = specialExtensions.AsReadOnly();
+        }
+
+
+        public (int width, int height) GetFullSize()
+        {
+            var lsd = gifMetadata.Header.LogicalScreenDescriptor;
+            return (lsd.Width, lsd.Height);
         }
     }
 }
