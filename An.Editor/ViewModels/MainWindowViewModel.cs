@@ -210,25 +210,25 @@ namespace An.Editor.ViewModels
         }
         private List<Frame> ImportFromGif(string source, string pathTemp)
         {
-            ShowProgress(DispatcherStringResource("Editor.ImportingFrames"), 50, true);
+            //ShowProgress(DispatcherStringResource("Editor.ImportingFrames"), 50, true);
 
             var listFrames = new List<Frame>();
 
-            var decoder = ImageUtil.GetDecoder(source, out GifFile gifMetadata) as GifBitmapDecoder;
+            var gifFile = GifFile.ReadGifFile(source, true);
 
            
-            ShowProgress(DispatcherStringResource("Editor.ImportingFrames"), gifMetadata.Frames.Count);
+           // ShowProgress(DispatcherStringResource("Editor.ImportingFrames"), gifMetadata.Frames.Count);
 
-            if (decoder.Frames.Count <= 0)
+            if (gifFile.Frames.Count <= 0)
                 return listFrames;
 
-            var fullSize = ImageUtil.GetFullSize(decoder, gifMetadata);
+            var fullSize = gifFile.GetFullSize();
             var index = 0;
 
             BitmapSource baseFrame = null;
-            foreach (var rawFrame in gifMetadata.Frames)
+            foreach (var rawFrame in gifFile.Frames)
             {
-                var metadata = ImageUtil.GetFrameMetadata(decoder, gifMetadata, index);
+                var metadata = ImageUtil.GetFrameMetadata(gifFile, index);
 
                 var bitmapSource = ImageUtil.MakeFrame(fullSize, rawFrame, metadata, baseFrame);
 
@@ -241,7 +241,7 @@ namespace An.Editor.ViewModels
                         baseFrame = bitmapSource;
                         break;
                     case FrameDisposalMethod.RestoreBackground:
-                        baseFrame = ImageUtil.IsFullFrame(metadata, fullSize) ? null : ImageUtil.ClearArea(bitmapSource, metadata);
+                        baseFrame = ImageUtil.IsFullFrame(metadata, fullSize.width, fullSize.height) ? null : ImageUtil.ClearArea(bitmapSource, metadata);
                         break;
                     case FrameDisposalMethod.RestorePrevious:
                         //Reuse same base frame.

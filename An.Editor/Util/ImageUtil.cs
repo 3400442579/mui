@@ -1,7 +1,11 @@
 ﻿using An.Image.Gif.Decoder;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 
 namespace An.Editor.Util
 {
@@ -66,37 +70,34 @@ namespace An.Editor.Util
             return defaultValue;
         }
 
-        public static FrameMetadata GetFrameMetadata(BitmapDecoder decoder, GifFile gifMetadata, int frameIndex)
+        public static FrameMetadata GetFrameMetadata(GifFile gifMetadata, int frameIndex)
         {
-            if (gifMetadata != null && gifMetadata.Frames.Count > frameIndex)
-                return GetFrameMetadata(gifMetadata.Frames[frameIndex]);
-
-            return GetFrameMetadata(decoder.Frames[frameIndex]);
+            return GetFrameMetadata(gifMetadata.Frames[frameIndex]);
         }
 
-        private static FrameMetadata GetFrameMetadata(BitmapFrame frame)
-        {
-            var metadata = (BitmapMetadata)frame.Metadata;
-            var delay = TimeSpan.FromMilliseconds(100);
-            var metadataDelay = metadata.GetQueryOrDefault("/grctlext/Delay", 10);
+        //private static FrameMetadata GetFrameMetadata(BitmapFrame frame)
+        //{
+        //    var metadata = (BitmapMetadata)frame.Metadata;
+        //    var delay = TimeSpan.FromMilliseconds(100);
+        //    var metadataDelay = metadata.GetQueryOrDefault("/grctlext/Delay", 10);
 
-            if (metadataDelay != 0)
-                delay = TimeSpan.FromMilliseconds(metadataDelay * 10);
+        //    if (metadataDelay != 0)
+        //        delay = TimeSpan.FromMilliseconds(metadataDelay * 10);
 
-            var disposalMethod = (FrameDisposalMethod)metadata.GetQueryOrDefault("/grctlext/Disposal", 0);
+        //    var disposalMethod = (FrameDisposalMethod)metadata.GetQueryOrDefault("/grctlext/Disposal", 0);
 
-            var frameMetadata = new FrameMetadata
-            {
-                Left = metadata.GetQueryOrDefault("/imgdesc/Left", 0),
-                Top = metadata.GetQueryOrDefault("/imgdesc/Top", 0),
-                Width = metadata.GetQueryOrDefault("/imgdesc/Width", frame.PixelWidth),
-                Height = metadata.GetQueryOrDefault("/imgdesc/Height", frame.PixelHeight),
-                Delay = delay,
-                DisposalMethod = disposalMethod
-            };
+        //    var frameMetadata = new FrameMetadata
+        //    {
+        //        Left = metadata.GetQueryOrDefault("/imgdesc/Left", 0),
+        //        Top = metadata.GetQueryOrDefault("/imgdesc/Top", 0),
+        //        Width = metadata.GetQueryOrDefault("/imgdesc/Width", frame.PixelWidth),
+        //        Height = metadata.GetQueryOrDefault("/imgdesc/Height", frame.PixelHeight),
+        //        Delay = delay,
+        //        DisposalMethod = disposalMethod
+        //    };
 
-            return frameMetadata;
-        }
+        //    return frameMetadata;
+        //}
 
         private static FrameMetadata GetFrameMetadata(GifFrame gifMetadata)
         {
@@ -158,9 +159,9 @@ namespace An.Editor.Util
             return bitmap;
         }
 
-        public static bool IsFullFrame(FrameMetadata metadata, System.Drawing.Size fullSize)
+        public static bool IsFullFrame(FrameMetadata metadata, int width, int height)
         {
-            return metadata.Left == 0 && metadata.Top == 0 && metadata.Width == fullSize.Width && metadata.Height == fullSize.Height;
+            return metadata.Left == 0 && metadata.Top == 0 && metadata.Width == width && metadata.Height == height;
         }
 
         public static BitmapSource ClearArea(BitmapSource frame, FrameMetadata metadata)
@@ -206,7 +207,7 @@ namespace An.Editor.Util
                 {ImageFormat.Png.Guid,  ImageFormat.Png}
             };
 
-            using (var gifImg = Image.FromFile(fileName, true))
+            using (var gifImg =System.Drawing. Image.FromFile(fileName, true))
             {
                 var imageGuid = gifImg.RawFormat.Guid;
 
