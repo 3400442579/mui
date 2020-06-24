@@ -13,6 +13,9 @@ using Avalonia.Controls.Shapes;
 using System.IO;
 using An.Image.Gif.Decoder;
 using An.Editor.Util;
+using An.Image.Gif.Decoding;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace An.Editor.ViewModels
 {
@@ -156,7 +159,7 @@ namespace An.Editor.ViewModels
                 InsertInternal(f, project.FullPath);
         }
 
-        private List<Frame> InsertInternal(string fileName, string pathTemp, ref double previousDpi, ref bool warn)
+        private List<Frame> InsertInternal(string fileName, string pathTemp)
         {
             List<Frame> listFrames;
 
@@ -164,12 +167,12 @@ namespace An.Editor.ViewModels
             {
                 switch (System.IO.Path.GetExtension(fileName).ToLowerInvariant())
                 {
-                    case "stg":
-                    case "zip":
-                        {
-                            listFrames = ImportFromProject(fileName, pathTemp);
-                            break;
-                        }
+                    //case "stg":
+                    //case "zip":
+                    //    {
+                    //        listFrames = ImportFromProject(fileName, pathTemp);
+                    //        break;
+                    //    }
 
                     case "gif":
                         {
@@ -177,26 +180,26 @@ namespace An.Editor.ViewModels
                             break;
                         }
 
-                    case "avi":
-                    case "mkv":
-                    case "mp4":
-                    case "wmv":
-                    case "webm":
-                        {
-                            listFrames = ImportFromVideo(fileName, pathTemp);
-                            break;
-                        }
+                    //case "avi":
+                    //case "mkv":
+                    //case "mp4":
+                    //case "wmv":
+                    //case "webm":
+                    //    {
+                    //        listFrames = ImportFromVideo(fileName, pathTemp);
+                    //        break;
+                    //    }
 
-                    case "apng":
-                    case "png":
-                        {
-                            listFrames = ImportFromPng(fileName, pathTemp, ref previousDpi, ref warn);
-                            break;
-                        }
+                    //case "apng":
+                    //case "png":
+                    //    {
+                    //        listFrames = ImportFromPng(fileName, pathTemp, ref previousDpi, ref warn);
+                    //        break;
+                    //    }
 
                     default:
                         {
-                            listFrames = ImportFromImage(fileName, pathTemp, ref previousDpi, ref warn);
+                            listFrames = ImportFromImage(fileName, pathTemp);
                             break;
                         }
                 }
@@ -214,69 +217,131 @@ namespace An.Editor.ViewModels
 
             var listFrames = new List<Frame>();
 
-            var gifFile = GifFile.ReadGifFile(source, true);
-
-           
-           // ShowProgress(DispatcherStringResource("Editor.ImportingFrames"), gifMetadata.Frames.Count);
-
-            if (gifFile.Frames.Count <= 0)
+            GifDecoder decoder = new GifDecoder(source);
+            if (decoder.Frames.Count <= 0)
                 return listFrames;
 
-            var fullSize = gifFile.GetFullSize();
-            var index = 0;
 
-            BitmapSource baseFrame = null;
-            foreach (var rawFrame in gifFile.Frames)
+            for (int i = 0; i < decoder.Frames.Count; i++)
             {
-                var metadata = ImageUtil.GetFrameMetadata(gifFile, index);
-
-                var bitmapSource = ImageUtil.MakeFrame(fullSize, rawFrame, metadata, baseFrame);
-
-                #region Disposal Method
-
-                switch (metadata.DisposalMethod)
-                {
-                    case FrameDisposalMethod.None:
-                    case FrameDisposalMethod.DoNotDispose:
-                        baseFrame = bitmapSource;
-                        break;
-                    case FrameDisposalMethod.RestoreBackground:
-                        baseFrame = ImageUtil.IsFullFrame(metadata, fullSize.width, fullSize.height) ? null : ImageUtil.ClearArea(bitmapSource, metadata);
-                        break;
-                    case FrameDisposalMethod.RestorePrevious:
-                        //Reuse same base frame.
-                        break;
-                }
-
-                #endregion
-
-                #region Each Frame
-
-                var fileName =System.IO. Path.Combine(pathTemp, $"{index} {DateTime.Now:hh-mm-ss-ffff}.png");
-
-                using (var stream = new System.IO.FileStream(fileName, System.IO. FileMode.Create))
-                {
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-                    encoder.Save(stream);
-                    stream.Close();
-                }
+                string fileName = System.IO.Path.Combine(pathTemp, $"{i} {DateTime.Now:hh-mm-ss-ffff}.png");
+                decoder.RenderFrame(i, fileName);
 
                 //It should not throw a overflow exception because of the maximum value for the milliseconds.
-                var frame = new Frame(fileName, (int)metadata.Delay.TotalMilliseconds);
+                var frame = new Frame(fileName, (int)decoder.Frames[i].FrameDelay.TotalMilliseconds);
                 listFrames.Add(frame);
 
-                UpdateProgress(index);
-
-                GC.Collect(1);
-
-                #endregion
-
-                index++;
+                //  UpdateProgress(index);
             }
+
+
+
+            // var gifFile = GifFile.ReadGifFile(source, true);
+
+
+            //// ShowProgress(DispatcherStringResource("Editor.ImportingFrames"), gifMetadata.Frames.Count);
+
+            // if (gifFile.Frames.Count <= 0)
+            //     return listFrames;
+
+            // var fullSize = gifFile.GetFullSize();
+            // var index = 0;
+
+
+            // var fileName = System.IO.Path.Combine(pathTemp, $"{index} {DateTime.Now:hh-mm-ss-ffff}.png");
+            // foreach (var rawFrame in gifFile.Frames)
+            // {
+            //     var metadata = gifFile.Frames[index];
+
+            //     var bitmapSource = ImageUtil.MakeFrame(fullSize, rawFrame, metadata, baseFrame);
+
+            //     #region Disposal Method
+
+            //     switch (metadata.DisposalMethod)
+            //     {
+            //         case FrameDisposalMethod.None:
+            //         case FrameDisposalMethod.DoNotDispose:
+            //             baseFrame = bitmapSource;
+            //             break;
+            //         case FrameDisposalMethod.RestoreBackground:
+            //             baseFrame = ImageUtil.IsFullFrame(metadata, fullSize.width, fullSize.height) ? null : ImageUtil.ClearArea(bitmapSource, metadata);
+            //             break;
+            //         case FrameDisposalMethod.RestorePrevious:
+            //             //Reuse same base frame.
+            //             break;
+            //     }
+
+            //     #endregion
+
+            //     #region Each Frame
+
+
+
+
+
+            //     using (var stream = new System.IO.FileStream(fileName, System.IO. FileMode.Create))
+            //     {
+            //         var encoder = new PngBitmapEncoder();
+            //         encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+            //         encoder.Save(stream);
+            //         stream.Close();
+            //     }
+
+            //     //It should not throw a overflow exception because of the maximum value for the milliseconds.
+            //     var frame = new Frame(fileName, (int)metadata.Delay.TotalMilliseconds);
+            //     listFrames.Add(frame);
+
+            //     UpdateProgress(index);
+
+            //     GC.Collect(1);
+
+            //     #endregion
+
+            //     index++;
+            // }
 
             return listFrames;
         }
 
+        private List<Frame> ImportFromImage(string source, string pathTemp)
+        {
+            var fileName =System.IO. Path.Combine(pathTemp, $"{0} {DateTime.Now:hh-mm-ss-ffff}.png");
+
+            #region Save the Image to the Recording Folder
+
+            SixLabors.ImageSharp.Image image = SixLabors.ImageSharp.Image.Load(source);
+            image.Metadata.VerticalResolution = 96;
+            image.Metadata.HorizontalResolution = 96;
+             image.Save(fileName);
+
+            //BitmapSource bitmap = new BitmapImage(new Uri(source));
+
+            ////Don't let it import multiple images with different DPI's.
+            //if (previousDpi > 0 && Math.Abs(previousDpi - bitmap.DpiX) > 0.09)
+            //{
+            //    warn = true;
+            //    return null;
+            //}
+
+            //if (Math.Abs(previousDpi) < 0.01)
+            //    previousDpi = bitmap.DpiX;
+
+            //if (bitmap.Format != PixelFormats.Bgra32)
+            //    bitmap = new FormatConvertedBitmap(bitmap, PixelFormats.Bgra32, null, 0);
+
+            //using (var stream = new FileStream(fileName, FileMode.Create))
+            //{
+            //    var encoder = new PngBitmapEncoder();
+            //    encoder.Frames.Add(BitmapFrame.Create(bitmap));
+            //    encoder.Save(stream);
+            //    stream.Close();
+            //}
+
+            GC.Collect();
+
+            #endregion
+
+            return new List<Frame> { new Frame(fileName, 66) };
+        }
     }
 }

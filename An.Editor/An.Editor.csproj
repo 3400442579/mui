@@ -17,16 +17,16 @@
     <AvaloniaResource Include="Assets\**" />
     <Folder Include="Pages\" />
     <Folder Include="Properties\" />
-    <Folder Include="ImageUtil\" />
+    <Folder Include="ImgLib\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.10" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.10" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.10" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.9.9" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0003" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\An.Image\An.Image.csproj" />
     <ProjectReference Include="..\Loc\Loc.csproj" />
   </ItemGroup>
 </Project>

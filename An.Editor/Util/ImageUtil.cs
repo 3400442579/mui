@@ -49,18 +49,18 @@ namespace An.Editor.Util
             }
         }
 
-        public static System.Drawing.Size GetFullSize(BitmapDecoder decoder, GifFile gifMetadata)
-        {
-            if (gifMetadata != null)
-            {
-                var lsd = gifMetadata.Header.LogicalScreenDescriptor;
-                return new System.Drawing.Size(lsd.Width, lsd.Height);
-            }
+        //public static System.Drawing.Size GetFullSize(BitmapDecoder decoder, GifFile gifMetadata)
+        //{
+        //    if (gifMetadata != null)
+        //    {
+        //        var lsd = gifMetadata.Header.LogicalScreenDescriptor;
+        //        return new System.Drawing.Size(lsd.Width, lsd.Height);
+        //    }
 
-            var width = decoder.Metadata.GetQueryOrDefault("/logscrdesc/Width", 0);
-            var height = decoder.Metadata.GetQueryOrDefault("/logscrdesc/Height", 0);
-            return new System.Drawing.Size(width, height);
-        }
+        //    var width = decoder.Metadata.GetQueryOrDefault("/logscrdesc/Width", 0);
+        //    var height = decoder.Metadata.GetQueryOrDefault("/logscrdesc/Height", 0);
+        //    return new System.Drawing.Size(width, height);
+        //}
 
         private static T GetQueryOrDefault<T>(this BitmapMetadata metadata, string query, T defaultValue)
         {

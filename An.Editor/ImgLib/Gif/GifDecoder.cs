@@ -1,40 +1,8 @@
-﻿
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.Processing;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using SixLabors.ImageSharp;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Threading.Tasks;
-using six = SixLabors.ImageSharp;
 
-namespace ConsoleApp
+namespace An.Image.Gif
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            AnimatedGif animatedGif = new AnimatedGif(@"C:\Users\jxw\Desktop\NGif.gif");
-            for (int i = 0; i < animatedGif.FrameCount; i++)
-                animatedGif.GetFrame(i).Save($@"E:\T\{i}.png");
-
-
-            var image = six.Image.Load(@"C:\Users\jxw\Desktop\NGif.gif");
-            for (int i = 0; i < image.Frames.Count; i++)
-            {
-                using var frameImage = image.Frames.CloneFrame(i);
-                //frameImage.Mutate(x => x.Quantize());
-                frameImage.Save($@"E:\T\a\{i}.png");// we include all metadata from the original image;
-            }
-        }
-
-
-
-
-    }
-
-
     public class GifDecoder
     {
         private readonly System.Drawing.Image gifImage;
@@ -83,15 +51,37 @@ namespace ConsoleApp
 
 
 
-        public void aa(string file) {
-            var image = SixLabors.ImageSharp.Image.Load(file);
-            for (int i = 0; i < image.Frames.Count; i++)
-            {
-                using var frameImage = image.Frames.CloneFrame(i);
-                frameImage.Save($@"E:\T\a\{i}.png");
-            }
-
-            image.Dispose();
+        ~GifDecoder()
+        {
+            gifImage.Dispose();
         }
+    }
+
+    public class GifDecoder2
+    {
+        private readonly SixLabors.ImageSharp.Image gifImage;
+
+        public GifDecoder2(string path)
+        {
+            gifImage = SixLabors.ImageSharp.Image.Load(path);
+
+            FrameCount = gifImage.Frames.Count;
+        }
+
+        public int FrameCount { get; }
+
+
+        public void GetFrame(int index, string outfile)
+        {
+            using var frameImage = gifImage.Frames.CloneFrame(index);
+            frameImage.Save(outfile);
+        }
+
+
+        ~GifDecoder2()
+        {
+            gifImage.Dispose();
+        }
+
     }
 }
