@@ -1,21 +1,14 @@
-﻿using System;
+﻿using An.Editor.Models;
+using An.Image.Gif.Decoding;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.VisualTree;
+using ReactiveUI;
+using SkiaSharp;
+using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
-using ReactiveUI;
-using System.Collections.Generic;
-using An.Editor.Controls;
-using An.Editor.Models;
-using Avalonia.Input;
-using System.Linq;
-using Avalonia.Controls;
-using Avalonia.VisualTree;
-using Avalonia.Controls.Shapes;
-using System.IO;
-using An.Image.Gif.Decoder;
-using An.Editor.Util;
-using An.Image.Gif.Decoding;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 
 namespace An.Editor.ViewModels
 {
@@ -199,12 +192,12 @@ namespace An.Editor.ViewModels
 
                     default:
                         {
-                            listFrames = ImportFromImage(fileName, pathTemp);
+                            listFrames = ImportFromImage(fileName, pathTemp,null,null);
                             break;
                         }
                 }
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
                 listFrames = new List<Frame>();
             }
@@ -303,16 +296,23 @@ namespace An.Editor.ViewModels
             return listFrames;
         }
 
-        private List<Frame> ImportFromImage(string source, string pathTemp)
+        private List<Frame> ImportFromImage(string source, string pathTemp,int? width,int? heght)
         {
             var fileName =System.IO. Path.Combine(pathTemp, $"{0} {DateTime.Now:hh-mm-ss-ffff}.png");
 
             #region Save the Image to the Recording Folder
 
-            SixLabors.ImageSharp.Image image = SixLabors.ImageSharp.Image.Load(source);
-            image.Metadata.VerticalResolution = 96;
-            image.Metadata.HorizontalResolution = 96;
-             image.Save(fileName);
+            SKBitmap bitmap= SkiaSharp.SKBitmap.Decode(source);
+            if (width.HasValue && heght.HasValue)
+            {
+                bitmap.Resize(new SKImageInfo(width.Value, heght.Value), SKFilterQuality.High);// SKBitmapResizeMethod.Box);
+            }
+            using System.IO.FileStream stream = new System.IO.FileStream(source, System.IO.FileMode.Create);
+            bitmap.PeekPixels().Encode(SKEncodedImageFormat.Png, 80).SaveTo(stream);
+            //SixLabors.ImageSharp.Image image = SixLabors.ImageSharp.Image.Load(source);
+            //image.Metadata.VerticalResolution = 96;
+            //image.Metadata.HorizontalResolution = 96;
+            // image.Save(fileName);
 
             //BitmapSource bitmap = new BitmapImage(new Uri(source));
 

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SkiaSharp;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace An.Image.Gif.Encoder.Quantization
@@ -30,7 +30,7 @@ namespace An.Image.Gif.Encoder.Quantization
         /// This function need only be overridden if your quantize algorithm needs two passes,
         /// such as an Octree quantizer.
         /// </remarks>
-        protected override void InitialQuantizePixel(Color pixel)
+        protected override void InitialQuantizePixel(SKColor pixel)
         {
             //Add the color to the octree.
             _octree.AddColor(pixel);
@@ -41,7 +41,7 @@ namespace An.Image.Gif.Encoder.Quantization
         /// </summary>
         /// <param name="pixel">The pixel to quantize</param>
         /// <returns>The quantized value</returns>
-        protected override byte QuantizePixel(Color pixel)
+        protected override byte QuantizePixel(SKColor pixel)
         {
             //var paletteIndex = (byte)MaxColors;    // The color at [_maxColors] is set to transparent
 
@@ -59,7 +59,7 @@ namespace An.Image.Gif.Encoder.Quantization
         /// Retrieve the palette for the quantized image
         /// </summary>
         /// <returns>The new color palette</returns>
-        protected override List<Color> GetPalette()
+        protected override List<SKColor> GetPalette()
         {
             //First off convert the octree to _maxColors colors.  - (TransparentColor.HasValue ? 1 : 0)
             var palette = _octree.Palletize(MaxColors, TransparentColor);
@@ -69,14 +69,14 @@ namespace An.Image.Gif.Encoder.Quantization
             //Add the transparent color
             if (TransparentColor.HasValue && !palette.Contains(TransparentColor.Value) && palette.Count == MaxColors)
             {
-                var closest = ScreenToGif.Util.ColorExtensions.ClosestColorRgb(palette.Cast<Color>().ToList(), TransparentColor.Value);
+                var closest = ScreenToGif.Util.ColorExtensions.ClosestColorRgb(palette.Cast<SKColor>().ToList(), TransparentColor.Value);
                 
-                TransparentColor = (Color)palette[closest];
+                TransparentColor = (SKColor)palette[closest];
                 //palette.Insert(palette.Count, TransparentColor);
             }
             
             //Then convert the palette based on those colors.
-            return palette.Cast<Color>().ToList();
+            return palette.Cast<SKColor>().ToList();
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace An.Image.Gif.Encoder.Quantization
             /// <summary>
             /// Cache the previous color quantized
             /// </summary>
-            private Color _previousColor;
+            private SKColor _previousColor;
 
             /// <summary>
             /// Get/Set the number of leaves in the tree
@@ -139,7 +139,7 @@ namespace An.Image.Gif.Encoder.Quantization
                 ReducibleNodes = new OctreeNode[9];
                 
                 _root = new OctreeNode(0, _maxColorBits, this);
-                _previousColor = Colors.Transparent;
+                _previousColor = SKColors.Transparent;
                 _previousNode = null;
             }
 
@@ -148,7 +148,7 @@ namespace An.Image.Gif.Encoder.Quantization
             /// Add a given color value to the octree
             /// </summary>
             /// <param name="pixel"></param>
-            public void AddColor(Color pixel)
+            public void AddColor(SKColor pixel)
             {
                 //Check if this request is for the same color as the last
                 if (_previousColor == pixel)
@@ -208,7 +208,7 @@ namespace An.Image.Gif.Encoder.Quantization
             /// <param name="colorCount">The maximum number of colors.</param>
             /// <param name="transparent">The transparent color.</param>
             /// <returns>An arraylist with the palettized colors</returns>
-            public ArrayList Palletize(int colorCount, Color? transparent)
+            public ArrayList Palletize(int colorCount, SKColor? transparent)
             {
                 while (Leaves > colorCount)
                     Reduce();
@@ -228,7 +228,7 @@ namespace An.Image.Gif.Encoder.Quantization
             /// </summary>
             /// <param name="pixel"></param>
             /// <returns></returns>
-            public int GetPaletteIndex(Color pixel)
+            public int GetPaletteIndex(SKColor pixel)
             {
                 return _root.GetPaletteIndex(pixel, 0);
             }
@@ -277,7 +277,7 @@ namespace An.Image.Gif.Encoder.Quantization
                 /// <param name="colorBits">The number of significant color bits</param>
                 /// <param name="level">The level in the tree</param>
                 /// <param name="octree">The tree to which this node belongs</param>
-                public void AddColor(Color pixel, int colorBits, int level, Octree octree)
+                public void AddColor(SKColor pixel, int colorBits, int level, Octree octree)
                 {
                     // Update the color information if this is a leaf
                     if (_leaf)
@@ -290,9 +290,9 @@ namespace An.Image.Gif.Encoder.Quantization
                     {
                         // Go to the next level down in the tree
                         var shift = 7 - level;
-                        var index = ((pixel.R & Mask[level]) >> (shift - 2)) |
-                                    ((pixel.G & Mask[level]) >> (shift - 1)) |
-                                    ((pixel.B & Mask[level]) >> (shift));
+                        var index = ((pixel.Red & Mask[level]) >> (shift - 2)) |
+                                    ((pixel.Green & Mask[level]) >> (shift - 1)) |
+                                    ((pixel.Blue & Mask[level]) >> (shift));
 
                         var child = Children[index];
 
@@ -354,7 +354,7 @@ namespace An.Image.Gif.Encoder.Quantization
                 /// <param name="palette">The palette</param>
                 /// <param name="paletteIndex">The current palette index</param>
                 /// <param name="transparent">The transparent color.</param>
-                public void ConstructPalette(IList palette, ref int paletteIndex, Color? transparent)
+                public void ConstructPalette(IList palette, ref int paletteIndex, SKColor? transparent)
                 {
                     if (_leaf)
                     {
@@ -373,7 +373,7 @@ namespace An.Image.Gif.Encoder.Quantization
                         _paletteIndex = paletteIndex++;
 
                         //And set the color of the palette entry.
-                        palette.Add(Color.FromArgb
+                        palette.Add(new SKColor
                         (
                             alpha: 255,
                             red: (byte)(_red / _pixelCount),
@@ -395,16 +395,16 @@ namespace An.Image.Gif.Encoder.Quantization
                 /// <summary>
                 /// Return the palette index for the passed color
                 /// </summary>
-                public int GetPaletteIndex(Color pixel, int level)
+                public int GetPaletteIndex(SKColor pixel, int level)
                 {
                     var paletteIndex = _paletteIndex;
 
                     if (_leaf) return paletteIndex;
 
                     var shift = 7 - level;
-                    var index = ((pixel.R & Mask[level]) >> (shift - 2)) |
-                                ((pixel.G & Mask[level]) >> (shift - 1)) |
-                                ((pixel.B & Mask[level]) >> (shift));
+                    var index = ((pixel.Red& Mask[level]) >> (shift - 2)) |
+                                ((pixel.Green & Mask[level]) >> (shift - 1)) |
+                                ((pixel.Blue & Mask[level]) >> (shift));
 
                     if (null != Children[index])
                         paletteIndex = Children[index].GetPaletteIndex(pixel, level + 1);
@@ -417,12 +417,12 @@ namespace An.Image.Gif.Encoder.Quantization
                 /// <summary>
                 /// Increment the pixel count and add to the color information
                 /// </summary>
-                public void Increment(Color pixel)
+                public void Increment(SKColor pixel)
                 {
                     _pixelCount++;
-                    _red += pixel.R;
-                    _green += pixel.G;
-                    _blue += pixel.B;
+                    _red += pixel.Red;
+                    _green += pixel.Green;
+                    _blue += pixel.Blue;
                 }
 
                 /// <summary>

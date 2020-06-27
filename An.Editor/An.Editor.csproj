@@ -6,6 +6,10 @@
     <LangVersion>8.0</LangVersion>
     <ApplicationIcon></ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Compile Update="**\*.xaml.cs">
@@ -15,6 +19,7 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\**" />
+    <Compile Remove="Util\ImageUtil.cs" />
     <Folder Include="Pages\" />
     <Folder Include="Properties\" />
     <Folder Include="ImgLib\" />
@@ -24,7 +29,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.9.10" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.10" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.9.9" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0003" />
+    <PackageReference Include="SkiaSharp" Version="1.68.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Loc\Loc.csproj" />

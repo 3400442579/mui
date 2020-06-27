@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SkiaSharp;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace An.Image.Gif.Encoder.Quantization
@@ -19,7 +19,7 @@ namespace An.Image.Gif.Encoder.Quantization
         {
             _colorMap = new Hashtable();
 
-            Colors = new Color[palette.Count];
+            Colors = new SKColor[palette.Count];
             palette.CopyTo(Colors);
         }
 
@@ -28,10 +28,11 @@ namespace An.Image.Gif.Encoder.Quantization
         ///</summary>
         ///<param name="pixel">The pixel to quantize</param>
         ///<returns>The quantized value</returns>
-        protected override byte QuantizePixel(Color pixel)
+        protected override byte QuantizePixel(SKColor pixel)
         {
+           
             byte colorIndex = 0;
-            var colorHash = BitConverter.ToInt32(new[] { pixel.A, pixel.R, pixel.G, pixel.B }, 0);
+            var colorHash = BitConverter.ToInt32(new[] { pixel.Alpha, pixel.Red, pixel.Green, pixel.Blue }, 0);
 
             //Check if the color is in the lookup table.
             if (_colorMap.ContainsKey(colorHash))
@@ -40,12 +41,12 @@ namespace An.Image.Gif.Encoder.Quantization
             {
                 //Not found - loop through the palette and find the nearest match.
                 //Firstly check the alpha value - if 0, lookup the transparent color.
-                if (0 == pixel.A)
+                if (0 == pixel.Alpha)
                 {
                     //Transparent. Lookup the first color with an alpha value of 0.
                     for (var index = 0; index < Colors.Length; index++)
                     {
-                        if (0 != Colors[index].A) continue;
+                        if (0 != Colors[index].Alpha) continue;
 
                         colorIndex = (byte)index;
                         break;
@@ -55,18 +56,18 @@ namespace An.Image.Gif.Encoder.Quantization
                 {
                     //Not transparent...
                     var leastDistance = int.MaxValue;
-                    int red = pixel.R;
-                    int green = pixel.G;
-                    int blue = pixel.B;
+                    int red = pixel.Red;
+                    int green = pixel.Green;
+                    int blue = pixel.Blue;
 
                     //Loop through the entire palette, looking for the closest color match
                     for (var index = 0; index < Colors.Length; index++)
                     {
                         var paletteColor = Colors[index];
 
-                        var redDistance = paletteColor.R - red;
-                        var greenDistance = paletteColor.G - green;
-                        var blueDistance = paletteColor.B - blue;
+                        var redDistance = paletteColor.Red - red;
+                        var greenDistance = paletteColor.Green - green;
+                        var blueDistance = paletteColor.Blue - blue;
 
                         var distance = (redDistance * redDistance) +
                                        (greenDistance * greenDistance) +
@@ -95,7 +96,7 @@ namespace An.Image.Gif.Encoder.Quantization
         ///Retrieve the palette for the quantized image
         ///</summary>
         ///<returns>The new color palette</returns>
-        protected override List<Color> GetPalette()
+        protected override List<SKColor> GetPalette()
         {
             return Colors.ToList();
         }
@@ -108,6 +109,6 @@ namespace An.Image.Gif.Encoder.Quantization
         ///<summary>
         ///List of all colors in the palette
         ///</summary>
-        protected Color[] Colors;
+        protected SKColor[] Colors;
     }
 }

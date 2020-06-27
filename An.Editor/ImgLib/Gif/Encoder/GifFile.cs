@@ -1,10 +1,11 @@
 ﻿using An.Image.Gif.Encoder.Quantization;
+using SkiaSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Color = System.Drawing.Color;
+
 
 namespace An.Image.Gif.Encoder
 {
@@ -23,12 +24,12 @@ namespace An.Image.Gif.Encoder
         /// <summary>
         /// The color marked as transparent. Null if not in use.
         /// </summary>
-        public Color? TransparentColor { get; set; }
+        public SKColor? TransparentColor { get; set; }
 
         /// <summary>
         /// The current color being used as transparent. Null if not in use.
         /// </summary>
-        public Color? CurrentTransparentColor { get; set; }
+        public SKColor? CurrentTransparentColor { get; set; }
 
         /// <summary>
         /// The maximum number of colors of each frame of the gif.
@@ -68,7 +69,7 @@ namespace An.Image.Gif.Encoder
         /// <summary>
         /// The current color table. Global or local.
         /// </summary>
-        private List<Color> ColorTable { get; set; }
+        private List<SKColor> ColorTable { get; set; }
 
         /// <summary>
         /// True if the frame will use a transparent flag. Not necessary if there's no presence of the color marked as transparent.
@@ -92,7 +93,7 @@ namespace An.Image.Gif.Encoder
 
         #endregion
 
-        public GifFile(Stream stream, Color? transparent, int repeatCount = 0)
+        public GifFile(Stream stream, SKColor? transparent, int repeatCount = 0)
         {
             InternalStream = stream;
             TransparentColor = transparent;
@@ -190,9 +191,9 @@ namespace An.Image.Gif.Encoder
         {
             foreach (var color in ColorTable)
             {
-                WriteByte(color.R);
-                WriteByte(color.G);
-                WriteByte(color.B);
+                WriteByte(color.Red);
+                WriteByte(color.Green);
+                WriteByte(color.Blue);
             }
 
             //Do I need to fill up the rest of the color table? 
@@ -347,8 +348,8 @@ namespace An.Image.Gif.Encoder
 
         private void ReadPixels(string path)
         {
-            var image = path.SourceFrom();
-            var pixelUtil = new PixelUtil(image);
+            
+            var pixelUtil = new PixelUtil(path);
             pixelUtil.LockBits();
 
             CurrentTransparentColor = TransparentColor;

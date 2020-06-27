@@ -6,8 +6,7 @@
 // The rest of the source file is licensed under MIT License.
 // Copyright (C) 2018 Jumar A. Macato, All Rights Reserved.
 
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
@@ -213,18 +212,33 @@ namespace An.Image.Gif.Decoding
                 _hasNewFrame = true;
 
                 ArrayPool<byte>.Shared.Return(tmpB);
-               
 
-                var ia = new Image<Rgba32>(Header.Dimensions.Width, Header.Dimensions.Height);
+                
+                var ia = new SkiaSharp.SKBitmap(Header.Dimensions.Width, Header.Dimensions.Height) ;
 
                 int c = 0;
                 for (int j = 0; j < Header.Dimensions.Height; j++)
                     for (int i = 0; i < Header.Dimensions.Width; i++)
                     {
                         var co = _bitmapBackBuffer[c++];
-                        ia[i, j] = new Rgba32(co.R, co.G, co.B, co.A);
+                        ia.SetPixel(i, j, new SkiaSharp.SKColor(co.R, co.G, co.B, co.A));
                     }
-                ia.Save(outfile);
+
+                var pp = ia.PeekPixels();
+               using System.IO.FileStream stream = new FileStream(outfile, FileMode.Create);
+                switch (Path.GetExtension(outfile).ToLower()) {
+                    case ".png":
+                        pp.Encode(new SKPngEncoderOptions()).SaveTo(stream);
+                        break;
+                    case ".jpge":
+                    case ".jpg":
+                        pp.Encode(new SKJpegEncoderOptions()).SaveTo(stream);
+                        break;
+                    case ".gif":
+                        pp.Encode(SKEncodedImageFormat.Gif,80).SaveTo(stream);
+                        break;
+                }
+                
 
 
                 //avalonia·½Ê½

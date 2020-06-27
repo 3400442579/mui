@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SkiaSharp;
+using System;
 using System.Collections;
-using System.Drawing;
 
 namespace An.Image.Gif.Encoder.Quantization
 {
@@ -14,7 +14,7 @@ namespace An.Image.Gif.Encoder.Quantization
         /// </remarks>
         public GrayscaleQuantizer() : base(new ArrayList())
         {
-            Colors = new Color[MaxColors];
+            Colors = new SKColor[MaxColors];
 
             var nColors = MaxColors;
 
@@ -33,7 +33,7 @@ namespace An.Image.Gif.Encoder.Quantization
                 // Otherwise, use your favorite color reduction algorithm
                 // and an optimum palette for that algorithm generated here.
                 // For example, a color histogram, or a median cut palette.
-                Colors[i] = Color.FromArgb(0xFF, (byte)intensity, (byte)intensity, (byte)intensity);
+                Colors[i] = new SKColor(alpha: 0xFF,red: (byte)intensity,green: (byte)intensity,blue: (byte)intensity);
             }
         }
 
@@ -42,9 +42,9 @@ namespace An.Image.Gif.Encoder.Quantization
         /// </summary>
         /// <param name="pixel">The pixel to quantize</param>
         /// <returns>The quantized value</returns>
-        protected override byte QuantizePixel(Color pixel)
+        protected override byte QuantizePixel(SKColor pixel)
         {
-            var luminance = pixel.R * 0.299 + pixel.G * 0.587 + pixel.B * 0.114;
+            var luminance = pixel.Red * 0.299 + pixel.Green * 0.587 + pixel.Blue * 0.114;
 
             // Gray scale is an intensity map from black to white.
             // Compute the index to the grayscale entry that

@@ -15,9 +15,9 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            AnimatedGif animatedGif = new AnimatedGif(@"C:\Users\jxw\Desktop\NGif.gif");
-            for (int i = 0; i < animatedGif.FrameCount; i++)
-                animatedGif.GetFrame(i).Save($@"E:\T\{i}.png");
+            //AnimatedGif animatedGif = new AnimatedGif(@"C:\Users\jxw\Desktop\NGif.gif");
+            //for (int i = 0; i < animatedGif.FrameCount; i++)
+            //    animatedGif.GetFrame(i).Save($@"E:\T\{i}.png");
 
 
             var image = six.Image.Load(@"C:\Users\jxw\Desktop\NGif.gif");

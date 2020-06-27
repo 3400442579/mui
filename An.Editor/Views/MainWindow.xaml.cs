@@ -41,7 +41,7 @@ namespace An.Editor.Views
         {
             if (e.Data.Contains(DataFormats.FileNames))
             {
-                (this.DataContext as MainWindowViewModel).ImportImage(e.Data.GetFileNames());
+                (this.DataContext as MainWindowViewModel).ImportImage(e.Data.GetFileNames().ToArray());
             }
         }
     }
