@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace An.Image
+namespace An.Image.Gif.Decoding
 {
     [StructLayout(LayoutKind.Explicit)]
     public readonly struct GifColor

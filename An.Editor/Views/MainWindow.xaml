@@ -12,6 +12,8 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="test"
         Background="White"
+        Width="400" Height="250"
+        WindowStartupLocation="CenterScreen"
         >
 
   <Design.DataContext>
@@ -21,13 +23,13 @@
 
   <Grid ColumnDefinitions="20,*"  RowDefinitions="20,*,auto,auto" Margin="0,0,1,0" >
     
-    <control:Ruler Foreground="Red" 
-                    Grid.ColumnSpan="2" Grid.RowSpan="2"
-                    Grid.Row="0" Grid.Column="0"
-                    Name="rc"
-                    Scale="{Binding Scale}"
-                    ContWidth="{Binding #mainImg.Bounds.Width}"
-                    ContHeight="{Binding #mainImg.Bounds.Height}"/>
+    <control:Ruler Foreground="Gray" 
+                   Grid.ColumnSpan="2" Grid.RowSpan="2"
+                   Grid.Row="0" Grid.Column="0"
+                   Name="rc"
+                   Scale="{Binding Scale}"
+                   ContWidth="{Binding #mainImg.Bounds.Width}"
+                   ContHeight="{Binding #mainImg.Bounds.Height}"/>
 
     <UniformGrid Grid.Row="1" Grid.Column="1"  Background="Gray">
       <Image Name="mainImg" 
@@ -42,23 +44,17 @@
 
 
 
-    <Grid Grid.Row="1" Grid.Column="1"  DragDrop.AllowDrop="True"  Background="Red" >
+    <Grid Grid.Row="1" Grid.Column="1"  DragDrop.AllowDrop="True" Background="LightPink"  >
      
     </Grid>
    
   
-    <ComboBox Name="cmbScale" Items="{Binding #rc.Scales}"
-              SelectedItem="{Binding ScaleValue}"
-              HorizontalAlignment="Left" Width="100" 
-              Background="White" 
-              BorderThickness="1" 
-              BorderBrush="Aqua"  VerticalAlignment="Top" 
-              Grid.Row="1" Grid.Column="1"/>
+  
 
 
     <Grid Grid.ColumnSpan="2" Grid.Row="2" RowDefinitions="auto,*" Height="100">
       
-      <WrapPanel Height="30">
+      <WrapPanel Height="30" IsVisible="False">
         <Button Classes="icon" Content="del"/>
         <Button Classes="icon" Content="up"/>
         <Button Classes="icon" Content="down"/>
@@ -76,9 +72,9 @@
         <ListBox.DataTemplates>
           <DataTemplate>
             <Grid Width="80" RowDefinitions="70,auto" ColumnDefinitions="*,*">
-              <Image Source="{Binding Path=Source,Converter={x:Static conv:UriToBitmapConverter.Instance}}" Stretch="Fill" Height="70" Width="70" Grid.ColumnSpan="2"/>
+              <Image Source="{Binding Path,Converter={x:Static conv:UriToBitmapConverter.Instance}}" Stretch="Fill" Height="70" Width="70" Grid.ColumnSpan="2"/>
               <TextBlock Text="{Binding Delay,StringFormat={}{0}ms }" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1"/>
-              <TextBlock Text="{Binding Index}"  Grid.Column="0" Grid.Row="1"/>
+              <TextBlock Text="{Binding Index}" Grid.Column="0" Grid.Row="1"/>
             </Grid>
           </DataTemplate>
         </ListBox.DataTemplates>
@@ -89,14 +85,12 @@
 
 
     <DockPanel Grid.ColumnSpan="2" Grid.Row="3" Background="AliceBlue">
-
-
       <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-        <TextBlock Text="{Binding ScaleValue,StringFormat={}{0}% }" VerticalAlignment="Center"/>
+        <TextBlock Text="{Binding Scale,StringFormat={}{0}%}" VerticalAlignment="Center"/>
         <Slider Width="100" VerticalAlignment="Center"
-                Name="slider" Value="15" Maximum="32" Minimum="0" 
+                Name="slider"  Maximum="32" Minimum="0" Value="{Binding ScaleIndex}"
                 IsSnapToTickEnabled="True" 
-                TickFrequency="1" 
+                TickFrequency="1"  
                 LargeChange="1" SmallChange="1" />
       </StackPanel>
     </DockPanel>

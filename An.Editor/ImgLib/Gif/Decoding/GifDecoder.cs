@@ -98,10 +98,9 @@ namespace An.Image.Gif.Decoding
             //_backBufferBytes = (pixelCount * Marshal.SizeOf(typeof(GifColor)));
         }
 
-        public GifDecoder(string file)
+        public GifDecoder(FileStream stream)
         {
-            using FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read);
-
+           
             _fileStream = stream;
             _lockObj = new object();
 
@@ -185,7 +184,7 @@ namespace An.Image.Gif.Decoding
             ClearArea(_gifDimensions);
         }
 
-        public void RenderFrame(int fIndex,string outfile="")
+        public void RenderFrame(int fIndex, string outfile = "")
         {
             lock (_lockObj)
             {
@@ -213,8 +212,8 @@ namespace An.Image.Gif.Decoding
 
                 ArrayPool<byte>.Shared.Return(tmpB);
 
-                
-                var ia = new SkiaSharp.SKBitmap(Header.Dimensions.Width, Header.Dimensions.Height) ;
+
+                var ia = new SkiaSharp.SKBitmap(Header.Dimensions.Width, Header.Dimensions.Height);
 
                 int c = 0;
                 for (int j = 0; j < Header.Dimensions.Height; j++)
@@ -225,20 +224,21 @@ namespace An.Image.Gif.Decoding
                     }
 
                 var pp = ia.PeekPixels();
-               using System.IO.FileStream stream = new FileStream(outfile, FileMode.Create);
-                switch (Path.GetExtension(outfile).ToLower()) {
+                using System.IO.FileStream stream = new FileStream(outfile, FileMode.Create);
+                switch (Path.GetExtension(outfile).ToLower())
+                {
                     case ".png":
                         pp.Encode(new SKPngEncoderOptions()).SaveTo(stream);
                         break;
                     case ".jpge":
                     case ".jpg":
-                        pp.Encode(new SKJpegEncoderOptions()).SaveTo(stream);
+                        pp.Encode(SKEncodedImageFormat.Jpeg,100).SaveTo(stream);
                         break;
                     case ".gif":
-                        pp.Encode(SKEncodedImageFormat.Gif,80).SaveTo(stream);
+                        pp.Encode(SKEncodedImageFormat.Gif, 80).SaveTo(stream);
                         break;
                 }
-                
+
 
 
                 //avalonia·½Ê½

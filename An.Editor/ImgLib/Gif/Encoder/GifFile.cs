@@ -56,10 +56,10 @@ namespace An.Image.Gif.Encoder
         /// </summary>
         private bool IsFirstFrame { get; set; } = true;
 
-        /// <summary>
-        /// The full size rect of the gif.
-        /// </summary>
-        private Rect FullSize { get; set; }
+        ///// <summary>
+        ///// The full size rect of the gif.
+        ///// </summary>
+        ////private Rect FullSize;
 
         /// <summary>
         /// The list of indexed pixels, based on a color table (palette).
@@ -121,7 +121,7 @@ namespace An.Image.Gif.Encoder
 
             if (IsFirstFrame)
             {
-                FullSize = rect;
+                //FullSize = rect;
 
                 WriteLogicalScreenDescriptor(rect);
 
@@ -348,9 +348,11 @@ namespace An.Image.Gif.Encoder
 
         private void ReadPixels(string path)
         {
-            
-            var pixelUtil = new PixelUtil(path);
-            pixelUtil.LockBits();
+            using SKBitmap sKBitmap = SKBitmap.Decode(path);
+
+
+            //var pixelUtil = new PixelUtil(path);
+            //pixelUtil.LockBits();
 
             CurrentTransparentColor = TransparentColor;
 
@@ -368,11 +370,11 @@ namespace An.Image.Gif.Encoder
                 TransparentColor = !IsFirstFrame || UseGlobalColorTable ? CurrentTransparentColor : null
             };
 
-            IndexedPixels = quantizer.Quantize(pixelUtil.Pixels);
+            IndexedPixels = quantizer.Quantize(sKBitmap.Bytes);
             ColorTable = quantizer.ColorTable;
             //}
 
-            pixelUtil.UnlockBits();
+            //pixelUtil.UnlockBits();
 
             if (quantizer.TransparentColor != null)
                 CurrentTransparentColor = quantizer.TransparentColor;

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace An.Image.Gif.Encoder.Quantization
 {
@@ -69,7 +70,7 @@ namespace An.Image.Gif.Encoder.Quantization
             //Add the transparent color
             if (TransparentColor.HasValue && !palette.Contains(TransparentColor.Value) && palette.Count == MaxColors)
             {
-                var closest = ScreenToGif.Util.ColorExtensions.ClosestColorRgb(palette.Cast<SKColor>().ToList(), TransparentColor.Value);
+                var closest = ClosestColorRgb(palette.Cast<SKColor>().ToList(), TransparentColor.Value);
                 
                 TransparentColor = (SKColor)palette[closest];
                 //palette.Insert(palette.Count, TransparentColor);
@@ -78,6 +79,37 @@ namespace An.Image.Gif.Encoder.Quantization
             //Then convert the palette based on those colors.
             return palette.Cast<SKColor>().ToList();
         }
+
+        private static int ClosestColorRgb(List<SKColor> colors, SKColor target)
+        {
+            //var colorDiffs = colors.AsParallel().Select(n => ColorDiff(n, target)).Min(n => n);
+            //return colors.FindIndex(n => ColorDiff(n, target) == colorDiffs);
+
+            var distance = int.MaxValue;
+            var indexOfMin = -1;
+            Parallel.For(0, colors.Count, (i, x) =>
+            {
+                var diff = ColorDiff(colors[i], target);
+
+                if (diff < distance)
+                {
+                    distance = diff;
+                    indexOfMin = i;
+                }
+
+                if (distance == 0)
+                    x.Break();
+            });
+
+            return indexOfMin;
+
+            //return colors.AsParallel().Select(n=> ColorDiff(n, target)).IndexOfMin();
+        }
+        private static int ColorDiff(SKColor first, SKColor second)
+        {
+            return (int)Math.Sqrt((first.Red - second.Red) * (first.Red - second.Red) + (first.Green - second.Green) * (first.Green - second.Green) + (first.Blue - second.Blue) * (first.Blue - second.Blue));
+        }
+
 
         /// <summary>
         /// Class which does the actual quantization.

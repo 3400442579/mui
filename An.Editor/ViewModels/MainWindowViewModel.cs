@@ -1,4 +1,6 @@
-﻿using An.Editor.Models;
+﻿using An.Editor.Controls;
+using An.Editor.Models;
+using An.Image.APNG;
 using An.Image.Gif.Decoding;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -7,6 +9,8 @@ using ReactiveUI;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 
@@ -18,9 +22,9 @@ namespace An.Editor.ViewModels
 
         public MainWindowViewModel()
         {
-            this.WhenAnyValue(o => o.ScaleValue).Subscribe(o =>
+            this.WhenAnyValue(o => o.ScaleIndex).Subscribe(o =>
             {
-                Scale = (int)o;
+                Scale = Ruler.Scales[o];
             });
 
             //Project = new Project { Width = 500, Height = 400, Name = "aa"  };
@@ -34,9 +38,20 @@ namespace An.Editor.ViewModels
             {
                 if (!(View?.GetVisualRoot() is Window window))
                     return;
-                var dialog = new OpenFileDialog();
+
+                var dialog = new OpenFileDialog
+                {
+                    AllowMultiple = true,
+                    Title = "导入",
+                    Filters = new List<FileDialogFilter> {
+                        new FileDialogFilter { Name="Image",Extensions=new List<string> { ".jpg", ".jpeg", ".gif", ".bmp", ".png", ".avi", ".mp4", ".wmv" } },
+                        new FileDialogFilter { Name="Video",Extensions=new List<string> {   ".avi", ".mp4", ".wmv" } },
+                        new FileDialogFilter { Name="Project",Extensions=new List<string>{".stg", ".zip" } }
+                    }
+                };
                 var result = await dialog.ShowAsync(window);
-                ImportImage(result);
+                if (result.Length > 0)
+                    ImportImage(result);
             });
 
         }
@@ -84,25 +99,24 @@ namespace An.Editor.ViewModels
             }
         }
 
-
-        private object scaleValue = 100;
-        public object ScaleValue
+        private int scaleIndex = 15;
+        public int ScaleIndex
         {
             set
             {
-                if (scaleValue != value)
+                if (scaleIndex != value)
                 {
-                    scaleValue = value;
-                    this.RaisePropertyChanged(nameof(ScaleValue));
+                    scaleIndex = value;
+                    this.RaisePropertyChanged(nameof(ScaleIndex));
                 }
             }
             get
             {
-                return scaleValue;
+                return scaleIndex;
             }
         }
 
-
+  
         private Project project;
         public Project Project
         {
@@ -142,6 +156,44 @@ namespace An.Editor.ViewModels
 
         #endregion
 
+
+
+        /// <summary>
+        /// 验证文件格式
+        /// </summary>
+        /// <param name="files"></param>
+        /// <returns></returns>
+        public List<string> ValidationFile(string[] files)
+        {
+            var media = new[] { ".jpg", ".jpeg", ".gif", ".bmp", ".png", ".avi", ".mp4", ".wmv" };
+
+            List<string> vfiles = files.Where(s => media.Contains(Path.GetExtension(s).ToLowerInvariant())).ToList();
+
+            var extensionList = vfiles.Select(s => Path.GetExtension(s).ToLowerInvariant()).ToList();
+
+            var projectCount = extensionList.Count(x => !string.IsNullOrEmpty(x) && (x.Equals(".stg") || x.Equals(".zip")));
+            var mediaCount = extensionList.Count(x => !string.IsNullOrEmpty(x) && media.Contains(Path.GetExtension(x)));
+
+            //if (projectCount != 0 && mediaCount != 0)
+            //{
+            //    Dialog.Ok(StringResource("Editor.DragDrop.Invalid.Title"),
+            //        StringResource("Editor.DragDrop.MultipleFiles.Instruction"),
+            //        StringResource("Editor.DragDrop.MultipleFiles.Message"), Icons.Warning);
+            //    return;
+            //}
+
+            //if (mediaCount == 0 && projectCount == 0)
+            //{
+            //    Dialog.Ok(StringResource("Editor.DragDrop.Invalid.Title"),
+            //        StringResource("Editor.DragDrop.Invalid.Instruction"),
+            //        StringResource("Editor.DragDrop.Invalid.Message"), Icons.Warning);
+            //    return;
+            //}
+
+            return vfiles;
+        }
+
+
         public void ImportImage(string[] files)
         {
             IsLoading = true;
@@ -149,7 +201,18 @@ namespace An.Editor.ViewModels
             var project = new Project().CreateProjectFolder();
 
             foreach (string f in files)
-                InsertInternal(f, project.FullPath);
+            {
+                var frames = InsertInternal(f, project.FullPath);
+                if (frames == null)
+                    continue;
+
+                project.Frames.AddRange(frames);
+            }
+
+            if (!project.Any)
+                project.ReleaseMutex();
+            
+            Project = project;
         }
 
         private List<Frame> InsertInternal(string fileName, string pathTemp)
@@ -160,12 +223,12 @@ namespace An.Editor.ViewModels
             {
                 switch (System.IO.Path.GetExtension(fileName).ToLowerInvariant())
                 {
-                    //case "stg":
-                    //case "zip":
-                    //    {
-                    //        listFrames = ImportFromProject(fileName, pathTemp);
-                    //        break;
-                    //    }
+                    case "stg":
+                    case "zip":
+                        {
+                            listFrames = ImportFromProject(fileName, pathTemp);
+                            break;
+                        }
 
                     case "gif":
                         {
@@ -173,22 +236,28 @@ namespace An.Editor.ViewModels
                             break;
                         }
 
-                    //case "avi":
-                    //case "mkv":
-                    //case "mp4":
-                    //case "wmv":
-                    //case "webm":
-                    //    {
-                    //        listFrames = ImportFromVideo(fileName, pathTemp);
-                    //        break;
-                    //    }
+                    case "avi":
+                    case "mkv":
+                    case "mp4":
+                    case "wmv":
+                    case "webm":
+                        {
+                            listFrames = ImportFromVideo(fileName, pathTemp);
+                            break;
+                        }
 
-                    //case "apng":
-                    //case "png":
-                    //    {
-                    //        listFrames = ImportFromPng(fileName, pathTemp, ref previousDpi, ref warn);
-                    //        break;
-                    //    }
+                    case "apng":
+                    case "png":
+                        {
+                            listFrames = ImportFromApng(fileName, pathTemp);
+                            break;
+                        }
+
+                    case "webp":
+                        {
+                            listFrames = ImportFromWebp(fileName, pathTemp);
+                            break;
+                        }
 
                     default:
                         {
@@ -210,7 +279,9 @@ namespace An.Editor.ViewModels
 
             var listFrames = new List<Frame>();
 
-            GifDecoder decoder = new GifDecoder(source);
+            using FileStream stream = new FileStream(source, FileMode.Open, FileAccess.Read);
+
+            GifDecoder decoder = new GifDecoder(stream);
             if (decoder.Frames.Count <= 0)
                 return listFrames;
 
@@ -295,7 +366,6 @@ namespace An.Editor.ViewModels
 
             return listFrames;
         }
-
         private List<Frame> ImportFromImage(string source, string pathTemp,int? width,int? heght)
         {
             var fileName =System.IO. Path.Combine(pathTemp, $"{0} {DateTime.Now:hh-mm-ss-ffff}.png");
@@ -342,6 +412,90 @@ namespace An.Editor.ViewModels
             #endregion
 
             return new List<Frame> { new Frame(fileName, 66) };
+        }
+
+        private List<Frame> ImportFromApng(string source, string pathTemp)
+        {
+            //ShowProgress(DispatcherStringResource("Editor.ImportingFrames"), 50, true);
+
+
+
+            using FileStream stream = new FileStream(source, FileMode.Open, FileAccess.Read);
+
+            Apng apng = new Apng(stream);
+            if (!apng.ReadFrames())
+                return ImportFromImage(source, pathTemp, null, null);
+
+
+            var listFrames = new List<Frame>();
+
+            var fullSize = new System.Drawing.Size((int)apng.Ihdr.Width, (int)apng.Ihdr.Height);
+           
+
+            BitmapSource baseFrame = null;
+            for (var index = 0; index < apng.Actl.NumFrames; index++)
+            {
+                var metadata = apng.GetFrame(index);
+                var rawFrame = SKBitmap.Decode(metadata.ImageData);
+
+
+                var bitmapSource = Apng.MakeFrame(fullSize, rawFrame, metadata, baseFrame);
+
+                #region Disposal Method
+
+                switch (metadata.DisposeOp)
+                {
+                    case Apng.DisposeOps.None: //No disposal is done on this frame before rendering the next; the contents of the output buffer are left as is.
+                        baseFrame = bitmapSource;
+                        break;
+                    case Apng.DisposeOps.Background: //The frame's region of the output buffer is to be cleared to fully transparent black before rendering the next frame.
+                        baseFrame = baseFrame == null || Apng.IsFullFrame(metadata, fullSize) ? null : Apng.ClearArea(baseFrame, metadata);
+                        break;
+                    case Apng.DisposeOps.Previous: //The frame's region of the output buffer is to be reverted to the previous contents before rendering the next frame.
+                                                   //Reuse same base frame.
+                        break;
+                }
+
+                #endregion
+
+                #region Each Frame
+
+                var fileName = Path.Combine(pathTemp, $"{index} {DateTime.Now:hh-mm-ss-ffff}.png");
+
+                //TODO: Do I need to verify the DPI of the image?
+
+                using (var output = new FileStream(fileName, FileMode.Create))
+                {
+                    var encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+                    encoder.Save(output);
+                    stream.Close();
+                }
+
+                list.Add(new FrameInfo(fileName, metadata.Delay));
+
+                UpdateProgress(index);
+
+                GC.Collect(1);
+
+                #endregion
+            }
+
+
+            return listFrames;
+        }
+        private List<Frame> ImportFromWebp(string source, string pathTemp)
+        {
+            return null;
+        }
+
+        private List<Frame> ImportFromVideo(string source, string pathTemp) {
+            return null;
+        }
+
+        private List<Frame> ImportFromProject(string source, string pathTemp)
+        {
+            return null;
         }
     }
 }

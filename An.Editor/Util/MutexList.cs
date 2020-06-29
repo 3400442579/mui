@@ -22,7 +22,7 @@ namespace An.Editor.Util
             //var sec = new MutexSecurity();
             //sec.AddAccessRule(new MutexAccessRule(Environment.UserDomainName + "\\" + Environment.UserName, MutexRights.FullControl, AccessControlType.Allow));
 
-            var mutex = new Mutex(false, @"Global\An.Editor\" + key.Replace("\\",""), out _);
+            var mutex = new Mutex(false, @"Global_An.Editor_" + key.Replace("\\",""), out bool created);
 
             All.Add(key, mutex);
         }

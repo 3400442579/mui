@@ -12,6 +12,7 @@ namespace An.Editor.Util
 
         static Config()
         {
+           
             //Loads AppData settings.
             if (File.Exists(appData))
             {
@@ -26,18 +27,29 @@ namespace An.Editor.Util
                 }
             }
 
-            // if (Instance == null)
-            //     Instance = new Config();
+      
         }
 
         public static void Save()
         {
+
+            var folder = Path.GetDirectoryName(appData);
+            if (!string.IsNullOrWhiteSpace(folder) && !Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+
+
+
             #region Create folder
 
 
-            File.WriteAllText(appData, System.Text.Json.JsonSerializer.Serialize(All,
-                new System.Text.Json.JsonSerializerOptions { IgnoreNullValues = true, AllowTrailingCommas = true }
-                ));
+            File.WriteAllText(appData,
+                System.Text.Json.JsonSerializer.Serialize(All,
+                new System.Text.Json.JsonSerializerOptions
+                {
+                    IgnoreNullValues = true,
+                    AllowTrailingCommas = true
+                })
+             );
 
             #endregion
         }
@@ -66,8 +78,22 @@ namespace An.Editor.Util
         /// </summary>
         public int HistoryLimit { get; set; } = 0;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public string TemporaryFolder { get; set; }
+         
 
-        public string TemporaryFolderResolved { get; set; }
+        public string TemporaryFolderResolved
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(TemporaryFolder))
+                    TemporaryFolder = "%temp%";
+
+                return Environment.ExpandEnvironmentVariables(TemporaryFolder);
+            }
+        }
 
     }
 }

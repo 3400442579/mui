@@ -118,7 +118,6 @@ namespace An.Image.Gif
         /// <returns> Gets or sets the number of milliseconds to show this frame.</returns>
         public int GetFrame(int index, string save)
         {
-
             if (index >= codec.FrameCount)
                 throw new System.Exception("Index超出FrameCount");
 
@@ -129,7 +128,24 @@ namespace An.Image.Gif
 
                 using FileStream stream = new System.IO.FileStream(save, FileMode.Create);
                 using SKPixmap pixmap = new SKPixmap(bitmap.Info, bitmap.GetPixels());
-                pixmap.Encode(SKEncodedImageFormat.Png, 80).SaveTo(stream);
+
+                switch (System.IO.Path.GetExtension(save).ToLower()) {
+                    case ".png":
+                        pixmap.Encode(SKEncodedImageFormat.Png, 100).SaveTo(stream);
+                        break;
+                    case ".jpg":
+                    case ".jpeg":
+                        pixmap.Encode(SKEncodedImageFormat.Jpeg, 100).SaveTo(stream);
+                        break;
+
+                    case ".webp":
+                        pixmap.Encode(SKEncodedImageFormat.Webp, 100).SaveTo(stream);
+                        break;
+                    default:
+                        pixmap.Encode(SKEncodedImageFormat.Bmp, 100).SaveTo(stream);
+                        break;
+                }
+               
                 //bitmap.PeekPixels().Encode(SKEncodedImageFormat.Png, 80).SaveTo(stream);
             }
 
@@ -138,7 +154,6 @@ namespace An.Image.Gif
 
 
         public int FrameCount => codec.FrameCount;
-
 
     }
 }
