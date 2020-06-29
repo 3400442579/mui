@@ -350,26 +350,35 @@ namespace An.Image.APNG
 
         internal static SKBitmap MakeFrame(System.Drawing.Size fullSize, SKBitmap rawFrame, Frame frame, SKBitmap baseFrame)
         {
-            var visual = new DrawingVisual();
-            using (var context = visual.RenderOpen())
-            {
-                if (baseFrame != null)
-                {
-                    var fullRect = new Rect(0, 0, fullSize.Width, fullSize.Height);
-                    context.DrawImage(frame.BlendOp == BlendOps.Source ? ClearArea(baseFrame, frame) : baseFrame, fullRect);
-                }
+            using SKBitmap bitmap = new SKBitmap(new SKImageInfo(fullSize.Width, fullSize.Height, SKColorType.Rgba8888));
+            using SKCanvas canvas = new SKCanvas(bitmap);
+            if (rawFrame != null)
+                canvas.DrawBitmap(baseFrame, new SKPoint(0, 0));
 
-                var rect = new Rect((int)frame.Left, (int)frame.Top, (int)frame.Width, (int)frame.Height);
-                context.DrawImage(rawFrame, rect);
-            }
-
-            var bitmap = new RenderTargetBitmap(fullSize.Width, fullSize.Height, rawFrame.DpiX, rawFrame.DpiY, PixelFormats.Pbgra32);
-            bitmap.Render(visual);
-
-            if (bitmap.CanFreeze && !bitmap.IsFrozen)
-                bitmap.Freeze();
-
+            var rect = new SKRect((int)frame.Left, (int)frame.Top, (int)frame.Width, (int)frame.Height);
+            canvas.DrawBitmap(rawFrame, rect.Location);
             return bitmap;
+            //var visual = new DrawingVisual();
+
+            //using (var context = visual.RenderOpen())
+            //{
+            //    if (baseFrame != null)
+            //    {
+            //        var fullRect = new Rect(0, 0, fullSize.Width, fullSize.Height);
+            //        context.DrawImage(frame.BlendOp == BlendOps.Source ? ClearArea(baseFrame, frame) : baseFrame, fullRect);
+            //    }
+
+            //    var rect = new Rect((int)frame.Left, (int)frame.Top, (int)frame.Width, (int)frame.Height);
+            //    context.DrawImage(rawFrame, rect);
+            //}
+
+            //var bitmap = new RenderTargetBitmap(fullSize.Width, fullSize.Height, rawFrame.DpiX, rawFrame.DpiY, PixelFormats.Pbgra32);
+            //bitmap.Render(visual);
+
+            //if (bitmap.CanFreeze && !bitmap.IsFrozen)
+            //    bitmap.Freeze();
+
+            //return bitmap;
         }
 
         public static bool IsFullFrame(Frame metadata, System.Drawing.Size fullSize)
