@@ -420,66 +420,66 @@ namespace An.Editor.ViewModels
 
 
 
-            using FileStream stream = new FileStream(source, FileMode.Open, FileAccess.Read);
+            //using FileStream stream = new FileStream(source, FileMode.Open, FileAccess.Read);
 
-            Apng apng = new Apng(stream);
-            if (!apng.ReadFrames())
-                return ImportFromImage(source, pathTemp, null, null);
+            //Apng apng = new Apng(stream);
+            //if (!apng.ReadFrames())
+            //    return ImportFromImage(source, pathTemp, null, null);
 
 
             var listFrames = new List<Frame>();
 
-            var fullSize = new System.Drawing.Size((int)apng.Ihdr.Width, (int)apng.Ihdr.Height);
+            //var fullSize = new System.Drawing.Size((int)apng.Ihdr.Width, (int)apng.Ihdr.Height);
            
 
-            BitmapSource baseFrame = null;
-            for (var index = 0; index < apng.Actl.NumFrames; index++)
-            {
-                var metadata = apng.GetFrame(index);
-                var rawFrame = SKBitmap.Decode(metadata.ImageData);
+            //BitmapSource baseFrame = null;
+            //for (var index = 0; index < apng.Actl.NumFrames; index++)
+            //{
+            //    var metadata = apng.GetFrame(index);
+            //    var rawFrame = SKBitmap.Decode(metadata.ImageData);
 
 
-                var bitmapSource = Apng.MakeFrame(fullSize, rawFrame, metadata, baseFrame);
+            //    var bitmapSource = Apng.MakeFrame(fullSize, rawFrame, metadata, baseFrame);
 
-                #region Disposal Method
+            //    #region Disposal Method
 
-                switch (metadata.DisposeOp)
-                {
-                    case Apng.DisposeOps.None: //No disposal is done on this frame before rendering the next; the contents of the output buffer are left as is.
-                        baseFrame = bitmapSource;
-                        break;
-                    case Apng.DisposeOps.Background: //The frame's region of the output buffer is to be cleared to fully transparent black before rendering the next frame.
-                        baseFrame = baseFrame == null || Apng.IsFullFrame(metadata, fullSize) ? null : Apng.ClearArea(baseFrame, metadata);
-                        break;
-                    case Apng.DisposeOps.Previous: //The frame's region of the output buffer is to be reverted to the previous contents before rendering the next frame.
-                                                   //Reuse same base frame.
-                        break;
-                }
+            //    switch (metadata.DisposeOp)
+            //    {
+            //        case Apng.DisposeOps.None: //No disposal is done on this frame before rendering the next; the contents of the output buffer are left as is.
+            //            baseFrame = bitmapSource;
+            //            break;
+            //        case Apng.DisposeOps.Background: //The frame's region of the output buffer is to be cleared to fully transparent black before rendering the next frame.
+            //            baseFrame = baseFrame == null || Apng.IsFullFrame(metadata, fullSize) ? null : Apng.ClearArea(baseFrame, metadata);
+            //            break;
+            //        case Apng.DisposeOps.Previous: //The frame's region of the output buffer is to be reverted to the previous contents before rendering the next frame.
+            //                                       //Reuse same base frame.
+            //            break;
+            //    }
 
-                #endregion
+            //    #endregion
 
-                #region Each Frame
+            //    #region Each Frame
 
-                var fileName = Path.Combine(pathTemp, $"{index} {DateTime.Now:hh-mm-ss-ffff}.png");
+            //    var fileName = Path.Combine(pathTemp, $"{index} {DateTime.Now:hh-mm-ss-ffff}.png");
 
-                //TODO: Do I need to verify the DPI of the image?
+            //    //TODO: Do I need to verify the DPI of the image?
 
-                using (var output = new FileStream(fileName, FileMode.Create))
-                {
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-                    encoder.Save(output);
-                    stream.Close();
-                }
+            //    using (var output = new FileStream(fileName, FileMode.Create))
+            //    {
+            //        var encoder = new PngBitmapEncoder();
+            //        encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+            //        encoder.Save(output);
+            //        stream.Close();
+            //    }
 
-                list.Add(new FrameInfo(fileName, metadata.Delay));
+            //    list.Add(new FrameInfo(fileName, metadata.Delay));
 
-                UpdateProgress(index);
+            //    UpdateProgress(index);
 
-                GC.Collect(1);
+            //    GC.Collect(1);
 
-                #endregion
-            }
+            //    #endregion
+            //}
 
 
             return listFrames;

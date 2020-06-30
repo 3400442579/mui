@@ -23,12 +23,11 @@
     <Compile Remove="Util\ImageUtil.cs" />
     <Folder Include="Pages\" />
     <Folder Include="Properties\" />
-    <Folder Include="ImgLib\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.11" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.9.10" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.10" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.11" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.11" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.9.9" />
     <PackageReference Include="SkiaSharp" Version="1.68.0" />
   </ItemGroup>
