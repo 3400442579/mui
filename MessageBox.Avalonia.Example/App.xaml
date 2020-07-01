@@ -1,18 +1,8 @@
 ﻿<Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:An.Editor"
-             x:Class="An.Editor.App">
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-
+             x:Class="MessageBox.Avalonia.Example.App">
     <Application.Styles>
         <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
-
-        <StyleInclude Source="avares://An.Editor/Styles/Generic.xaml"/>
-
-       
-
     </Application.Styles>
 </Application>

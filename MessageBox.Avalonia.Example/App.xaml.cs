@@ -1,10 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using An.Editor.ViewModels;
-using An.Editor.Views;
 
-namespace An.Editor
+namespace MessageBox.Avalonia.Example
 {
     public class App : Application
     {
@@ -17,12 +15,7 @@ namespace An.Editor
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                //desktop.MainWindow = new MainWindow
-                //{
-                //    DataContext = new MainWindowViewModel(),
-                //};
-                desktop.MainWindow = new TestWindow();
-                
+                desktop.MainWindow = new MainWindow();
             }
 
             base.OnFrameworkInitializationCompleted();

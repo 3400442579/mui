@@ -21,6 +21,10 @@
     <AvaloniaResource Include="Assets\**" />
     <Compile Remove="ImgLib\Gif\Encoder\PixelUtil.cs" />
     <Compile Remove="Util\ImageUtil.cs" />
+    <None Remove="DecoratedWindow.xaml" />
+    <None Remove="Styles\MetroWindow.xaml" />
+    <None Remove="Styles\ProgressRing.xaml" />
+    <None Remove="TestWindow.xaml" />
     <Folder Include="Pages\" />
     <Folder Include="Properties\" />
   </ItemGroup>
@@ -33,5 +37,24 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Loc\Loc.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Update="DecoratedWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Styles\MetroWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Styles\ProgressRing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Update="TestWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="TestWindow.xaml.cs">
+      <DependentUpon>TestWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

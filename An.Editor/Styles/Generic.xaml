@@ -1,6 +1,9 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui">
-  <StyleInclude Source="avares://Avalonia.ExtendedToolkit/Styles/Fonts.xaml"/>
-  <StyleInclude Source="avares://Avalonia.Controlz/Styles/Generic.xaml"/>
-  <!--Default Controls-->
+
+  <StyleInclude Source="avares://An.Editor/Styles/Ruler.xaml"/>
+  <StyleInclude Source="avares://An.Editor/Styles/ProgressRing.xaml"/>
+
+
+  <StyleInclude Source="avares://An.Editor/Styles/MetroWindow.xaml"/>
 
 </Styles>

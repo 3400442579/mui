@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
         xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-        xmlns:control="clr-namespace:An.Editor.Controls"
+        xmlns:n="clr-namespace:An.Editor.Controls"
         xmlns:conv="clr-namespace:An.Editor.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="An.Editor.Views.MainWindow"
@@ -23,7 +23,7 @@
 
   <Grid ColumnDefinitions="20,*"  RowDefinitions="20,*,auto,auto" Margin="0,0,1,0" >
     
-    <control:Ruler Foreground="Gray" 
+    <n:Ruler Foreground="Gray" 
                    Grid.ColumnSpan="2" Grid.RowSpan="2"
                    Grid.Row="0" Grid.Column="0"
                    Name="rc"
@@ -42,16 +42,22 @@
       </Image>
     </UniformGrid>
 
-
+    <n:ProgressRing Width="80"
+                    Height="80"
+                    IsActive="true"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Foreground="Green"
+                    Margin="10,20,0,0"/>
 
     <Grid Grid.Row="1" Grid.Column="1"  DragDrop.AllowDrop="True" Background="LightPink"  >
      
     </Grid>
-   
-  
-  
 
 
+
+
+  
     <Grid Grid.ColumnSpan="2" Grid.Row="2" RowDefinitions="auto,*" Height="100">
       
       <WrapPanel Height="30" IsVisible="False">
@@ -81,7 +87,13 @@
       </ListBox>
     
     </Grid>
-    
+
+
+
+    <Viewbox Width="100" Grid.Row="1" Grid.Column="1">
+      <Path Data="M971.674 445.235L594.842 53.35a122.266 122.266 0 0 0-176.538 0L41.574 445.235c-38.912 40.96-33.894 75.469-27.545 90.01a65.536 65.536 0 0 0 64.614 38.912h55.296v301.465c0 68.404 49.152 133.12 119.091 133.12H413.39V689.46c0-34.201-5.12-53.248 29.798-53.248h126.771c35.021 0 29.799 19.047 29.799 53.248v319.079h160.46c69.837 0 119.092-64.512 119.092-133.12V574.157h55.193a65.536 65.536 0 0 0 64.615-38.912c6.451-14.541 11.469-49.562-27.443-90.01z" Fill="Red"/>
+    </Viewbox>
+
 
 
     <DockPanel Grid.ColumnSpan="2" Grid.Row="3" Background="AliceBlue">
