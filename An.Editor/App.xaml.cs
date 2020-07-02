@@ -3,6 +3,9 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using An.Editor.ViewModels;
 using An.Editor.Views;
+using Avalonia.Styling;
+using Avalonia.Markup.Xaml.Styling;
+using System;
 
 namespace An.Editor
 {
@@ -21,8 +24,14 @@ namespace An.Editor
                 //{
                 //    DataContext = new MainWindowViewModel(),
                 //};
+
+                //var theme = new StyleInclude(new Uri("resm:Styles?assembly=An.Ava"))
+                //{
+                //    Source = new Uri($"avares://An.Ava/Styles/Extended/MetroWindow.xaml?assembly=An.Ava")
+                //    //Source = new Uri($"resm:{tempXamlPath}?assembly=Avalonia.ExtendedToolkit")
+                //};
                 desktop.MainWindow = new TestWindow();
-                
+                //desktop.MainWindow.Styles.Add(theme);
             }
 
             base.OnFrameworkInitializationCompleted();

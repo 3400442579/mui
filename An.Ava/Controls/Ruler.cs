@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Media;
@@ -7,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace An.Editor.Controls
+namespace An.Ava.Controls
 {
     #region Enumerations
     // public enum OrientationEnum { Horizontal, Vertical }

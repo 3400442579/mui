@@ -1,10 +1,9 @@
-﻿<Styles
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Controls="clr-namespace:An.Editor.Controls"
-    xmlns:System="clr-namespace:System;assembly=mscorlib">
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:n="clr-namespace:An.Ava.Controls"
+        xmlns:System="clr-namespace:System;assembly=mscorlib">
 
-  <Style Selector="Controls|Ruler">
+  <Style Selector="n|Ruler">
     <Setter Property="Foreground" Value="Green" />
     <Setter Property="Template">
       <Setter.Value>

@@ -13,7 +13,6 @@ namespace An.Image.Webp
 
         public WebpDecoder(string gif)
         {
- 
             codec = SKCodec.Create(gif);
             frames = codec.FrameInfo;
 

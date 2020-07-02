@@ -31,7 +31,7 @@ namespace An.Editor.Views
             AddHandler(DragDrop.DropEvent, Drop);
             AddHandler(DragDrop.DragOverEvent, DragOver);
 
-            using FileStream webpstream = new FileStream(@"C:\Users\jxw\Desktop\world-cup-2014-42.webp", FileMode.Open, FileAccess.Read);
+            //using FileStream webpstream = new FileStream(@"C:\Users\jxw\Desktop\world-cup-2014-42.webp", FileMode.Open, FileAccess.Read);
             WebpDecoder webpDecoder = new WebpDecoder(@"C:\Users\jxw\Desktop\world-cup-2014-42.webp");
             for (int i = 0; i < webpDecoder.FrameCount; i++)
                 webpDecoder.GetFrame(i, $@"E:\T\a\webp_{i}.jpg");

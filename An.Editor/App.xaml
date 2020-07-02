@@ -1,7 +1,9 @@
 ﻿<Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:An.Editor"
-             x:Class="An.Editor.App">
+             x:Class="An.Editor.App"
+             xmlns:n="clr-namespace:An.Ava.Controls;assembly=An.Ava"
+             >
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
@@ -10,9 +12,44 @@
         <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
 
-        <StyleInclude Source="avares://An.Editor/Styles/Generic.xaml"/>
+        <StyleInclude Source="avares://An.Ava/Styles/Generic.xaml"/>
 
-       
+
+
+      <Style Selector="n|MetroWindow">
+        <Setter Property="HasSystemDecorations" Value="false" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate>
+
+              <Grid RowDefinitions="5,*,5" ColumnDefinitions="5,*,5">
+                <DockPanel  Grid.Column="1"  Grid.Row="1" >
+                  <Grid Name="TitleBar" Background="LightBlue" DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto">
+                    <TextBlock VerticalAlignment="Center" Margin="5,0,0,0">Titleeeee</TextBlock>
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                      <StackPanel.Styles>
+                        <Style Selector="Button">
+                          <Setter Property="Margin" Value="2"/>
+                        </Style>
+                      </StackPanel.Styles>
+                      <Button Name="MinimizeButton">_</Button>
+                      <Button Name="MaximizeButton">[ ]</Button>
+                      <Button Name="CloseButton">X</Button>
+                    </StackPanel>
+                  </Grid>
+                  <Border Background="White" Margin="5">
+                    <ContentPresenter  Content="{TemplateBinding Content}" />
+                  </Border>
+                </DockPanel>
+
+
+               
+              </Grid>
+
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
 
     </Application.Styles>
 </Application>

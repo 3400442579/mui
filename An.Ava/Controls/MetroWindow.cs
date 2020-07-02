@@ -1,11 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Styling;
 
-
-namespace An.Editor.Controls
+namespace An.Ava.Controls
 {
-    public class MetroWindow : Window
+    public partial class MetroWindow : Window, IStyleable
     {
         public MetroWindow() { 
         }
@@ -23,6 +23,7 @@ namespace An.Editor.Controls
             }
         }
       
+        
         
         protected override void OnTemplateApplied(TemplateAppliedEventArgs e)
         {

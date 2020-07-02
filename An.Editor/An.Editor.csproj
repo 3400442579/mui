@@ -21,9 +21,8 @@
     <AvaloniaResource Include="Assets\**" />
     <Compile Remove="ImgLib\Gif\Encoder\PixelUtil.cs" />
     <Compile Remove="Util\ImageUtil.cs" />
+    <Folder Include="Styles\" />
     <None Remove="DecoratedWindow.xaml" />
-    <None Remove="Styles\MetroWindow.xaml" />
-    <None Remove="Styles\ProgressRing.xaml" />
     <None Remove="TestWindow.xaml" />
     <Folder Include="Pages\" />
     <Folder Include="Properties\" />
@@ -36,16 +35,11 @@
     <PackageReference Include="SkiaSharp" Version="1.68.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\An.Ava\An.Ava.csproj" />
     <ProjectReference Include="..\Loc\Loc.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Update="DecoratedWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaResource>
-    <AvaloniaResource Update="Styles\MetroWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaResource>
-    <AvaloniaResource Update="Styles\ProgressRing.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Update="TestWindow.xaml">

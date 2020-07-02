@@ -1,0 +1,7 @@
+﻿<Styles xmlns="https://github.com/avaloniaui">
+
+  <StyleInclude Source="avares://An.Ava/Styles/Extended/Ruler.xaml"/>
+  <StyleInclude Source="avares://An.Ava/Styles/Extended/ProgressRing.xaml"/>
+
+  <StyleInclude Source="avares://An.Ava/Styles/Extended/MetroWindow.xaml"/>
+</Styles>

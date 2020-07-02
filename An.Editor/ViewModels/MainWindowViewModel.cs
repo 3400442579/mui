@@ -1,6 +1,5 @@
-﻿using An.Editor.Controls;
+﻿using An.Ava.Controls;
 using An.Editor.Models;
-using An.Image.APNG;
 using An.Image.Gif.Decoding;
 using Avalonia.Controls;
 using Avalonia.Input;

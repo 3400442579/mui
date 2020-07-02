@@ -1,11 +1,10 @@
-﻿<Styles
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Controls="clr-namespace:An.Editor.Controls;assembly=An.Editor"
-    xmlns:System="clr-namespace:System;assembly=mscorlib">
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:n="clr-namespace:An.Ava.Controls"
+        xmlns:System="clr-namespace:System;assembly=mscorlib">
 
 
-  <Style Selector="Controls|MetroWindow">
+  <Style Selector="n|MetroWindow">
     <Setter Property="HasSystemDecorations" Value="false" />
     <Setter Property="Template">
       <Setter.Value>
@@ -27,7 +26,7 @@
                 </StackPanel>
               </Grid>
               <Border Background="White" Margin="5">
-                
+                <ContentPresenter  Content="{TemplateBinding Content}" />
               </Border>
             </DockPanel>
 

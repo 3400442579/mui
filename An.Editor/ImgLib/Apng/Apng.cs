@@ -1,5 +1,4 @@
 ﻿using An.Image.APNG.Chunks;
-using Avalonia.Media;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;

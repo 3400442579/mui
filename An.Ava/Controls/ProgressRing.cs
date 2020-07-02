@@ -3,7 +3,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using System;
 
-namespace An.Editor.Controls
+namespace An.Ava.Controls
 {
     public class ProgressRing : TemplatedControl
     {
