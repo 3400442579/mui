@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "An.Test", "An.Test\An.Test.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{09050DA1-D9B9-4E0D-9FB7-6BA423F30E04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "An.Ava", "An.Ava\An.Ava.csproj", "{4A92811F-2F89-4FC4-8510-570C597B0001}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "An.Ava", "An.Ava\An.Ava.csproj", "{4A92811F-2F89-4FC4-8510-570C597B0001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animate", "src\Animate\Animate.csproj", "{EEAF13E3-B602-47DE-BCFD-4FC43F5BFDCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ani.IMG", "Ani.IMG\Ani.IMG.csproj", "{19CFBA78-4AD5-4161-90BB-9055E3CB7029}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{4A92811F-2F89-4FC4-8510-570C597B0001}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A92811F-2F89-4FC4-8510-570C597B0001}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A92811F-2F89-4FC4-8510-570C597B0001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEAF13E3-B602-47DE-BCFD-4FC43F5BFDCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEAF13E3-B602-47DE-BCFD-4FC43F5BFDCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEAF13E3-B602-47DE-BCFD-4FC43F5BFDCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEAF13E3-B602-47DE-BCFD-4FC43F5BFDCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19CFBA78-4AD5-4161-90BB-9055E3CB7029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19CFBA78-4AD5-4161-90BB-9055E3CB7029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19CFBA78-4AD5-4161-90BB-9055E3CB7029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19CFBA78-4AD5-4161-90BB-9055E3CB7029}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
