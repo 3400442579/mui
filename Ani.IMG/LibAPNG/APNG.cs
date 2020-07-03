@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Ani.IMG;
+using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace LibAPNG
 {
     public class APNG
     {
-        private readonly Frame defaultImage = new Frame();
         private readonly List<Frame> frames = new List<Frame>();
         private readonly MemoryStream ms;
 
-        public APNG(string fileName)
-            : this(File.ReadAllBytes(fileName))
+        public APNG(string fileName) : this(File.ReadAllBytes(fileName))
         {
         }
 
@@ -49,17 +50,17 @@ namespace LibAPNG
                         if (IsSimplePNG)
                             throw new Exception("acTL chunk must located before any IDAT and fdAT");
 
-                        acTLChunk = new acTLChunk(chunk);
+                        AcTLChunk = new acTLChunk(chunk);
                         break;
 
                     case "IDAT":
                         // To be an APNG, acTL must located before any IDAT and fdAT.
-                        if (acTLChunk == null)
+                        if (AcTLChunk == null)
                             IsSimplePNG = true;
 
                         // Only default image has IDAT.
-                        defaultImage.IHDRChunk = IHDRChunk;
-                        defaultImage.AddIDATChunk(new IDATChunk(chunk));
+                        DefaultImage.IHDRChunk = IHDRChunk;
+                        DefaultImage.AddIDATChunk(new IDATChunk(chunk));
                         isIDATAlreadyParsed = true;
                         break;
 
@@ -87,7 +88,7 @@ namespace LibAPNG
                         // Otherwise this fcTL is used by the DEFAULT IMAGE.
                         else
                         {
-                            defaultImage.fcTLChunk = new fcTLChunk(chunk);
+                            DefaultImage.fcTLChunk = new fcTLChunk(chunk);
                         }
                         break;
                     case "fdAT":
@@ -124,9 +125,9 @@ namespace LibAPNG
             // We have one more thing to do:
             // If the default image if part of the animation,
             // we should insert it into frames list.
-            if (defaultImage.fcTLChunk != null)
+            if (DefaultImage.fcTLChunk != null)
             {
-                frames.Insert(0, defaultImage);
+                frames.Insert(0, DefaultImage);
                 DefaultImageIsAnimated = true;
             }
 
@@ -149,10 +150,7 @@ namespace LibAPNG
         ///     If IsSimplePNG = True, returns the only image;
         ///     if False, returns the default image
         /// </summary>
-        public Frame DefaultImage
-        {
-            get { return defaultImage; }
-        }
+        public Frame DefaultImage { get; } = new Frame();
 
         /// <summary>
         ///     Gets the frame array.
@@ -171,10 +169,72 @@ namespace LibAPNG
         /// <summary>
         ///     Gets the acTL Chunk
         /// </summary>
-        public acTLChunk acTLChunk { get; private set; }
+        public acTLChunk AcTLChunk { get; private set; }
 
 
-        public  BitmapSource[] ToBitmapSources(APNG apng)
+        public void SaveFrame(int index, string save) {
+            if (index > Frames.Length-1) {
+                throw new Exception("index 超出");
+            }
+            if (index == 0) {
+                if (IsSimplePNG)
+                    DefaultImage.Save(save);
+                else 
+                    Frames[index].Save(save);
+                return;
+            }
+
+            var firstFrame = Frames[0];
+            var width = firstFrame.IHDRChunk.Width;
+            var height = firstFrame.IHDRChunk.Height;
+
+            SKBitmap backgroundBitmap = null;
+
+           
+            var fcTlChunk = Frames[index].fcTLChunk;
+            SKBitmap foregroundBitmap;
+
+            var frameBitmap = SKBitmap.Decode(Frames[index].GetStream());// BitmapFactory.ConvertToPbgra32Format( BitmapFrame.Create(frame.GetStream(), BitmapCreateOptions.None, BitmapCacheOption.OnLoad));
+
+            if (fcTlChunk.XOffset == 0 &&
+                fcTlChunk.YOffset == 0 &&
+                fcTlChunk.Width == width &&
+                fcTlChunk.Height == height &&
+                fcTlChunk.BlendOp == BlendOps.APNGBlendOpSource)
+            {
+                foregroundBitmap = frameBitmap;
+            }
+            else
+            {
+                foregroundBitmap = backgroundBitmap ?? new SKBitmap(new SKImageInfo(width, height));// BitmapFactory.New(width, height);
+
+                // blend_op 
+                switch (fcTlChunk.BlendOp)
+                {
+                    case BlendOps.APNGBlendOpSource:
+                        foregroundBitmap.Blit(
+                            new Rect(fcTlChunk.XOffset, fcTlChunk.YOffset, fcTlChunk.Width, fcTlChunk.Height),
+                            frameBitmap,
+                            new Rect(0, 0, frameBitmap.PixelWidth, frameBitmap.PixelHeight),
+                            WriteableBitmapExtensions.BlendMode.None);
+                        break;
+
+                    case BlendOps.APNGBlendOpOver:
+                        foregroundBitmap.Blit(
+                            new Rect(fcTlChunk.XOffset, fcTlChunk.YOffset, fcTlChunk.Width, fcTlChunk.Height),
+                            frameBitmap,
+                            new Rect(0, 0, frameBitmap.PixelWidth, frameBitmap.PixelHeight),
+                            WriteableBitmapExtensions.BlendMode.Alpha);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+            }
+            Frames[index].Save(save);
+        }
+
+        public BitmapSource[] ToBitmapSources(APNG apng)
         {
             var list = new List<BitmapSource>();
 

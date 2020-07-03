@@ -1,29 +1,29 @@
-﻿namespace Ani.IMG.APNG
+﻿namespace ScreenToGif.ImageUtil.Apng.Chunks
 {
     /// <summary>
     /// Frame that contains the image data and playback details.
     /// </summary>
-    public class Frame
+    internal class ApngFrame
     {
         /// <summary>
         /// The image width.
         /// </summary>
-        public uint Width { get; set; }
+        internal uint Width { get; set; }
 
         /// <summary>
         /// The image height.
         /// </summary>
-        public uint Height { get; set; }
+        internal uint Height { get; set; }
 
         /// <summary>
         /// The left offset of the image.
         /// </summary>
-        public uint Left { get; set; }
+        internal uint Left { get; set; }
 
         /// <summary>
         /// The top offset of the image.
         /// </summary>
-        public uint Top { get; set; }
+        internal uint Top { get; set; }
 
         /// <summary>
         /// The color type of the image.
@@ -34,31 +34,31 @@
         /// Greyscale with alpha  • 4           • 8, 16              • Each pixel is a greyscale sample followed by an alpha sample.
         /// Truecolour with alpha • 6           • 8, 16              • Each pixel is an R,G,B triple followed by an alpha sample.
         /// </summary>
-        public byte ColorType { get; set; }
+        internal byte ColorType { get; set; }
 
         /// <summary>
         /// The bit depth of the image.
         /// </summary>
-        public byte BitDepth { get; set; }
+        internal byte BitDepth { get; set; }
 
         /// <summary>
         /// The whole image data, including auxiliar chunks.
         /// </summary>
-        public byte[] ImageData { get; set; }
+        internal byte[] ImageData { get; set; }
 
         /// <summary>
         /// The delay of the frame in miliseconds.
         /// </summary>
-        public int Delay { get; set; }
+        internal int Delay { get; set; }
 
         ///<summary>
         ///Type of frame area disposal to be done after rendering this frame.
         ///</summary>
-        public Apng.DisposeOps DisposeOp { get; set; }
+        internal Apng.DisposeOps DisposeOp { get; set; }
 
         ///<summary>
         ///Type of frame area rendering for this frame.
         ///</summary>
-        public Apng.BlendOps BlendOp { get; set; }
+        internal Apng.BlendOps BlendOp { get; set; }
     }
 }

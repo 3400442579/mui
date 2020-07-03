@@ -8,6 +8,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Security.Cryptography;
+using Avalonia.Media;
+using Avalonia;
 
 namespace An.Editor
 {
@@ -42,6 +44,10 @@ namespace An.Editor
             //Apng apng = new Apng(stream);
 
 
+
+           
+           
+            
         }
     }
 }

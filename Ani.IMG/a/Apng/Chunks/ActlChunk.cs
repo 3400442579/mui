@@ -1,12 +1,13 @@
-﻿using System.IO;
+﻿using Ani.IMG.APNG;
+using System.IO;
 using System.Text;
 
-namespace Ani.IMG.APNG.Chunks
+namespace ScreenToGif.ImageUtil.Apng.Chunks
 {
     /// <summary>
     /// The animation control chunk.
     /// </summary>
-    public class ActlChunk : Chunk
+    internal class ActlChunk : Chunk
     {
         public uint NumFrames { get; private set; }
 

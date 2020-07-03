@@ -40,8 +40,6 @@
                 c = crcTable[(c ^ bytes[n]) & 0xff] ^ (c >> 8);
             }
             return c;
-
-
         }
 
         public static uint Calculate(byte[] bytes)

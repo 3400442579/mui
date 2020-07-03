@@ -2,31 +2,31 @@
 using System.IO;
 using System.Text;
 
-namespace Ani.IMG.APNG.Chunks
+namespace ScreenToGif.ImageUtil.Apng.Chunks
 {
     /// <summary>
     /// The image header chunk.
     /// </summary>
-    public class IhdrChunk : Chunk
+    internal class IhdrChunk : Chunk
     {
-        public uint Width { get; private set; }
+        internal uint Width { get; private set; }
 
-        public uint Height { get; private set; }
+        internal uint Height { get; private set; }
 
-        public byte BitDepth { get; private set; }
+        internal byte BitDepth { get; private set; }
 
-        public byte ColorType { get; private set; }
+        internal byte ColorType { get; private set; }
 
-        public byte CompressionMethod { get; private set; }
+        internal byte CompressionMethod { get; private set; }
 
-        public byte FilterMethod { get; private set; }
+        internal byte FilterMethod { get; private set; }
 
-        public byte InterlaceMethod { get; private set; }
-
+        internal byte InterlaceMethod { get; private set; }
+        
         /// <summary>
         /// Attempts to read 25 bytes of the stream.
         /// </summary>
-        public static IhdrChunk Read(Stream stream)
+        internal static IhdrChunk Read(Stream stream)
         {
             var chunk = new IhdrChunk
             {
@@ -58,7 +58,7 @@ namespace Ani.IMG.APNG.Chunks
         /// Write the IHDR chunk to the stream.
         /// If a custom size is given, that's what is written.
         /// </summary>
-        public void Write(Stream stream, uint? width = null, uint? height = null)
+        internal void Write(Stream stream, uint? width = null, uint? height = null)
         {
             stream.WriteUInt32(BitHelper.ConvertEndian(Length)); //4 bytes.
             stream.WriteBytes(Encoding.ASCII.GetBytes(ChunkType)); //4 bytes.

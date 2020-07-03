@@ -1,12 +1,13 @@
-﻿using System.IO;
+﻿using Ani.IMG.APNG;
+using System.IO;
 using System.Text;
 
-namespace Ani.IMG.APNG.Chunks
+namespace ScreenToGif.ImageUtil.Apng.Chunks
 {
     /// <summary>
     /// Generic chunk.
     /// </summary>
-    public class Chunk
+    internal class Chunk
     {
         #region Properties
 
@@ -33,7 +34,7 @@ namespace Ani.IMG.APNG.Chunks
         /// <summary>
         /// Attempts to read XX bytes of the stream.
         /// </summary>
-        public static Chunk Read(Stream stream, int sequence)
+        internal static Chunk Read(Stream stream, int sequence)
         {
             var chunk = new Chunk
             {
@@ -49,7 +50,7 @@ namespace Ani.IMG.APNG.Chunks
             return chunk;
         }
 
-        public void Write(Stream stream)
+        internal void Write(Stream stream)
         {
             stream.WriteUInt32(BitHelper.ConvertEndian(Length)); //4 bytes.
             stream.WriteBytes(Encoding.ASCII.GetBytes(ChunkType)); //4 bytes.

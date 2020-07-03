@@ -8,6 +8,13 @@
             Height = height;
             Width = width;
         }
+        public Rect(uint x, uint y, uint width, uint height)
+        {
+            X = (int)x;
+            Y = (int)y;
+            Height = (int)height;
+            Width = (int)width;
+        }
 
         public int Height { get; set; }
         public int Width { get; set; }

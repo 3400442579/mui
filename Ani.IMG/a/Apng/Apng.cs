@@ -1,12 +1,14 @@
-﻿using Ani.IMG.APNG.Chunks;
-using SkiaSharp;
+﻿using Ani.IMG;
+using Ani.IMG.APNG;
+using ScreenToGif.ImageUtil.Apng.Chunks;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Ani.IMG.APNG
+namespace ScreenToGif.ImageUtil.Apng
 {
     /// <summary>
     /// Apng encoder and decoder.
@@ -14,16 +16,16 @@ namespace Ani.IMG.APNG
     /// https://wiki.mozilla.org/APNG_Specification
     /// https://www.w3.org/TR/PNG/
     /// </summary>
-    public class Apng : IDisposable
+    internal class Apng : IDisposable
     {
-        public enum DisposeOps
+        internal enum DisposeOps
         {
             None = 0,
             Background = 1,
             Previous = 2
         }
 
-        public enum BlendOps
+        internal enum BlendOps
         {
             Source = 0,
             Over = 1
@@ -40,12 +42,12 @@ namespace Ani.IMG.APNG
         /// <summary>
         /// The total number of frames.
         /// </summary>
-        public int FrameCount { get; set; } = 0;
+        internal int FrameCount { get; set; } = 0;
 
         /// <summary>
         /// Repeat Count for the apng.
         /// </summary>
-        public int RepeatCount { get; set; } = 0;
+        internal int RepeatCount { get; set; } = 0;
 
         /// <summary>
         /// True if it's the first frame of the apgn.
@@ -64,34 +66,34 @@ namespace Ani.IMG.APNG
         /// <summary>
         /// The image header chunk.
         /// </summary>
-        public IhdrChunk Ihdr { get; private set; }
+        internal IhdrChunk Ihdr { get; private set; }
 
         /// <summary>
         /// The animation control chunk.
         /// </summary>
-        public ActlChunk Actl { get; private set; }
+        internal ActlChunk Actl { get; private set; }
 
         /// <summary>
         /// All the chunks of the Png, except IHDR, acTL and IEND. 
         /// </summary>
-        public List<Chunk> Chunks { get; } = new List<Chunk>();
+        internal List<Chunk> Chunks { get; } = new List<Chunk>();
 
         #endregion
 
 
-        public Apng(Stream stream, int frameCount, int repeatCount)
+        internal Apng(Stream stream, int frameCount, int repeatCount)
         {
             InternalStream = stream;
             FrameCount = frameCount;
             RepeatCount = repeatCount;
         }
 
-        public Apng(Stream stream)
+        internal Apng(Stream stream)
         {
             InternalStream = stream;
         }
 
-        public void AddFrame(string path, SKRect rect, int delay = 66)
+        internal void AddFrame(string path, Rect rect, int delay = 66)
         {
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
@@ -117,8 +119,8 @@ namespace Ani.IMG.APNG
                 InternalStream.WriteUInt32(BitHelper.ConvertEndian((uint)SequenceNumber++)); //SequenceNumber, 4 bytes.
                 InternalStream.WriteUInt32(BitHelper.ConvertEndian((uint)rect.Width)); //Width, 4 bytes.
                 InternalStream.WriteUInt32(BitHelper.ConvertEndian((uint)rect.Height)); //Height, 4 bytes.
-                InternalStream.WriteUInt32(BitHelper.ConvertEndian((uint)rect.Left)); //OffsetX, 4 bytes.
-                InternalStream.WriteUInt32(BitHelper.ConvertEndian((uint)rect.Top)); //OffsetY, 4 bytes.
+                InternalStream.WriteUInt32(BitHelper.ConvertEndian((uint)rect.X)); //OffsetX, 4 bytes.
+                InternalStream.WriteUInt32(BitHelper.ConvertEndian((uint)rect.Y)); //OffsetY, 4 bytes.
                 InternalStream.WriteUInt16(BitHelper.ConvertEndian((ushort)delay)); //Delay numerator, 2 bytes.
                 InternalStream.WriteUInt16(BitHelper.ConvertEndian((ushort)1000)); //Delay denominator, 2 bytes.
 
@@ -185,7 +187,7 @@ namespace Ani.IMG.APNG
             return list;
         }
 
-        public bool ReadFrames()
+        internal bool ReadFrames()
         {
             //Png header, 8 bytes.
             if (!InternalStream.ReadBytes(8).SequenceEqual(new byte[] {137, 80, 78, 71, 13, 10, 26, 10}))
@@ -229,7 +231,7 @@ namespace Ani.IMG.APNG
             return true;
         }
 
-        public Frame GetFrame(int index)
+        internal ApngFrame GetFrame(int index)
         {
             //Build each frame using:
             //Starting blocks: IHDR, tIME, zTXt, tEXt, iTXt, pHYs, sPLT, (iCCP | sRGB), sBIT, gAMA, cHRM, PLTE, tRNS, hIST, bKGD.
@@ -242,7 +244,7 @@ namespace Ani.IMG.APNG
             if (!chunks.Any())
                 return null;
 
-            var frame = new Frame();
+            var frame = new ApngFrame();
 
             //First frame • Second frame
             //Default image is part of the animation:       fcTL + IDAT • fcTL + fdAT
@@ -261,186 +263,139 @@ namespace Ani.IMG.APNG
                 frame.DisposeOp = fctl.DisposeOp;
                 frame.BlendOp = fctl.BlendOp;
 
-                using var stream = new MemoryStream();
-                //Png signature, 8 bytes.
-                stream.WriteBytes(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 });
-
-                //Image header chunk. 25 bytes.
-                Ihdr.Write(stream, fctl.Width, fctl.Height);
-
-                //Any other auxiliar chunks.
-                foreach (var other in otherChunks)
-                    other.Write(stream);
-
-                //Frame has multiple chunks.
-                if (chunks.Count > 2)
+                using (var stream = new MemoryStream())
                 {
-                    var datas = new List<byte[]>();
+                    //Png signature, 8 bytes.
+                    stream.WriteBytes(new byte[] {137, 80, 78, 71, 13, 10, 26, 10});
 
-                    //Data chunks.
-                    for (var i = 1; i < chunks.Count; i++)
+                    //Image header chunk. 25 bytes.
+                    Ihdr.Write(stream, fctl.Width, fctl.Height);
+
+                    //Any other auxiliar chunks.
+                    foreach (var other in otherChunks)
+                        other.Write(stream);
+
+                    //Frame has multiple chunks.
+                    if (chunks.Count > 2)
                     {
-                        switch (chunks[i].ChunkType)
+                        var datas = new List<byte[]>();
+
+                        //Data chunks.
+                        for (var i = 1; i < chunks.Count; i++)
                         {
-                            case "fdAT":
+                            switch (chunks[i].ChunkType)
+                            {
+                                case "fdAT":
                                 {
                                     var fdat = FdatChunk.Read(chunks[i].Length, chunks[i].ChunkData);
                                     datas.Add(fdat.FrameData);
                                     break;
                                 }
-                            case "IDAT":
+                                case "IDAT":
                                 {
                                     var idat = IdatChunk.Read(chunks[i].Length, chunks[i].ChunkData);
                                     datas.Add(idat.FrameData);
                                     break;
                                 }
+                            }
                         }
+
+                        //Write combined frame data.
+                        var length = datas.Sum(s => s.Length);
+
+                        stream.WriteUInt32(BitHelper.ConvertEndian((uint)length)); //4 bytes.
+                        stream.WriteBytes(Encoding.ASCII.GetBytes("IDAT")); //4 bytes.
+                        stream.WriteBytes(datas.SelectMany(s => s).ToArray()); //XX bytes.
+                        stream.WriteUInt32(BitHelper.ConvertEndian(CrcHelper.Calculate(stream.PeekBytes(stream.Position - (length + 4), length + 4)))); //CRC, 4 bytes.
                     }
-
-                    //Write combined frame data.
-                    var length = datas.Sum(s => s.Length);
-
-                    stream.WriteUInt32(BitHelper.ConvertEndian((uint)length)); //4 bytes.
-                    stream.WriteBytes(Encoding.ASCII.GetBytes("IDAT")); //4 bytes.
-                    stream.WriteBytes(datas.SelectMany(s => s).ToArray()); //XX bytes.
-                    stream.WriteUInt32(BitHelper.ConvertEndian(CrcHelper.Calculate(stream.PeekBytes(stream.Position - (length + 4), length + 4)))); //CRC, 4 bytes.
-                }
-                else
-                {
-                    switch (chunks[1].ChunkType)
+                    else
                     {
-                        case "fdAT":
+                        switch (chunks[1].ChunkType)
+                        {
+                            case "fdAT":
                             {
                                 var fdat = FdatChunk.Read(chunks[1].Length, chunks[1].ChunkData);
                                 fdat.Write(stream);
                                 break;
                             }
-                        case "IDAT":
+                            case "IDAT":
                             {
                                 var idat = IdatChunk.Read(chunks[1].Length, chunks[1].ChunkData);
                                 idat.Write(stream);
                                 break;
                             }
+                        }
                     }
+
+                    //End chunk.
+                    stream.WriteUInt32(BitHelper.ConvertEndian(0u)); //Chunk length, 4 bytes.
+                    stream.WriteBytes(Encoding.ASCII.GetBytes("IEND")); //Chunk type, 4 bytes.
+                    stream.WriteUInt32(BitHelper.ConvertEndian(CrcHelper.Calculate(stream.PeekBytes(stream.Position - 4, 4)))); //CRC, 4 bytes.
+
+                    //Gets the whole Png.
+                    frame.ImageData = stream.ToArray();
                 }
-
-                //End chunk.
-                stream.WriteUInt32(BitHelper.ConvertEndian(0u)); //Chunk length, 4 bytes.
-                stream.WriteBytes(Encoding.ASCII.GetBytes("IEND")); //Chunk type, 4 bytes.
-                stream.WriteUInt32(BitHelper.ConvertEndian(CrcHelper.Calculate(stream.PeekBytes(stream.Position - 4, 4)))); //CRC, 4 bytes.
-
-                //Gets the whole Png.
-                frame.ImageData = stream.ToArray();
             }
             else
             {
                 //This is not supposed to happen.
                 //All chunks with an FrameGroupId are grouped with a starting fcTL, ending with a IDAT or fdAT chunk.
+                //LogWriter.Log(new Exception("Missing fcTL on frame number " + index), $"It was not possible to read frame number {index}");
                 return null;
             }
 
             return frame;
         }
 
-
-        public static SKBitmap MakeFrame(SKSize fullSize, SKImage rawFrame, Frame frame, SKBitmap baseFrame)
+        internal static Bitmap MakeFrame(System.Drawing.Size fullSize, Bitmap rawFrame, ApngFrame frame, Bitmap baseFrame)
         {
-            SKBitmap bitmap = new SKBitmap(new SKImageInfo((int)fullSize.Width, (int)fullSize.Height));
-            using SKCanvas canvas = new SKCanvas(bitmap);
+            Bitmap bitmap = new Bitmap(fullSize.Width, fullSize.Height);
+            using Graphics graphics = Graphics.FromImage(bitmap);
 
-            //if (baseFrame != null)
-            //{
-            //    var fullRect = new SKRect(0, 0, fullSize.Width, fullSize.Height);
-            //    if (frame.BlendOp == BlendOps.Source)
-            //        canvas.DrawBitmap(ClearArea(baseFrame, frame), fullRect);
-            //    else
-            //        canvas.DrawBitmap(baseFrame, fullRect);
-            //}
-
-            canvas.DrawImage(rawFrame,new SKPoint((int)frame.Left, (int)frame.Top));
-            
-            return bitmap;
-        }
-
-        public static bool IsFullFrame(Frame metadata, SKSize fullSize)
-        {
-            return metadata.Left == 0 && metadata.Top == 0 && metadata.Width == fullSize.Width && metadata.Height == fullSize.Height;
-        }
-
-        public static SKBitmap ClearArea(SKBitmap frame, Frame metadata)
-        {
-            SKBitmap sKBitmap = new SKBitmap(new SKImageInfo (frame.Width, frame.Height,SKColorType.Rgba8888));
-             
-        
-            using (SKCanvas context = new SKCanvas(sKBitmap))
+            if (baseFrame != null)
             {
-                var fullRect = new SKRect(0, 0, frame.Width, frame.Height);
-                var clearRect = new SKRect((int)metadata.Left, (int)metadata.Top, (int)metadata.Width, (int)metadata.Height);
-
-
-                //context.PushClip(clip);
-                context.DrawBitmap(frame, fullRect.Location);
+                var fullRect = new Rectangle(0, 0, fullSize.Width, fullSize.Height);
+                graphics.DrawImage(frame.BlendOp == BlendOps.Source ? ClearArea(baseFrame, frame) : baseFrame, fullRect);
             }
 
-            //var bitmap = new RenderTargetBitmap(frame.Width, frame.Height, frame.DpiX, frame.DpiY, PixelFormats.Pbgra32);
+            var rect = new Rectangle((int)frame.Left, (int)frame.Top, (int)frame.Width, (int)frame.Height);
+            graphics.DrawImage(rawFrame, rect);
+
+
+            //var bitmap = new RenderTargetBitmap(fullSize.Width, fullSize.Height, rawFrame.DpiX, rawFrame.DpiY, PixelFormats.Pbgra32);
             //bitmap.Render(visual);
 
             //if (bitmap.CanFreeze && !bitmap.IsFrozen)
             //    bitmap.Freeze();
 
-            return sKBitmap;
+            return bitmap;
         }
 
+        public static bool IsFullFrame(ApngFrame metadata, System.Drawing.Size fullSize)
+        {
+            return metadata.Left == 0 && metadata.Top == 0 && metadata.Width == fullSize.Width && metadata.Height == fullSize.Height;
+        }
 
-        //public static void SaveFrames(string png, string pathTemp)
-        //{
-        //    string fn;
+        public static Bitmap ClearArea(Bitmap frame, ApngFrame metadata)
+        {
+            Bitmap bitmap = new Bitmap(frame.Width, frame.Height);
+            using Graphics graphics = Graphics.FromImage(bitmap);
 
-        //    using var stream = new FileStream(png, FileMode.Open);
-        //    var apng = new Apng(stream);
+            var fullRect = new Rectangle(0, 0, frame.Width, frame.Height);
+            //var clearRect = new Rect(metadata.Left, metadata.Top, metadata.Width, metadata.Height);
+            //var clip = Geometry.Combine(new RectangleGeometry(fullRect), new RectangleGeometry(clearRect), GeometryCombineMode.Exclude, null);
 
-        //    if (!apng.ReadFrames())
-        //    {
-        //        fn = Path.Combine(pathTemp, $"{Path.GetFileName(Path.GetTempFileName())}.png");
-        //        using FileStream fileStream = new FileStream(Path.Combine(pathTemp, $"{fn}.png"), FileMode.Create);
-        //        SKImage.FromEncodedData(stream).EncodedData.SaveTo(fileStream);
-        //        return;
-        //    }
+            graphics.DrawImage(frame, fullRect);
 
-        //    var fullSize = new SKSize((int)apng.Ihdr.Width, (int)apng.Ihdr.Height);
 
-        //    SKBitmap baseFrame = null;
-        //    for (var index = 0; index < apng.Actl.NumFrames; index++)
-        //    {
-        //        var metadata = apng.GetFrame(index);
+            //var bitmap = new RenderTargetBitmap(frame.Width, frame.Height, frame.HorizontalResolution, frame.VerticalResolution, PixelFormats.Pbgra32);
+            //bitmap.Render(visual);
 
-        //        SKImage rawFrame = SKImage.FromEncodedData(metadata.ImageData);
+            //if (bitmap.CanFreeze && !bitmap.IsFrozen)
+            //    bitmap.Freeze();
 
-        //        var bitmapSource = MakeFrame(fullSize, rawFrame, metadata, baseFrame);
-
-        //        #region Disposal Method
-
-        //        switch (metadata.DisposeOp)
-        //        {
-        //            case DisposeOps.None: //No disposal is done on this frame before rendering the next; the contents of the output buffer are left as is.
-        //                baseFrame = bitmapSource;
-        //                break;
-        //            case DisposeOps.Background: //The frame's region of the output buffer is to be cleared to fully transparent black before rendering the next frame.
-        //                baseFrame = baseFrame == null || IsFullFrame(metadata, fullSize) ? null : ClearArea(baseFrame, metadata);
-        //                break;
-        //            case DisposeOps.Previous: //The frame's region of the output buffer is to be reverted to the previous contents before rendering the next frame.
-        //                                      //Reuse same base frame.
-        //                break;
-        //        }
-
-        //        #endregion
-
-        //        fn = Path.Combine(pathTemp, $"{Path.GetFileName(Path.GetTempFileName())}.png");
-        //        using var output = new FileStream(fn, FileMode.Create);
-        //        bitmapSource.Encode(SKEncodedImageFormat.Png, 100).SaveTo(output);
-        //    }
-        //}
-
+            return bitmap;
+        }
 
         public void Dispose()
         {

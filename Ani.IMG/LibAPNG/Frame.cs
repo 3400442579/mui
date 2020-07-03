@@ -77,5 +77,27 @@ namespace LibAPNG
             ms.Position = 0;
             return ms;
         }
+
+        public void Save(string save)
+        {
+            var ihdrChunk = new IHDRChunk(IHDRChunk);
+            if (fcTLChunk != null)
+            {
+                // Fix frame size with fcTL data.
+                ihdrChunk.ModifyChunkData(0, Helper.ConvertEndian(fcTLChunk.Width));
+                ihdrChunk.ModifyChunkData(4, Helper.ConvertEndian(fcTLChunk.Height));
+            }
+
+            // Write image data
+
+            using FileStream stream = new FileStream(save, FileMode.Create);
+
+            stream.WriteBytes(Signature);
+            stream.WriteBytes(ihdrChunk.RawData);
+            OtherChunks.ForEach(o => stream.WriteBytes(o.RawData));
+            IDATChunks.ForEach(i => stream.WriteBytes(i.RawData));
+            stream.WriteBytes(IENDChunk.RawData);
+            stream.Flush();
+        }
     }
 }
