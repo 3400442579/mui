@@ -13,21 +13,16 @@
   
 
   <ItemGroup>
-    <Compile Remove="APNGLib\**" />
-    <Compile Remove="a\**" />
+  
     <Compile Remove="GIF\AnimatedGif\**" />
-    <Compile Remove="LibAPNG\**" />
-    <EmbeddedResource Remove="APNGLib\**" />
-    <EmbeddedResource Remove="a\**" />
+    
     <EmbeddedResource Remove="GIF\AnimatedGif\**" />
-    <EmbeddedResource Remove="LibAPNG\**" />
-    <None Remove="APNGLib\**" />
-    <None Remove="a\**" />
+   
     <None Remove="GIF\AnimatedGif\**" />
-    <None Remove="LibAPNG\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="APNGLib\APNGAssembler.cs" />
     <Compile Remove="APNG\Decoder.cs" />
   </ItemGroup>
 

@@ -347,16 +347,15 @@ namespace Ani.IMG.APNG
         {
             SKBitmap bitmap = new SKBitmap(new SKImageInfo((int)fullSize.Width, (int)fullSize.Height));
             using SKCanvas canvas = new SKCanvas(bitmap);
-
-            //if (baseFrame != null)
-            //{
-            //    var fullRect = new SKRect(0, 0, fullSize.Width, fullSize.Height);
-            //    if (frame.BlendOp == BlendOps.Source)
-            //        canvas.DrawBitmap(ClearArea(baseFrame, frame), fullRect);
-            //    else
-            //        canvas.DrawBitmap(baseFrame, fullRect);
-            //}
-
+            if (baseFrame != null)
+            {
+                var fullRect = new SKRect(0, 0, fullSize.Width, fullSize.Height);
+                if (frame.BlendOp == BlendOps.Source)
+                    canvas.DrawBitmap(ClearArea(baseFrame, frame), 0, 0);
+                else
+                    canvas.DrawBitmap(baseFrame, 0, 0);
+            }
+            //canvas.DrawBitmap(SKBitmap.Decode(@"C:\Users\jxw\Desktop\17\1.png"), (int)frame.Left, (int)frame.Top);
             canvas.DrawImage(rawFrame,new SKPoint((int)frame.Left, (int)frame.Top));
             
             return bitmap;
@@ -369,17 +368,15 @@ namespace Ani.IMG.APNG
 
         public static SKBitmap ClearArea(SKBitmap frame, Frame metadata)
         {
-            SKBitmap sKBitmap = new SKBitmap(new SKImageInfo (frame.Width, frame.Height,SKColorType.Rgba8888));
-             
-        
+            SKBitmap sKBitmap = new SKBitmap(new SKImageInfo (frame.Width, frame.Height));
             using (SKCanvas context = new SKCanvas(sKBitmap))
             {
                 var fullRect = new SKRect(0, 0, frame.Width, frame.Height);
                 var clearRect = new SKRect((int)metadata.Left, (int)metadata.Top, (int)metadata.Width, (int)metadata.Height);
 
-
                 //context.PushClip(clip);
-                context.DrawBitmap(frame, fullRect.Location);
+                context.ClipRect(clearRect, SKClipOperation.Difference);
+                context.DrawBitmap(frame, fullRect);
             }
 
             //var bitmap = new RenderTargetBitmap(frame.Width, frame.Height, frame.DpiX, frame.DpiY, PixelFormats.Pbgra32);

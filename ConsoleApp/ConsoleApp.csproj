@@ -18,6 +18,15 @@
 
 
   <ItemGroup>
+    <None Update="test\bounce.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="test\brain.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="test\clock.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="test\world-cup-2014-42.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
