@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Ani.IMG.APNG
 {
@@ -77,11 +76,9 @@ namespace Ani.IMG.APNG
 
         #endregion Consts
 
-        public static uint Calculate(byte[] what)
+        internal static uint Calculate(byte[] what)
         {
-            UInt32 crc = what.Aggregate(
-                                        0xffffffff,
-                                        (current, t) => (current >> 8) ^ CrcTable[(current & 0xff) ^ t]);
+            var crc = what.Aggregate(0xffffffff, (current, t) => (current >> 8) ^ CrcTable[(current & 0xff) ^ t]);
             crc ^= 0xffffffff;
 
             return crc;

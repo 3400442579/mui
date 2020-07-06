@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace APNGLib
+namespace Ani.IMG.APNG
 {
 	public static class PNGUtils
 	{
@@ -31,7 +31,7 @@ namespace APNGLib
 			if (buffer.Length - offset < sizeof(ushort))
 			{
 				throw new ArgumentException(
-					String.Format("buffer is not long enough to extract {0} bytes at offset {1}",
+					string.Format("buffer is not long enough to extract {0} bytes at offset {1}",
 					sizeof(ushort), offset));
 			}
 			for (int i = offset + sizeof(ushort) - 1, j = 0; i >= offset; i--, j++)

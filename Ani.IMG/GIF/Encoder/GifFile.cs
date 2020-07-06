@@ -108,7 +108,7 @@ namespace Ani.IMG.GIF.Encoder
 
         #region Public Methods
 
-        public void AddFrame(string path, Rect rect, int delay = 66)
+        public void AddFrame(string path, SKRectI rect, int delay = 66)
         {
             CurrentTransparentColor = TransparentColor;
 
@@ -150,7 +150,7 @@ namespace Ani.IMG.GIF.Encoder
 
         #region Main Methods
 
-        private void WriteLogicalScreenDescriptor(Rect rect)
+        private void WriteLogicalScreenDescriptor(SKRectI rect)
         {
             //File Header, 6 bytes
             WriteString("GIF89a");
@@ -283,11 +283,11 @@ namespace Ani.IMG.GIF.Encoder
             WriteByte(0); //Terminator.
         }
 
-        private void WriteImageDescriptor(Rect rect)
+        private void WriteImageDescriptor(SKRectI rect)
         {
             WriteByte(0x2c); //Image Separator.
-            WriteShort(rect.X); //Position X. 2 bytes.
-            WriteShort(rect.Y); //Position Y. 2 bytes.
+            WriteShort(rect.Left); //Position X. 2 bytes.
+            WriteShort(rect.Top); //Position Y. 2 bytes.
             WriteShort(rect.Width); //Width. 2 bytes.
             WriteShort(rect.Height); //Height. 2 bytes.
 

@@ -241,7 +241,7 @@ namespace Ani.IMG.APNG
         {
             var bytes = Encoding.GetEncoding(1252).GetBytes(value);
 
-            ms.WriteByte((byte)bytes.Length); //String size, 1 byte.
+            ms.WriteByte((byte)bytes.Length); //string size, 1 byte.
             ms.Write(bytes, 0, bytes.Length); //String, XX bytes.
 
             if (!padded)
@@ -255,7 +255,7 @@ namespace Ani.IMG.APNG
 
         public static void WritePascalString(this Stream ms, byte[] bytes, bool padded = true)
         {
-            ms.WriteByte((byte)bytes.Length); //String size, 1 byte.
+            ms.WriteByte((byte)bytes.Length); //string size, 1 byte.
             ms.Write(bytes, 0, bytes.Length); //String, XX bytes (Max 31).
 
             if (!padded)

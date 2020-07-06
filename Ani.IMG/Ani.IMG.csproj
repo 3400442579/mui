@@ -22,11 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="APNGLib\APNGAssembler.cs" />
-    <Compile Remove="APNG\Decoder.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="SkiaSharp" Version="1.68.3" />
   </ItemGroup>
 

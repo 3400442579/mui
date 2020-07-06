@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace APNGLib
+namespace Ani.IMG.APNG
 {
     public class PNGChunk
     {
@@ -88,7 +88,7 @@ namespace APNGLib
 
     public class IHDRChunk : PNGChunk
     {
-        public const String NAME = "IHDR";
+        public const string NAME = "IHDR";
 
         private static readonly byte[] AllowedColorTypes = { 0, 2, 3, 4, 6 };
 
@@ -133,7 +133,7 @@ namespace APNGLib
 
     public class PLTEChunk : PNGChunk
     {
-        public const String NAME = "PLTE";
+        public const string NAME = "PLTE";
 
         public override byte[] ChunkData
         {
@@ -187,7 +187,7 @@ namespace APNGLib
 
     public class IDATChunk : PNGChunk
     {
-        public const String NAME = "IDAT";
+        public const string NAME = "IDAT";
 
         public override byte[] ChunkData
         {
@@ -210,7 +210,7 @@ namespace APNGLib
 
     public class IENDChunk : PNGChunk
     {
-        public const String NAME = "IEND";
+        public const string NAME = "IEND";
 
         public override byte[] ChunkData
         {
@@ -224,21 +224,19 @@ namespace APNGLib
             }
         }
 
-        public IENDChunk() :
-            base(NAME)
+        public IENDChunk() : base(NAME)
         { }
     }
 
-    public abstract class tRNSChunk : PNGChunk
+    public abstract class TRNSChunk : PNGChunk
     {
-        public const String NAME = "tRNS";
+        public const string NAME = "tRNS";
 
-        public tRNSChunk() :
-            base(NAME)
+        public TRNSChunk() : base(NAME)
         { }
     }
 
-    public class tRNSChunkType0 : tRNSChunk
+    public class TRNSChunkType0 : TRNSChunk
     {
         public override byte[] ChunkData
         {
@@ -255,12 +253,12 @@ namespace APNGLib
 
         public ushort GreySample { get; set; }
 
-        public tRNSChunkType0() :
+        public TRNSChunkType0() :
             base()
         { }
     }
 
-    public class tRNSChunkType2 : tRNSChunk
+    public class TRNSChunkType2 : TRNSChunk
     {
         public override byte[] ChunkData
         {
@@ -284,12 +282,11 @@ namespace APNGLib
         public ushort BlueSample { get; set; }
         public ushort GreenSample { get; set; }
 
-        public tRNSChunkType2() :
-            base()
+        public TRNSChunkType2() : base()
         { }
     }
 
-    public class tRNSChunkType3 : tRNSChunk
+    public class TRNSChunkType3 : TRNSChunk
     {
         public override byte[] ChunkData
         {
@@ -305,14 +302,13 @@ namespace APNGLib
 
         public byte[] AlphaSettings { get; set; }
 
-        public tRNSChunkType3() :
-            base()
+        public TRNSChunkType3() : base()
         { }
     }
 
-    public class cHRMChunk : PNGChunk
+    public class CHRMChunk : PNGChunk
     {
-        public const String NAME = "cHRM";
+        public const string NAME = "cHRM";
 
         public override byte[] ChunkData
         {
@@ -351,14 +347,13 @@ namespace APNGLib
         public uint BlueX { get; set; }
         public uint BlueY { get; set; }
 
-        public cHRMChunk() :
-            base(NAME)
+        public CHRMChunk() :  base(NAME)
         { }
     }
 
-    public class gAMAChunk : PNGChunk
+    public class GAMAChunk : PNGChunk
     {
-        public const String NAME = "gAMA";
+        public const string NAME = "gAMA";
 
         public override byte[] ChunkData
         {
@@ -375,14 +370,13 @@ namespace APNGLib
 
         public uint Gamma { get; set; }
 
-        public gAMAChunk() :
-            base(NAME)
+        public GAMAChunk() : base(NAME)
         { }
     }
 
-    public class iCCPChunk : PNGChunk
+    public class ICCPChunk : PNGChunk
     {
-        public const String NAME = "iCCP";
+        public const string NAME = "iCCP";
 
         public override byte[] ChunkData
         {
@@ -412,21 +406,21 @@ namespace APNGLib
         public byte CompressionMethod { get; set; }
         public byte[] CompressionProfile { get; set; }
 
-        public iCCPChunk() :
+        public ICCPChunk() :
             base(NAME)
         { }
     }
 
-    public abstract class sBITChunk : PNGChunk
+    public abstract class SBITChunk : PNGChunk
     {
-        public const String NAME = "sBIT";
+        public const string NAME = "sBIT";
 
-        public sBITChunk() :
+        public SBITChunk() :
             base(NAME)
         { }
     }
 
-    public class sBITChunkType0 : sBITChunk
+    public class SBITChunkType0 : SBITChunk
     {
         public override byte[] ChunkData
         {
@@ -442,12 +436,12 @@ namespace APNGLib
 
         public byte SignificantGreyscaleBits { get; set; }
 
-        public sBITChunkType0() :
+        public SBITChunkType0() :
             base()
         { }
     }
 
-    public class sBITChunkType2 : sBITChunk
+    public class SBITChunkType2 : SBITChunk
     {
         public override byte[] ChunkData
         {
@@ -468,12 +462,12 @@ namespace APNGLib
         public byte SignificantGreenBits { get; set; }
         public byte SignificantBlueBits { get; set; }
 
-        public sBITChunkType2() :
+        public SBITChunkType2() :
             base()
         { }
     }
 
-    public class sBITChunkType3 : sBITChunk
+    public class SBITChunkType3 : SBITChunk
     {
         public override byte[] ChunkData
         {
@@ -494,12 +488,12 @@ namespace APNGLib
         public byte SignificantGreenBits { get; set; }
         public byte SignificantBlueBits { get; set; }
 
-        public sBITChunkType3() :
+        public SBITChunkType3() :
             base()
         { }
     }
 
-    public class sBITChunkType4 : sBITChunk
+    public class SBITChunkType4 : SBITChunk
     {
         public override byte[] ChunkData
         {
@@ -518,12 +512,12 @@ namespace APNGLib
         public byte SignificantGreyscaleBits { get; set; }
         public byte SignificantAlphaBits { get; set; }
 
-        public sBITChunkType4() :
+        public SBITChunkType4() :
             base()
         { }
     }
 
-    public class sBITChunkType6 : sBITChunk
+    public class SBITChunkType6 : SBITChunk
     {
         public override byte[] ChunkData
         {
@@ -546,14 +540,14 @@ namespace APNGLib
         public byte SignificantBlueBits { get; set; }
         public byte SignificantAlphaBits { get; set; }
 
-        public sBITChunkType6() :
+        public SBITChunkType6() :
             base()
         { }
     }
 
-    public class sRGBChunk : PNGChunk
+    public class SRGBChunk : PNGChunk
     {
-        public const String NAME = "sRGB";
+        public const string NAME = "sRGB";
 
         public override byte[] ChunkData
         {
@@ -570,14 +564,14 @@ namespace APNGLib
 
         public byte RenderingIntent { get; set; }
 
-        public sRGBChunk() :
+        public SRGBChunk() :
             base(NAME)
         { }
     }
 
-    public class tEXtChunk : PNGChunk
+    public class TEXtChunk : PNGChunk
     {
-        public const String NAME = "tEXt";
+        public const string NAME = "tEXt";
 
         public override byte[] ChunkData
         {
@@ -605,14 +599,14 @@ namespace APNGLib
         public string Keyword { get; set; }
         public string Text { get; set; }
 
-        public tEXtChunk() :
+        public TEXtChunk() :
             base(NAME)
         { }
     }
 
-    public class zTXtChunk : PNGChunk
+    public class ZTXtChunk : PNGChunk
     {
-        public const String NAME = "zTXt";
+        public const string NAME = "zTXt";
 
         public override byte[] ChunkData
         {
@@ -643,14 +637,14 @@ namespace APNGLib
         public byte CompressionMethod { get; set; }
         public byte[] TextDatastream { get; set; }
 
-        public zTXtChunk() :
+        public ZTXtChunk() :
             base(NAME)
         { }
     }
 
-    public class iTXtChunk : PNGChunk
+    public class ITXtChunk : PNGChunk
     {
-        public const String NAME = "iTXt";
+        public const string NAME = "iTXt";
 
         public override byte[] ChunkData
         {
@@ -688,21 +682,21 @@ namespace APNGLib
         public string TranslatedKeyword { get; set; }
         public string Text { get; set; }
 
-        public iTXtChunk() :
+        public ITXtChunk() :
             base(NAME)
         { }
     }
 
-    public abstract class bKGDChunk : PNGChunk
+    public abstract class BKGDChunk : PNGChunk
     {
-        public const String NAME = "bKGD";
+        public const string NAME = "bKGD";
 
-        public bKGDChunk() :
+        public BKGDChunk() :
             base(NAME)
         { }
     }
 
-    public class bKGDChunkType0 : bKGDChunk
+    public class BKGDChunkType0 : BKGDChunk
     {
         public override byte[] ChunkData
         {
@@ -719,12 +713,12 @@ namespace APNGLib
 
         public ushort Greyscale { get; set; }
 
-        public bKGDChunkType0() :
+        public BKGDChunkType0() :
             base()
         { }
     }
 
-    public class bKGDChunkType2 : bKGDChunk
+    public class BKGDChunkType2 : BKGDChunk
     {
         public override byte[] ChunkData
         {
@@ -748,12 +742,12 @@ namespace APNGLib
         public ushort Green { get; set; }
         public ushort Blue { get; set; }
 
-        public bKGDChunkType2() :
+        public BKGDChunkType2() :
             base()
         { }
     }
 
-    public class bKGDChunkType3 : bKGDChunk
+    public class BKGDChunkType3 : BKGDChunk
     {
         public override byte[] ChunkData
         {
@@ -770,12 +764,12 @@ namespace APNGLib
 
         public byte PaletteIndex { get; set; }
 
-        public bKGDChunkType3() :
+        public BKGDChunkType3() :
             base()
         { }
     }
 
-    public class bKGDChunkType4 : bKGDChunk
+    public class BKGDChunkType4 : BKGDChunk
     {
         public override byte[] ChunkData
         {
@@ -792,12 +786,12 @@ namespace APNGLib
 
         public ushort Greyscale { get; set; }
 
-        public bKGDChunkType4() :
+        public BKGDChunkType4() :
             base()
         { }
     }
 
-    public class bKGDChunkType6 : bKGDChunk
+    public class bKGDChunkType6 : BKGDChunk
     {
         public override byte[] ChunkData
         {
@@ -826,9 +820,9 @@ namespace APNGLib
         { }
     }
 
-    public class hISTChunk : PNGChunk
+    public class HISTChunk : PNGChunk
     {
-        public const String NAME = "hIST";
+        public const string NAME = "hIST";
 
         public override byte[] ChunkData
         {
@@ -856,14 +850,14 @@ namespace APNGLib
 
         public ushort[] Frequency { get; set; }
 
-        public hISTChunk() :
+        public HISTChunk() :
             base(NAME)
         { }
     }
 
-    public class pHYsChunk : PNGChunk
+    public class PHYsChunk : PNGChunk
     {
-        public const String NAME = "pHYs";
+        public const string NAME = "pHYs";
 
         public override byte[] ChunkData
         {
@@ -887,14 +881,14 @@ namespace APNGLib
         public uint PixelsPerUnitYAxis { get; set; }
         public byte Unit { get; set; }
 
-        public pHYsChunk() :
+        public PHYsChunk() :
             base(NAME)
         { }
     }
 
-    public class sPLTChunk : PNGChunk
+    public class SPLTChunk : PNGChunk
     {
-        public const String NAME = "sPLT";
+        public const string NAME = "sPLT";
 
         public override byte[] ChunkData
         {
@@ -975,7 +969,7 @@ namespace APNGLib
 
         public ICollection<SuggestedPalette> palettes;
 
-        public sPLTChunk() :
+        public SPLTChunk() :
             base(NAME)
         {
             palettes = new List<SuggestedPalette>();

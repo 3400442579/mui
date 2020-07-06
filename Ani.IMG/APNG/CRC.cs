@@ -22,7 +22,7 @@
                     }
                     else
                     {
-                        c = c >> 1;
+                        c >>= 1;
                     }
                 }
                 crcTable[n] = c;

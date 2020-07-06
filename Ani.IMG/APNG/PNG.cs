@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 
-namespace APNGLib
+namespace Ani.IMG.APNG
 {
     internal static class PNGSignature
     {
@@ -37,19 +38,19 @@ namespace APNGLib
         public IENDChunk IEND { get; set; }
 
         public PLTEChunk PLTE { get; set; }
-        public tRNSChunk TRNS { get; set; }
-        public cHRMChunk CHRM { get; set; }
-        public gAMAChunk GAMA { get; set; }
-        public iCCPChunk ICCP { get; set; }
-        public sBITChunk SBIT { get; set; }
-        public sRGBChunk SRGB { get; set; }
-        public ICollection<tEXtChunk> TEXtList { get; private set; }
-        public ICollection<zTXtChunk> ZTXtList { get; private set; }
-        public ICollection<iTXtChunk> ITXtList { get; private set; }
-        public bKGDChunk BKGD { get; set; }
-        public hISTChunk HIST { get; set; }
-        public pHYsChunk PHYs { get; set; }
-        public sPLTChunk SPLT { get; set; }
+        public TRNSChunk TRNS { get; set; }
+        public CHRMChunk CHRM { get; set; }
+        public GAMAChunk GAMA { get; set; }
+        public ICCPChunk ICCP { get; set; }
+        public SBITChunk SBIT { get; set; }
+        public SRGBChunk SRGB { get; set; }
+        public ICollection<TEXtChunk> TEXtList { get; private set; }
+        public ICollection<ZTXtChunk> ZTXtList { get; private set; }
+        public ICollection<ITXtChunk> ITXtList { get; private set; }
+        public BKGDChunk BKGD { get; set; }
+        public HISTChunk HIST { get; set; }
+        public PHYsChunk PHYs { get; set; }
+        public SPLTChunk SPLT { get; set; }
         public TIMEChunk TIME { get; set; }
 
         protected ICollection<PNGChunk> chunks;
@@ -57,9 +58,9 @@ namespace APNGLib
         public PNG()
         {
             IDATList = new List<IDATChunk>();
-            TEXtList = new HashSet<tEXtChunk>();
-            ZTXtList = new HashSet<zTXtChunk>();
-            ITXtList = new HashSet<iTXtChunk>();
+            TEXtList = new HashSet<TEXtChunk>();
+            ZTXtList = new HashSet<ZTXtChunk>();
+            ITXtList = new HashSet<ITXtChunk>();
 
             chunks = new List<PNGChunk>();
         }
@@ -80,7 +81,7 @@ namespace APNGLib
             }
         }
 
-        public virtual Stream ToStream()
+        public virtual SKBitmap ToBitmap()
         {
             Validate();
 
@@ -88,37 +89,39 @@ namespace APNGLib
             foreach (IDATChunk idat in IDATList)
             {
                 foreach (byte b in idat.ImageData)
-                {
                     imageData.Add(b);
-                }
             }
-            Stream s = new MemoryStream();
+
+            using Stream s = new MemoryStream();
             WriteImageData(s, imageData);
-            return s;
+            s.Position = 0;
+
+            return SKBitmap.Decode(s);
         }
 
-        public virtual SKBitmap ToBitmap()
-        {
-            Stream s = ToStream();
-            SKBitmap b = SKBitmap.Decode(s);
-            return b;
-        }
+        
 
-        protected void WriteImageData(Stream s, IList<byte> imageData, uint width, uint height)
+        public void WriteImageData(Stream s, IList<byte> imageData, uint width, uint height)
         {
             WriteSignature(s);
-            IHDRChunk tIHDR = new IHDRChunk();
-            tIHDR.ChunkData = IHDR.ChunkData;
-            tIHDR.Width = width;
-            tIHDR.Height = height;
-            WriteChunk(s, tIHDR);
+            
+            WriteChunk(s, new IHDRChunk
+            {
+                ChunkData = IHDR.ChunkData,
+                Width = width,
+                Height = height
+            });
+
             WriteAncillaryChunks(s);
-            IDATChunk id = new IDATChunk();
-            id.ChunkData = imageData.ToArray();
-            WriteChunk(s, id);
+            
+            WriteChunk(s, new IDATChunk
+            {
+                ChunkData = imageData.ToArray()
+            });
             WriteChunk(s, IEND);
         }
 
+    
         protected void WriteImageData(Stream s, IList<byte> imageData)
         {
             WriteImageData(s, imageData, IHDR.Width, IHDR.Height);
@@ -143,22 +146,18 @@ namespace APNGLib
             WriteChunk(s, PHYs);
             WriteChunk(s, SPLT);
             WriteChunk(s, TIME);
-            foreach (tEXtChunk text in TEXtList)
-            {
+
+            foreach (TEXtChunk text in TEXtList)
                 WriteChunk(s, text);
-            }
-            foreach (zTXtChunk ztxt in ZTXtList)
-            {
+
+            foreach (ZTXtChunk ztxt in ZTXtList)
                 WriteChunk(s, ztxt);
-            }
-            foreach (iTXtChunk itxt in ITXtList)
-            {
+
+            foreach (ITXtChunk itxt in ITXtList)
                 WriteChunk(s, itxt);
-            }
+
             foreach (PNGChunk chunk in chunks)
-            {
                 WriteChunk(s, chunk);
-            }
         }
 
         protected static void WriteChunk(Stream s, PNGChunk chunk)
@@ -193,8 +192,7 @@ namespace APNGLib
             uint calcCRC = value.CalculateCRC();
             if (readCRC != calcCRC)
             {
-                throw new ApplicationException(String.Format("APNG Chunk CRC Mismatch.  Chunk CRC = {0}, Calculated CRC = {1}.",
-                    readCRC, calcCRC));
+                throw new ApplicationException(string.Format("APNG Chunk CRC Mismatch.  Chunk CRC = {0}, Calculated CRC = {1}.", readCRC, calcCRC));
             }
             return value;
         }
@@ -222,6 +220,7 @@ namespace APNGLib
                     HandleDefaultChunk(chunk);
                 }
             } while (chunk.ChunkType != IENDChunk.NAME);
+
             Validate();
         }
 
@@ -241,43 +240,43 @@ namespace APNGLib
                 case IENDChunk.NAME:
                     Handle_IEND(chunk);
                     break;
-                case tRNSChunk.NAME:
+                case TRNSChunk.NAME:
                     Handle_tRNS(chunk);
                     break;
-                case cHRMChunk.NAME:
+                case CHRMChunk.NAME:
                     Handle_cHRM(chunk);
                     break;
-                case gAMAChunk.NAME:
+                case GAMAChunk.NAME:
                     Handle_gAMA(chunk);
                     break;
-                case iCCPChunk.NAME:
+                case ICCPChunk.NAME:
                     Handle_iCCP(chunk);
                     break;
-                case sBITChunk.NAME:
+                case SBITChunk.NAME:
                     Handle_sBIT(chunk);
                     break;
-                case sRGBChunk.NAME:
+                case SRGBChunk.NAME:
                     Handle_sRGB(chunk);
                     break;
-                case tEXtChunk.NAME:
+                case TEXtChunk.NAME:
                     Handle_tEXt(chunk);
                     break;
-                case zTXtChunk.NAME:
+                case ZTXtChunk.NAME:
                     Handle_zTXt(chunk);
                     break;
-                case iTXtChunk.NAME:
+                case ITXtChunk.NAME:
                     Handle_iTXt(chunk);
                     break;
-                case bKGDChunk.NAME:
+                case BKGDChunk.NAME:
                     Handle_bKGD(chunk);
                     break;
-                case hISTChunk.NAME:
+                case HISTChunk.NAME:
                     Handle_hIST(chunk);
                     break;
-                case pHYsChunk.NAME:
+                case PHYsChunk.NAME:
                     Handle_pHYs(chunk);
                     break;
-                case sPLTChunk.NAME:
+                case SPLTChunk.NAME:
                     Handle_sPLT(chunk);
                     break;
                 case TIMEChunk.NAME:
@@ -305,7 +304,7 @@ namespace APNGLib
             {
                 throw new ApplicationException("sPLT chunk encountered more than once");
             }
-            SPLT = new sPLTChunk();
+            SPLT = new SPLTChunk();
             SPLT.ChunkData = chunk.ChunkData;
         }
 
@@ -315,7 +314,7 @@ namespace APNGLib
             {
                 throw new ApplicationException("pHYs chunk encountered more than once");
             }
-            PHYs = new pHYsChunk();
+            PHYs = new PHYsChunk();
             PHYs.ChunkData = chunk.ChunkData;
         }
 
@@ -325,7 +324,7 @@ namespace APNGLib
             {
                 throw new ApplicationException("hIST chunk encountered more than once");
             }
-            HIST = new hISTChunk();
+            HIST = new HISTChunk();
             HIST.ChunkData = chunk.ChunkData;
         }
 
@@ -338,16 +337,16 @@ namespace APNGLib
             switch (IHDR.ColorType)
             {
                 case 0:
-                    BKGD = new bKGDChunkType0();
+                    BKGD = new BKGDChunkType0();
                     break;
                 case 2:
-                    BKGD = new bKGDChunkType2();
+                    BKGD = new BKGDChunkType2();
                     break;
                 case 3:
-                    BKGD = new bKGDChunkType3();
+                    BKGD = new BKGDChunkType3();
                     break;
                 case 4:
-                    BKGD = new bKGDChunkType4();
+                    BKGD = new BKGDChunkType4();
                     break;
                 case 6:
                     BKGD = new bKGDChunkType6();
@@ -360,21 +359,21 @@ namespace APNGLib
 
         private void Handle_iTXt(PNGChunk chunk)
         {
-            iTXtChunk it = new iTXtChunk();
+            ITXtChunk it = new ITXtChunk();
             it.ChunkData = chunk.ChunkData;
             ITXtList.Add(it);
         }
 
         private void Handle_zTXt(PNGChunk chunk)
         {
-            zTXtChunk zt = new zTXtChunk();
+            ZTXtChunk zt = new ZTXtChunk();
             zt.ChunkData = chunk.ChunkData;
             ZTXtList.Add(zt);
         }
 
         private void Handle_tEXt(PNGChunk chunk)
         {
-            tEXtChunk txt = new tEXtChunk();
+            TEXtChunk txt = new TEXtChunk();
             txt.ChunkData = chunk.ChunkData;
             TEXtList.Add(txt);
         }
@@ -385,7 +384,7 @@ namespace APNGLib
             {
                 throw new ApplicationException("sRGB chunk encountered more than once");
             }
-            SRGB = new sRGBChunk();
+            SRGB = new SRGBChunk();
             SRGB.ChunkData = chunk.ChunkData;
         }
 
@@ -398,19 +397,19 @@ namespace APNGLib
             switch (IHDR.ColorType)
             {
                 case 0:
-                    SBIT = new sBITChunkType0();
+                    SBIT = new SBITChunkType0();
                     break;
                 case 2:
-                    SBIT = new sBITChunkType2();
+                    SBIT = new SBITChunkType2();
                     break;
                 case 3:
-                    SBIT = new sBITChunkType3();
+                    SBIT = new SBITChunkType3();
                     break;
                 case 4:
-                    SBIT = new sBITChunkType4();
+                    SBIT = new SBITChunkType4();
                     break;
                 case 6:
-                    SBIT = new sBITChunkType6();
+                    SBIT = new SBITChunkType6();
                     break;
                 default:
                     throw new ApplicationException("Colour type is not supported");
@@ -424,7 +423,7 @@ namespace APNGLib
             {
                 throw new ApplicationException("iCCP chunk encountered more than once");
             }
-            ICCP = new iCCPChunk();
+            ICCP = new ICCPChunk();
             ICCP.ChunkData = chunk.ChunkData;
         }
 
@@ -434,7 +433,7 @@ namespace APNGLib
             {
                 throw new ApplicationException("gAMA chunk encountered more than once");
             }
-            GAMA = new gAMAChunk();
+            GAMA = new GAMAChunk();
             GAMA.ChunkData = chunk.ChunkData;
         }
 
@@ -444,7 +443,7 @@ namespace APNGLib
             {
                 throw new ApplicationException("cHRM chunk encountered more than once");
             }
-            CHRM = new cHRMChunk();
+            CHRM = new CHRMChunk();
             CHRM.ChunkData = chunk.ChunkData;
         }
 
@@ -457,13 +456,13 @@ namespace APNGLib
             switch (IHDR.ColorType)
             {
                 case 0:
-                    TRNS = new tRNSChunkType0();
+                    TRNS = new TRNSChunkType0();
                     break;
                 case 2:
-                    TRNS = new tRNSChunkType2();
+                    TRNS = new TRNSChunkType2();
                     break;
                 case 3:
-                    TRNS = new tRNSChunkType3();
+                    TRNS = new TRNSChunkType3();
                     break;
                 case 4:
                 case 6:
@@ -490,14 +489,18 @@ namespace APNGLib
             {
                 throw new ApplicationException("IHDR defined more than once");
             }
-            IHDR = new IHDRChunk();
-            IHDR.ChunkData = chunk.ChunkData;
+            IHDR = new IHDRChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
         }
 
         private void Handle_IDAT(PNGChunk chunk)
         {
-            IDATChunk idatC = new IDATChunk();
-            idatC.ChunkData = chunk.ChunkData;
+            IDATChunk idatC = new IDATChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
             IDATList.Add(idatC);
         }
 
@@ -507,8 +510,10 @@ namespace APNGLib
             {
                 throw new ApplicationException("IEND defined more than once");
             }
-            IEND = new IENDChunk();
-            IEND.ChunkData = chunk.ChunkData;
+            IEND = new IENDChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
         }
 
         private void HandleDefaultChunk(PNGChunk chunk)

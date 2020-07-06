@@ -5,18 +5,17 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 
-namespace APNGLib
+namespace Ani.IMG.APNG
 {
     public static class APNGAssembler
     {
-        public static APNG AssembleAPNG(IList<string> files, bool optimize)
+        public static Apng AssembleAPNG(IList<string> files, bool optimize)
         {
             if (files.Count < 1)
-            {
                 return null;
-            }
+            
             uint sequenceCount = 0;
-            APNG apng = new APNG();
+            Apng apng = new Apng();
             PNG first = new PNG();
             using (Stream s = File.OpenRead(files.First()))
             {
@@ -38,9 +37,7 @@ namespace APNGLib
                         png.Load(optStr);
                     }
                     else
-                    {
                         png.Load(fileStr);
-                    }
                 }
                 Frame f = CreateFrame(png.Height, png.Width, (uint)p.X, (uint)p.Y, ref sequenceCount, false, png.IDATList);
                 apng.AddFrame(f);
@@ -51,7 +48,7 @@ namespace APNGLib
             return apng;
         }
 
-        public static APNG AssembleAPNG(IList<FileInfo> files, bool optimize)
+        public static Apng AssembleAPNG(IList<FileInfo> files, bool optimize)
         {
             IList<string> filenames = new List<string>();
             foreach (FileInfo fi in files)
@@ -95,7 +92,7 @@ namespace APNGLib
             return f;
         }
 
-        private static void SetupAPNGChunks(APNG apng, PNG png)
+        private static void SetupAPNGChunks(Apng apng, PNG png)
         {
             apng.IHDR = png.IHDR;
             apng.AcTL = new AcTLChunk()
@@ -114,15 +111,15 @@ namespace APNGLib
             apng.ICCP = png.ICCP;
             apng.SBIT = png.SBIT;
             apng.SRGB = png.SRGB;
-            foreach (tEXtChunk chunk in png.TEXtList)
+            foreach (TEXtChunk chunk in png.TEXtList)
             {
                 apng.TEXtList.Add(chunk);
             }
-            foreach (zTXtChunk chunk in png.ZTXtList)
+            foreach (ZTXtChunk chunk in png.ZTXtList)
             {
                 apng.ZTXtList.Add(chunk);
             }
-            foreach (iTXtChunk chunk in png.ITXtList)
+            foreach (ITXtChunk chunk in png.ITXtList)
             {
                 apng.ITXtList.Add(chunk);
             }
@@ -145,125 +142,113 @@ namespace APNGLib
 
         private static Stream OptimizeBitmapStream(Stream bmStr, out Point p)
         {
-            SKBitmap bm =  SKBitmap.Decode(bmStr);
-            SKBitmap opt = TrimBitmap(bm, out p);
+            using SKBitmap bm = SKBitmap.Decode(bmStr);
+            using SKBitmap opt = TrimBitmap(bm, out p);
             Stream ret = new MemoryStream();
-            opt.Save(ret, ImageFormat.Png);
+            opt.Encode(SKEncodedImageFormat.Png, 100).SaveTo(ret);
             ret.Position = 0;
             return ret;
         }
 
         private static SKBitmap TrimBitmap(SKBitmap source, out Point p)
         {
-            Rectangle srcRect = default(Rectangle);
-            BitmapData data = null;
-            try
+            int xMin = int.MaxValue,
+                xMax = int.MinValue,
+                yMin = int.MaxValue,
+                yMax = int.MinValue;
+
+            bool foundPixel = false;
+
+            // Find xMin
+            for (int x = 0; x < source.Width; x++)
             {
-                data = source.LockBits(new Rectangle(0, 0, source.Width, source.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                byte[] buffer = new byte[data.Height * data.Stride];
-                System.Runtime.InteropServices.Marshal.Copy(data.Scan0, buffer, 0, buffer.Length);
+                bool stop = false;
+                for (int y = 0; y < source.Height; y++)
+                {
 
-                int xMin = int.MaxValue,
-                    xMax = int.MinValue,
-                    yMin = int.MaxValue,
-                    yMax = int.MinValue;
-
-                bool foundPixel = false;
-
-                // Find xMin
-                for (int x = 0; x < data.Width; x++)
-                {
-                    bool stop = false;
-                    for (int y = 0; y < data.Height; y++)
+                    if (source.GetPixel(x, y).Alpha != 0)
                     {
-                        byte alpha = buffer[(y * data.Stride) + (4 * x) + 3];
-                        if (alpha != 0)
-                        {
-                            xMin = x;
-                            stop = true;
-                            foundPixel = true;
-                            break;
-                        }
-                    }
-                    if (stop)
-                    {
+                        xMin = x;
+                        stop = true;
+                        foundPixel = true;
                         break;
                     }
                 }
-                if (!foundPixel)
+                if (stop)
                 {
-                    // Image is empty...
-                    p = new Point(0, 0);
-                    return new Bitmap(1, 1);
-                }
-                // Find yMin
-                for (int y = 0; y < data.Height; y++)
-                {
-                    bool stop = false;
-                    for (int x = xMin; x < data.Width; x++)
-                    {
-                        byte alpha = buffer[(y * data.Stride) + (4 * x) + 3];
-                        if (alpha != 0)
-                        {
-                            yMin = y;
-                            stop = true;
-                            break;
-                        }
-                    }
-                    if (stop)
-                    {
-                        break;
-                    }
-                }
-                // Find xMax
-                for (int x = data.Width - 1; x >= xMin; x--)
-                {
-                    bool stop = false;
-                    for (int y = yMin; y < data.Height; y++)
-                    {
-                        byte alpha = buffer[(y * data.Stride) + (4 * x) + 3];
-                        if (alpha != 0)
-                        {
-                            xMax = x;
-                            stop = true;
-                            break;
-                        }
-                    }
-                    if (stop)
-                    {
-                        break;
-                    }
-                }
-                // Find yMax
-                for (int y = data.Height - 1; y >= yMin; y--)
-                {
-                    bool stop = false;
-                    for (int x = xMin; x <= xMax; x++)
-                    {
-                        byte alpha = buffer[(y * data.Stride) + (4 * x) + 3];
-                        if (alpha != 0)
-                        {
-                            yMax = y;
-                            stop = true;
-                            break;
-                        }
-                    }
-                    if (stop)
-                    {
-                        break;
-                    }
-                }
-                srcRect = Rectangle.FromLTRB(xMin, yMin, xMax, yMax);
-                p = new Point(xMin, yMin);
-            }
-            finally
-            {
-                if (data != null)
-                {
-                    source.UnlockBits(data);
+                    break;
                 }
             }
-            return source.Clone(srcRect, source.PixelFormat);
+            if (!foundPixel)
+            {
+                // Image is empty...
+                p = new Point(0, 0);
+                return new SKBitmap(1, 1);
+            }
+            // Find yMin
+            for (int y = 0; y < source.Height; y++)
+            {
+                bool stop = false;
+                for (int x = xMin; x < source.Width; x++)
+                {
+                    //byte alpha = buffer[(y * data.Stride) + (4 * x) + 3];
+                    if (source.GetPixel(x, y).Alpha != 0)
+                    {
+                        yMin = y;
+                        stop = true;
+                        break;
+                    }
+                }
+                if (stop)
+                {
+                    break;
+                }
+            }
+            // Find xMax
+            for (int x = source.Width - 1; x >= xMin; x--)
+            {
+                bool stop = false;
+                for (int y = yMin; y < source.Height; y++)
+                {
+                    //byte alpha = buffer[(y * data.Stride) + (4 * x) + 3];
+                    if (source.GetPixel(x, y).Alpha != 0)
+                    {
+                        xMax = x;
+                        stop = true;
+                        break;
+                    }
+                }
+                if (stop)
+                {
+                    break;
+                }
+            }
+            // Find yMax
+            for (int y = source.Height - 1; y >= yMin; y--)
+            {
+                bool stop = false;
+                for (int x = xMin; x <= xMax; x++)
+                {
+                    //byte alpha = buffer[(y * data.Stride) + (4 * x) + 3];
+                    if (source.GetPixel(x, y).Alpha != 0)
+                    {
+                        yMax = y;
+                        stop = true;
+                        break;
+                    }
+                }
+                if (stop)
+                {
+                    break;
+                }
+            }
+
+            SKRect srcRect = SKRect.Create(xMin, yMin, xMax - xMin, yMax - yMin);
+            p = new Point(xMin, yMin);
+
+            var destination = new SKBitmap(new SKImageInfo((int)srcRect.Width, (int)srcRect.Height));
+            source.ExtractSubset(destination, SKRectI.Ceiling(srcRect));
+            return destination;
         }
     }
 }

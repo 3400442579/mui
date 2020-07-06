@@ -1,64 +1,214 @@
-﻿namespace Ani.IMG.APNG
+﻿using System;
+using System.Collections.Generic;
+
+namespace Ani.IMG.APNG
 {
-    /// <summary>
-    /// Frame that contains the image data and playback details.
-    /// </summary>
     public class Frame
     {
-        /// <summary>
-        /// The image width.
-        /// </summary>
-        public uint Width { get; set; }
+        public FcTLChunk Fctl { get; private set; }
+        private readonly IList<IDATChunk> idats;
+        private readonly IList<FdATChunk> fdats;
+        public bool IFrame { get; set; }
 
-        /// <summary>
-        /// The image height.
-        /// </summary>
-        public uint Height { get; set; }
+        public IEnumerable<IDATChunk> IDATs
+        {
+            get
+            {
+                return idats;
+            }
+        }
 
-        /// <summary>
-        /// The left offset of the image.
-        /// </summary>
-        public uint Left { get; set; }
+        public IEnumerable<FdATChunk> FdATs
+        {
+            get
+            {
+                return fdats;
+            }
+        }
 
-        /// <summary>
-        /// The top offset of the image.
-        /// </summary>
-        public uint Top { get; set; }
+        public void AddChunk(IDATChunk i)
+        {
+            if (IFrame)
+            {
+                idats.Add(i);
+            }
+            else
+            {
+                throw new ApplicationException("Cannot add IDAT chunk to fdAT frame");
+            }
+        }
 
-        /// <summary>
-        /// The color type of the image.
-        /// PNG image type        • Colour type • Allowed bit depths • Interpretation
-        /// Greyscale             • 0           • 1, 2, 4, 8, 16     • Each pixel is a greyscale sample
-        /// Truecolour            • 2           • 8, 16              • Each pixel is an R,G,B triple
-        /// Indexed-colour        • 3           • 1, 2, 4, 8         • Each pixel is a palette index; a PLTE chunk shall appear.
-        /// Greyscale with alpha  • 4           • 8, 16              • Each pixel is a greyscale sample followed by an alpha sample.
-        /// Truecolour with alpha • 6           • 8, 16              • Each pixel is an R,G,B triple followed by an alpha sample.
-        /// </summary>
-        public byte ColorType { get; set; }
+        public void AddChunk(FdATChunk f)
+        {
+            if (IFrame)
+            {
+                throw new ApplicationException("Cannot add fdAT chunk to IDAT frame");
+            }
+            else
+            {
+                fdats.Add(f);
+            }
+        }
 
-        /// <summary>
-        /// The bit depth of the image.
-        /// </summary>
-        public byte BitDepth { get; set; }
+        public uint Width
+        {
+            get
+            {
+                return Fctl.Width;
+            }
 
-        /// <summary>
-        /// The whole image data, including auxiliar chunks.
-        /// </summary>
-        public byte[] ImageData { get; set; }
+            //set
+            //{
+            //    Fctl.Width = value;
+            //}
+        }
 
-        /// <summary>
-        /// The delay of the frame in miliseconds.
-        /// </summary>
-        public int Delay { get; set; }
+        public uint Height
+        {
+            get
+            {
+                return Fctl.Height;
+            }
+            //set
+            //{
+            //    Fctl.Height = value;
+            //}
+        }
 
-        ///<summary>
-        ///Type of frame area disposal to be done after rendering this frame.
-        ///</summary>
-        public Apng.DisposeOps DisposeOp { get; set; }
+        public uint XOffset
+        {
+            get
+            {
+                return Fctl.XOffset;
+            }
+            //set
+            //{
+            //    Fctl.XOffset = value;
+            //}
+        }
 
-        ///<summary>
-        ///Type of frame area rendering for this frame.
-        ///</summary>
-        public Apng.BlendOps BlendOp { get; set; }
+        public uint YOffset
+        {
+            get
+            {
+                return Fctl.YOffset;
+            }
+            //set
+            //{
+            //    Fctl.YOffset = value;
+            //}
+        }
+
+        //public ushort DelayNumerator
+        //{
+        //    get
+        //    {
+        //        return Fctl.DelayNumerator;
+        //    }
+        //    set
+        //    {
+        //        Fctl.DelayNumerator = value;
+        //        milliFlag = false;
+        //    }
+        //}
+
+        //public ushort DelayDenominator
+        //{
+        //    get
+        //    {
+        //        return Fctl.DelayDenominator;
+        //    }
+        //    set
+        //    {
+        //        Fctl.DelayDenominator = value;
+        //        milliFlag = false;
+        //    }
+        //}
+
+
+        public int Delay
+        {
+            get => (int)(Fctl.DelayNumerator / (float)Fctl.DelayDenominator * 1000);
+        }
+
+        
+
+        public DisposeOperation DisposeOp
+        {
+            get
+            {
+                return Fctl.DisposeOperation switch
+                {
+                    0 => DisposeOperation.NONE,
+                    1 => DisposeOperation.BACKGROUND,
+                    2 => DisposeOperation.PREVIOUS,
+                    _ => throw new ApplicationException("Invalid Dispose Op"),
+                };
+            }
+            //set
+            //{
+            //    Fctl.DisposeOperation = (byte)value;
+            //}
+        }
+
+        public BlendOperation BlendOp
+        {
+            get
+            {
+                return Fctl.BlendOperation switch
+                {
+                    0 => BlendOperation.SOURCE,
+                    1 => BlendOperation.OVER,
+                    _ => throw new ApplicationException("Invalid Blend Op"),
+                };
+            }
+            //set
+            //{
+            //    Fctl.BlendOperation = (byte)value;
+            //}
+        }
+
+        public Frame(bool first, FcTLChunk fChunk)
+        {
+            IFrame = first;
+            if (IFrame)
+            {
+                idats = new List<IDATChunk>();
+            }
+            else
+            {
+                fdats = new List<FdATChunk>();
+            }
+            Fctl = fChunk;
+        }
+
+        public IList<byte> ImageData
+        {
+            get
+            {
+                IList<byte> value = new List<byte>();
+                if (IFrame)
+                {
+                    foreach (IDATChunk id in idats)
+                    {
+                        foreach (byte b in id.ImageData)
+                        {
+                            value.Add(b);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (FdATChunk fd in fdats)
+                    {
+                        foreach (byte b in fd.FrameData)
+                        {
+                            value.Add(b);
+                        }
+                    }
+                }
+                return value;
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace APNGLib
+namespace Ani.IMG.APNG
 {
     public class FcTLChunk : PNGChunk
     {
@@ -123,4 +123,5 @@ namespace APNGLib
         {
         }
     }
+
 }
