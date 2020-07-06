@@ -6,15 +6,7 @@ using System.Linq;
 
 namespace Ani.IMG.APNG
 {
-    public enum DisposeOperation
-    {
-        NONE, BACKGROUND, PREVIOUS
-    }
-
-    public enum BlendOperation
-    {
-        SOURCE, OVER
-    }
+   
 
     public class Apng : PNG
     {

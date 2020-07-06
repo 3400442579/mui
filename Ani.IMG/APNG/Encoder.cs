@@ -6,18 +6,7 @@ using System.Text;
 
 namespace Ani.IMG.APNG
 {
-    public enum DisposeOps
-    {
-        None = 0,
-        Background = 1,
-        Previous = 2
-    }
 
-    public enum BlendOps
-    {
-        Source = 0,
-        Over = 1
-    }
 
     public class Encoder : IDisposable
     {
@@ -50,8 +39,6 @@ namespace Ani.IMG.APNG
         private int SequenceNumber { get; set; } = 0;
 
         #endregion
-
-
 
 
         public Encoder(Stream stream, int frameCount, int repeatCount)
@@ -94,13 +81,13 @@ namespace Ani.IMG.APNG
 
             if (IsFirstFrame)
             {
-                InternalStream.WriteByte((byte)DisposeOps.None); //DisposeOp, 1 byte.
-                InternalStream.WriteByte((byte)BlendOps.Source); //BlendOp, 1 byte.
+                InternalStream.WriteByte((byte)DisposeOperation.NONE); //DisposeOp, 1 byte.
+                InternalStream.WriteByte((byte)BlendOperation.SOURCE); //BlendOp, 1 byte.
             }
             else
             {
-                InternalStream.WriteByte((byte)DisposeOps.None); //DisposeOp, 1 byte.
-                InternalStream.WriteByte((byte)BlendOps.Over); //BlendOp, 1 byte.
+                InternalStream.WriteByte((byte)DisposeOperation.NONE); //DisposeOp, 1 byte.
+                InternalStream.WriteByte((byte)BlendOperation.OVER); //BlendOp, 1 byte.
             }
 
             InternalStream.WriteUInt32(BitHelper.ConvertEndian(CrcHelper.Calculate(InternalStream.PeekBytes(InternalStream.Position - 30, 30)))); //CRC, 4 bytes.
