@@ -1,30 +1,24 @@
 ﻿using SkiaSharp;
 using System.IO;
 
-namespace Ani.IMG.Webp 
+namespace Ani.IMG.Webp
 {
-    
+
     public class WebpDecoder
     {
         private readonly SKCodec codec = null;
         private SKImageInfo info = SKImageInfo.Empty;
-        private readonly SKBitmap bitmap = null;
+        //private readonly SKBitmap bitmap = null;
         private readonly SKCodecFrameInfo[] frames;
 
         public WebpDecoder(string gif)
         {
             codec = SKCodec.Create(gif);
-            frames = codec.FrameInfo;
 
-            info = codec.Info;
-            info = new SKImageInfo(info.Width, info.Height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-
-            bitmap = new SKBitmap(info);
         }
 
         ~WebpDecoder()
         {
-            bitmap.Dispose();
             codec.Dispose();
         }
 
@@ -39,9 +33,11 @@ namespace Ani.IMG.Webp
             if (index >= codec.FrameCount)
                 throw new System.Exception("Index超出FrameCount");
 
-            var opts = new SKCodecOptions(index);
-            var re = codec?.GetPixels(info, bitmap.GetPixels(), opts);
-            if (re == SKCodecResult.Success)
+            SKCodecOptions opts = new SKCodecOptions(index);
+           
+            using var bitmap = new SKBitmap(codec.Info);
+ 
+            if (codec?.GetPixels(codec.Info, bitmap.GetPixels(), opts) == SKCodecResult.Success)
             {
                 bitmap.NotifyPixelsChanged();
 
@@ -61,15 +57,13 @@ namespace Ani.IMG.Webp
                     case ".webp":
                         pixmap.Encode(SKEncodedImageFormat.Webp, 100).SaveTo(stream);
                         break;
+
                     default:
-                        pixmap.Encode(SKEncodedImageFormat.Bmp, 100).SaveTo(stream);
+                        pixmap.Encode(SKEncodedImageFormat.Webp, 100).SaveTo(stream);
                         break;
                 }
-
-                //bitmap.PeekPixels().Encode(SKEncodedImageFormat.Png, 80).SaveTo(stream);
             }
-
-            return frames[index].Duration;
+            return codec.FrameInfo[index].Duration;
         }
 
 

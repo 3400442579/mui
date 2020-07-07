@@ -6,8 +6,6 @@ using System.Linq;
 
 namespace Ani.IMG.APNG
 {
-   
-
     public class Apng : PNG
     {
         public AcTLChunk AcTL { get; set; }
@@ -48,10 +46,10 @@ namespace Ani.IMG.APNG
             frames.Add(f);
         }
 
-        public void RemoveFrame(Frame f)
-        {
-            frames.Remove(f);
-        }
+        //public void RemoveFrame(Frame f)
+        //{
+        //    frames.Remove(f);
+        //}
 
         public override SKBitmap ToBitmap()
         {
@@ -60,11 +58,11 @@ namespace Ani.IMG.APNG
 
 
 
-        public Stream ToStream()
+        public MemoryStream ToStream()
         {
             Validate();
 
-            Stream s = new MemoryStream();
+            MemoryStream s = new MemoryStream();
             WriteSignature(s);
             WriteChunk(s, IHDR);
             WriteChunk(s, AcTL);
@@ -75,7 +73,6 @@ namespace Ani.IMG.APNG
                 WriteChunk(s, first.Fctl);
                 foreach (IDATChunk idat in first.IDATs)
                     WriteChunk(s, idat);
-
             }
             else
             {
@@ -87,6 +84,8 @@ namespace Ani.IMG.APNG
                     WriteChunk(s, fdat);
 
             }
+
+
             foreach (Frame f in frames.Skip(1))
             {
                 WriteChunk(s, f.Fctl);

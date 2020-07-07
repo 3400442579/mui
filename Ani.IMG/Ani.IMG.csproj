@@ -15,10 +15,16 @@
   <ItemGroup>
   
     <Compile Remove="GIF\AnimatedGif\**" />
+  
+    <Compile Remove="GIF\Decoder\**" />
     
     <EmbeddedResource Remove="GIF\AnimatedGif\**" />
+    
+    <EmbeddedResource Remove="GIF\Decoder\**" />
    
     <None Remove="GIF\AnimatedGif\**" />
+   
+    <None Remove="GIF\Decoder\**" />
   </ItemGroup>
 
   <ItemGroup>

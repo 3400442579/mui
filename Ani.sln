@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "An.Ava", "An.Ava\An.Ava.csproj", "{4A92811F-2F89-4FC4-8510-570C597B0001}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animate", "src\Animate\Animate.csproj", "{EEAF13E3-B602-47DE-BCFD-4FC43F5BFDCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Animate", "src\Animate\Animate.csproj", "{EEAF13E3-B602-47DE-BCFD-4FC43F5BFDCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ani.IMG", "Ani.IMG\Ani.IMG.csproj", "{19CFBA78-4AD5-4161-90BB-9055E3CB7029}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ani.IMG", "Ani.IMG\Ani.IMG.csproj", "{19CFBA78-4AD5-4161-90BB-9055E3CB7029}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

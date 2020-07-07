@@ -32,9 +32,9 @@ namespace An.Editor.Views
             AddHandler(DragDrop.DragOverEvent, DragOver);
 
             //using FileStream webpstream = new FileStream(@"C:\Users\jxw\Desktop\world-cup-2014-42.webp", FileMode.Open, FileAccess.Read);
-            WebpDecoder webpDecoder = new WebpDecoder(@"C:\Users\jxw\Desktop\world-cup-2014-42.webp");
+            WebpDecoder webpDecoder = new WebpDecoder(@"test\world-cup-2014-42.webp");
             for (int i = 0; i < webpDecoder.FrameCount; i++)
-                webpDecoder.GetFrame(i, $@"E:\T\a\webp_{i}.jpg");
+                webpDecoder.GetFrame(i, $@"test\gif\webp_{i}.jpg");
 
             //using FileStream stream = new FileStream(@"C:\Users\jxw\Desktop\e.gif", FileMode.Open, FileAccess.Read);
             //GifDecoder decoder = new GifDecoder(stream);

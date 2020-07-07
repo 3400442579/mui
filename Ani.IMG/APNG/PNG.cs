@@ -294,8 +294,10 @@ namespace Ani.IMG.APNG
             {
                 throw new ApplicationException("tIME chunk encountered more than once");
             }
-            TIME = new TIMEChunk();
-            TIME.ChunkData = chunk.ChunkData;
+            TIME = new TIMEChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
         }
 
         private void Handle_sPLT(PNGChunk chunk)
@@ -304,8 +306,10 @@ namespace Ani.IMG.APNG
             {
                 throw new ApplicationException("sPLT chunk encountered more than once");
             }
-            SPLT = new SPLTChunk();
-            SPLT.ChunkData = chunk.ChunkData;
+            SPLT = new SPLTChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
         }
 
         private void Handle_pHYs(PNGChunk chunk)
@@ -314,8 +318,10 @@ namespace Ani.IMG.APNG
             {
                 throw new ApplicationException("pHYs chunk encountered more than once");
             }
-            PHYs = new PHYsChunk();
-            PHYs.ChunkData = chunk.ChunkData;
+            PHYs = new PHYsChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
         }
 
         private void Handle_hIST(PNGChunk chunk)
@@ -359,15 +365,19 @@ namespace Ani.IMG.APNG
 
         private void Handle_iTXt(PNGChunk chunk)
         {
-            ITXtChunk it = new ITXtChunk();
-            it.ChunkData = chunk.ChunkData;
+            ITXtChunk it = new ITXtChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
             ITXtList.Add(it);
         }
 
         private void Handle_zTXt(PNGChunk chunk)
         {
-            ZTXtChunk zt = new ZTXtChunk();
-            zt.ChunkData = chunk.ChunkData;
+            ZTXtChunk zt = new ZTXtChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
             ZTXtList.Add(zt);
         }
 
@@ -423,8 +433,10 @@ namespace Ani.IMG.APNG
             {
                 throw new ApplicationException("iCCP chunk encountered more than once");
             }
-            ICCP = new ICCPChunk();
-            ICCP.ChunkData = chunk.ChunkData;
+            ICCP = new ICCPChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
         }
 
         private void Handle_gAMA(PNGChunk chunk)
@@ -443,8 +455,10 @@ namespace Ani.IMG.APNG
             {
                 throw new ApplicationException("cHRM chunk encountered more than once");
             }
-            CHRM = new CHRMChunk();
-            CHRM.ChunkData = chunk.ChunkData;
+            CHRM = new CHRMChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
         }
 
         private void Handle_tRNS(PNGChunk chunk)
@@ -479,8 +493,10 @@ namespace Ani.IMG.APNG
             {
                 throw new ApplicationException("PLTE chunk encountered more than once");
             }
-            PLTE = new PLTEChunk();
-            PLTE.ChunkData = chunk.ChunkData;
+            PLTE = new PLTEChunk
+            {
+                ChunkData = chunk.ChunkData
+            };
         }
 
         private void Handle_IHDR(PNGChunk chunk)

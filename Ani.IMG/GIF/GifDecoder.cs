@@ -88,25 +88,21 @@ namespace Ani.IMG.GIF
     public class GifDecoder
     {
         private readonly SKCodec codec = null;
-        private SKImageInfo info = SKImageInfo.Empty;
-        private readonly SKBitmap bitmap = null;
-        private readonly SKCodecFrameInfo[] frames;
+        //private SKImageInfo info = SKImageInfo.Empty;
+        //private readonly SKBitmap bitmap = null;
+        //private readonly SKCodecFrameInfo[] frames;
 
         public GifDecoder(string gif)
         {
-
             codec = SKCodec.Create(gif);
-            frames = codec.FrameInfo;
-
-            info = codec.Info;
-            info = new SKImageInfo(info.Width, info.Height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-
-            bitmap = new SKBitmap(info);
+            //frames = codec.FrameInfo;
+           // info = codec.Info;
+           // info = new SKImageInfo(info.Width, info.Height, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
+           // bitmap = new SKBitmap(info);
         }
 
         ~GifDecoder()
         {
-            bitmap.Dispose();
             codec.Dispose();
         }
 
@@ -122,14 +118,16 @@ namespace Ani.IMG.GIF
                 throw new System.Exception("Index超出FrameCount");
 
             var opts = new SKCodecOptions(index);
-            if (codec?.GetPixels(info, bitmap.GetPixels(), opts) == SKCodecResult.Success)
+            using var bitmap = new SKBitmap(codec.Info);
+            if (codec?.GetPixels(codec.Info, bitmap.GetPixels(), opts) == SKCodecResult.Success)
             {
                 bitmap.NotifyPixelsChanged();
 
                 using FileStream stream = new System.IO.FileStream(save, FileMode.Create);
                 using SKPixmap pixmap = new SKPixmap(bitmap.Info, bitmap.GetPixels());
 
-                switch (System.IO.Path.GetExtension(save).ToLower()) {
+                switch (System.IO.Path.GetExtension(save).ToLower())
+                {
                     case ".png":
                         pixmap.Encode(SKEncodedImageFormat.Png, 100).SaveTo(stream);
                         break;
@@ -138,18 +136,18 @@ namespace Ani.IMG.GIF
                         pixmap.Encode(SKEncodedImageFormat.Jpeg, 100).SaveTo(stream);
                         break;
 
-                    case ".webp":
-                        pixmap.Encode(SKEncodedImageFormat.Webp, 100).SaveTo(stream);
-                        break;
+                    //case ".webp":
+                    //    pixmap.Encode(SKEncodedImageFormat.Webp, 100).SaveTo(stream);
+                    //    break;
                     default:
-                        pixmap.Encode(SKEncodedImageFormat.Bmp, 100).SaveTo(stream);
+                        pixmap.Encode(new SKWebpEncoderOptions { Compression = SKWebpEncoderCompression.Lossless, Quality = 100 }).SaveTo(stream);
                         break;
                 }
-               
+
                 //bitmap.PeekPixels().Encode(SKEncodedImageFormat.Png, 80).SaveTo(stream);
             }
 
-            return frames[index].Duration;
+            return codec.FrameInfo[index].Duration;
         }
 
 

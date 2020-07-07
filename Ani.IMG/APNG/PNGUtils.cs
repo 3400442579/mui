@@ -54,7 +54,7 @@ namespace Ani.IMG.APNG
 			if (buffer.Length - offset < sizeof(uint))
 			{
 				throw new ArgumentException(
-					String.Format("buffer is not long enough to extract {0} bytes at offset {1}",
+					string.Format("buffer is not long enough to extract {0} bytes at offset {1}",
 					sizeof(uint), offset));
 			}
 			for (int i = offset + sizeof(uint) - 1, j = 0; i >= offset; i--, j++)
@@ -77,7 +77,7 @@ namespace Ani.IMG.APNG
 			if (buffer.Length - offset < length)
 			{
 				throw new ArgumentException(
-					String.Format("buffer is not long enough to extract {0} bytes at offset {1}",
+					string.Format("buffer is not long enough to extract {0} bytes at offset {1}",
 					length, offset));
 			}
 			for (int i = offset; i < (offset + length); i++)
