@@ -18,8 +18,8 @@ namespace ConsoleApp
             //GifDecoding();
 
 
-            //ApngDecoding();
-            ApngEncoder();
+            ApngDecoding();
+            //ApngEncoder();
         }
 
 
@@ -44,7 +44,7 @@ namespace ConsoleApp
         static void ApngDecoding()
         {
             string pathTemp = @"test\png";
-            using var stream = new FileStream(@"test\2.png", FileMode.Open);
+            using var stream = new FileStream(@"test\aaa.png", FileMode.Open);
             var apng = new Apng();
             apng.Load(stream);
 
@@ -89,12 +89,11 @@ namespace ConsoleApp
             //using var stream = apng.ToStream();
 
             using var stream = new MemoryStream();//2.png
-            using Encoder encoder = new Encoder(stream, ss.Length, 0);
+            Encoder encoder = new Encoder(stream, ss.Length, 0);
             foreach (var s in ss)
-            {
                 encoder.AddFrame(s, new SKRect(0, 0, 547, 200));
-            }
-
+            
+            encoder.Finish();
             using var fileStream = new FileStream(@"test\png\aaa.png", FileMode.Create, FileAccess.Write, FileShare.None, 4096);
             stream.WriteTo(fileStream);
         }

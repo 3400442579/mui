@@ -6,11 +6,8 @@ using System.Text;
 
 namespace Ani.IMG.APNG
 {
-
-
-    public class Encoder : IDisposable
+    public class Encoder 
     {
-
         #region Properties
 
         /// <summary>
@@ -40,14 +37,12 @@ namespace Ani.IMG.APNG
 
         #endregion
 
-
         public Encoder(Stream stream, int frameCount, int repeatCount)
         {
             InternalStream = stream;
             FrameCount = frameCount;
             RepeatCount = repeatCount;
         }
-
 
         public void AddFrame(string path, SKRect rect, int delay = 66)
         {
@@ -141,8 +136,7 @@ namespace Ani.IMG.APNG
             return list;
         }
 
-        public void Dispose()
-        {
+        public void Finish() {
             //IEND: The end of the Png datastream. 0 bytes (Length + Type + CRC, 4 bytes each) = 12 bytes.
             InternalStream.WriteUInt32(BitHelper.ConvertEndian(0u)); //Length, 4 bytes.
             InternalStream.WriteBytes(Encoding.ASCII.GetBytes("IEND")); //Chunk type, 4 bytes.
@@ -152,6 +146,7 @@ namespace Ani.IMG.APNG
             //Resets the stream position to save afterwards.
             InternalStream.Position = 0;
         }
+
     }
 }
 

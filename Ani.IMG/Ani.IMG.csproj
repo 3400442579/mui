@@ -27,6 +27,12 @@
     <None Remove="GIF\Decoder\**" />
   </ItemGroup>
 
+  
+
+  <ItemGroup>
+    <Compile Remove="APNG\APNGAssembler.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="SkiaSharp" Version="1.68.3" />
   </ItemGroup>
