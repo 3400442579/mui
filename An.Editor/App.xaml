@@ -13,7 +13,7 @@
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
 
         <StyleInclude Source="avares://An.Ava/Styles/Generic.xaml"/>
-
+        <StyleInclude Source="avares://An.Ava/Styles/Extended/MetroWindow.xaml"/>
 
 
       <Style Selector="n|MetroWindow">

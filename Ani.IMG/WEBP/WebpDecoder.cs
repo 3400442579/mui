@@ -4,6 +4,8 @@ using System.IO;
 namespace Ani.IMG.Webp
 {
 
+
+
     public class WebpDecoder
     {
         private readonly SKCodec codec = null;
@@ -14,7 +16,6 @@ namespace Ani.IMG.Webp
         public WebpDecoder(string gif)
         {
             codec = SKCodec.Create(gif);
-
         }
 
         ~WebpDecoder()

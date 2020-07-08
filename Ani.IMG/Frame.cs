@@ -1,4 +1,6 @@
-﻿namespace Ani.IMG
+﻿using SkiaSharp;
+
+namespace Ani.IMG
 {
     public class Frame
     {
@@ -6,12 +8,14 @@
 
         public int Delay { get; set; }
 
-        public uint Width { get; set; }
+        //public uint Width { get; set; }
 
-        public uint Height { get; set; }
+        //public uint Height { get; set; }
 
-        public uint X { get; set; }
+        //public uint X { get; set; }
 
-        public uint Y { get; set; }
+        //public uint Y { get; set; }
+
+        public SKRectI Rect { get; set; }
     }
 }

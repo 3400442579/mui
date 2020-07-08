@@ -1,11 +1,15 @@
 ﻿
+using Ani.IMG;
 using Ani.IMG.APNG;
 using Ani.IMG.GIF;
 using Ani.IMG.Webp;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using SkiaSharp;
 using System;
 using System.IO;
 using System.Linq;
+using ImageMagick;
 
 namespace ConsoleApp
 {
@@ -18,8 +22,12 @@ namespace ConsoleApp
             //GifDecoding();
 
 
-            ApngDecoding();
+            //ApngDecoding();
             //ApngEncoder();
+
+
+            webp();
+            //ss();
         }
 
 
@@ -57,7 +65,7 @@ namespace ConsoleApp
             var fullSize = new SKSize((int)apng.Width, (int)apng.Height);
             for (int index = 0; index < apng.FrameCount; index++)
             {
-                SKBitmap rawFrame = apng.ToBitmap(index, out Frame frame);
+                SKBitmap rawFrame = apng.ToBitmap(index, out Ani.IMG.APNG.Frame frame);
 
                 var bitmapSource = Render.MakeFrame(fullSize, rawFrame, frame, baseFrame);
                 switch (frame.DisposeOp)
@@ -97,6 +105,53 @@ namespace ConsoleApp
             using var fileStream = new FileStream(@"test\png\aaa.png", FileMode.Create, FileAccess.Write, FileShare.None, 4096);
             stream.WriteTo(fileStream);
         }
+
+
+
+        static void ss()
+        {
+            //using SKBitmap bitmap = SKBitmap.Decode(@"E:\T\0.png");
+            //using SKBitmap bitm = Util.PixelAnalysis(bitmap, new Ani.IMG.Frame { Path = @"E:\T\1.png", Rect = new SKRectI { Left = 0, Top = 0, Bottom = 230, Right = 230 } });
+            //using FileStream stream = new FileStream(@"E:\T\1_1.png", FileMode.Create);
+            //bitm.Encode(SKEncodedImageFormat.Png, 100).SaveTo(stream);
+
+
+
+            var bg = Image.Load<Rgba32>(@"E:\T\0.png");
+            using Image img = Util.Ss(bg, new Ani.IMG.Frame { Path = @"E:\T\1.png", Rect = new SKRectI { Left = 0, Top = 0, Bottom = 230, Right = 230 } });
+            using FileStream stream = new FileStream(@"E:\T\1_1.png", FileMode.Create);
+            img.SaveAsPng(stream);
+            
+            using FileStream stream2 = new FileStream(@"E:\T\0_1.png", FileMode.Create);
+            bg.SaveAsPng(stream2);
+
+
+
+           // Util.Alpha()
+        }
+
+
+        static void webp() {
+
+            //ImageMagick.MagickImageCollection images = new MagickImageCollection();
+           // MagickImage magick = new MagickImage("");
+            
+
+            using var collection = new MagickImageCollection(@"C:\Users\jxw\source\repos\mui\ConsoleApp\bin\Debug\netcoreapp3.1\test\world-cup-2014-42.gif");
+
+            collection.Add("Snakeware.png");
+            collection[0].AnimationDelay = 100; // in this example delay is 1000ms/1sec
+           
+            // Add second image, set the animation delay (in 1/100th of a second) and flip the image
+            collection.Add("Snakeware.png");
+            collection[1].AnimationDelay = 100; // in this example delay is 1000ms/1sec
+            //collection[1].Flip();
+
+
+            collection.Coalesce();
+            collection.Write(@"C:\Users\jxw\source\repos\mui\ConsoleApp\bin\Debug\netcoreapp3.1\test\test.webp", MagickFormat.WebP);
+        }
+
 
     }
 

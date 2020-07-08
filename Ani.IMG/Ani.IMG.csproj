@@ -34,6 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.20.0.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0003" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0010" />
     <PackageReference Include="SkiaSharp" Version="1.68.3" />
   </ItemGroup>
 
