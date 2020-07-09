@@ -1,15 +1,13 @@
-﻿
-using Ani.IMG;
+﻿using Ani.IMG;
 using Ani.IMG.APNG;
 using Ani.IMG.GIF;
-using Ani.IMG.Webp;
+using Ani.IMG.WEBP;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SkiaSharp;
 using System;
 using System.IO;
 using System.Linq;
-using ImageMagick;
 
 namespace ConsoleApp
 {
@@ -26,7 +24,7 @@ namespace ConsoleApp
             //ApngEncoder();
 
 
-            webp();
+            Webp();
             //ss();
         }
 
@@ -131,25 +129,42 @@ namespace ConsoleApp
         }
 
 
-        static void webp() {
+        static void Webp() {
+
+            //using (var images = new MagickImageCollection())
+            //{
+            //    // Add the first image
+            //    var first = new MagickImage(@"C:\Users\jxw\Desktop\firefox-512.png");
+            //    images.Add(first);
+
+            //    // Add the second image
+            //    var second = new MagickImage(@"C:\Users\jxw\Desktop\警报.png");
+            //    images.Add(second);
+
+            //    // Create a mosaic from both images
+            //    using var result = images.Merge( );
+               
+            //    // Save the result
+            //    result.Write(@"C:\Users\jxw\Desktop\Mosaic.png");
+            //}
 
             //ImageMagick.MagickImageCollection images = new MagickImageCollection();
-           // MagickImage magick = new MagickImage("");
-            
+            // MagickImage magick = new MagickImage("");
 
-            using var collection = new MagickImageCollection(@"C:\Users\jxw\source\repos\mui\ConsoleApp\bin\Debug\netcoreapp3.1\test\world-cup-2014-42.gif");
 
-            collection.Add("Snakeware.png");
-            collection[0].AnimationDelay = 100; // in this example delay is 1000ms/1sec
+            //using var collection = new MagickImageCollection(@"C:\Users\jxw\source\repos\mui\ConsoleApp\bin\Debug\netcoreapp3.1\test\world-cup-2014-42.gif");
+
+            //collection.Add("Snakeware.png");
+            //collection[0].AnimationDelay = 100; // in this example delay is 1000ms/1sec
            
-            // Add second image, set the animation delay (in 1/100th of a second) and flip the image
-            collection.Add("Snakeware.png");
-            collection[1].AnimationDelay = 100; // in this example delay is 1000ms/1sec
-            //collection[1].Flip();
+            //// Add second image, set the animation delay (in 1/100th of a second) and flip the image
+            //collection.Add("Snakeware.png");
+            //collection[1].AnimationDelay = 100; // in this example delay is 1000ms/1sec
+            ////collection[1].Flip();
 
 
-            collection.Coalesce();
-            collection.Write(@"C:\Users\jxw\source\repos\mui\ConsoleApp\bin\Debug\netcoreapp3.1\test\test.webp", MagickFormat.WebP);
+            //collection.Coalesce();
+            //collection.Write(@"C:\Users\jxw\source\repos\mui\ConsoleApp\bin\Debug\netcoreapp3.1\test\test.webp", MagickFormat.WebP);
         }
 
 

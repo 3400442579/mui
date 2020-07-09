@@ -1,6 +1,8 @@
 ﻿using An.Ava.Controls;
 using An.Editor.Models;
-using An.Image.Gif.Decoding;
+using Ani.IMG.APNG;
+using Ani.IMG.GIF;
+using Ani.IMG.WEBP;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
@@ -278,90 +280,19 @@ namespace An.Editor.ViewModels
 
             var listFrames = new List<Frame>();
 
-            using FileStream stream = new FileStream(source, FileMode.Open, FileAccess.Read);
+            using GifDecoder decoder = new GifDecoder(source);
 
-            GifDecoder decoder = new GifDecoder(stream);
-            if (decoder.Frames.Count <= 0)
-                return listFrames;
-
-
-            for (int i = 0; i < decoder.Frames.Count; i++)
+            for (int i = 0; i < decoder.FrameCount; i++)
             {
                 string fileName = System.IO.Path.Combine(pathTemp, $"{i} {DateTime.Now:hh-mm-ss-ffff}.png");
-                decoder.RenderFrame(i, fileName);
+                int duration = decoder.GetFrame(i, fileName);
 
-                //It should not throw a overflow exception because of the maximum value for the milliseconds.
-                var frame = new Frame(fileName, (int)decoder.Frames[i].FrameDelay.TotalMilliseconds);
+                var frame = new Frame(fileName, duration);
                 listFrames.Add(frame);
-
                 //  UpdateProgress(index);
             }
 
-
-
-            // var gifFile = GifFile.ReadGifFile(source, true);
-
-
-            //// ShowProgress(DispatcherStringResource("Editor.ImportingFrames"), gifMetadata.Frames.Count);
-
-            // if (gifFile.Frames.Count <= 0)
-            //     return listFrames;
-
-            // var fullSize = gifFile.GetFullSize();
-            // var index = 0;
-
-
-            // var fileName = System.IO.Path.Combine(pathTemp, $"{index} {DateTime.Now:hh-mm-ss-ffff}.png");
-            // foreach (var rawFrame in gifFile.Frames)
-            // {
-            //     var metadata = gifFile.Frames[index];
-
-            //     var bitmapSource = ImageUtil.MakeFrame(fullSize, rawFrame, metadata, baseFrame);
-
-            //     #region Disposal Method
-
-            //     switch (metadata.DisposalMethod)
-            //     {
-            //         case FrameDisposalMethod.None:
-            //         case FrameDisposalMethod.DoNotDispose:
-            //             baseFrame = bitmapSource;
-            //             break;
-            //         case FrameDisposalMethod.RestoreBackground:
-            //             baseFrame = ImageUtil.IsFullFrame(metadata, fullSize.width, fullSize.height) ? null : ImageUtil.ClearArea(bitmapSource, metadata);
-            //             break;
-            //         case FrameDisposalMethod.RestorePrevious:
-            //             //Reuse same base frame.
-            //             break;
-            //     }
-
-            //     #endregion
-
-            //     #region Each Frame
-
-
-
-
-
-            //     using (var stream = new System.IO.FileStream(fileName, System.IO. FileMode.Create))
-            //     {
-            //         var encoder = new PngBitmapEncoder();
-            //         encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-            //         encoder.Save(stream);
-            //         stream.Close();
-            //     }
-
-            //     //It should not throw a overflow exception because of the maximum value for the milliseconds.
-            //     var frame = new Frame(fileName, (int)metadata.Delay.TotalMilliseconds);
-            //     listFrames.Add(frame);
-
-            //     UpdateProgress(index);
-
-            //     GC.Collect(1);
-
-            //     #endregion
-
-            //     index++;
-            // }
+            GC.Collect(1);
 
             return listFrames;
         }
@@ -369,46 +300,17 @@ namespace An.Editor.ViewModels
         {
             var fileName =System.IO. Path.Combine(pathTemp, $"{0} {DateTime.Now:hh-mm-ss-ffff}.png");
 
-            #region Save the Image to the Recording Folder
-
             SKBitmap bitmap= SkiaSharp.SKBitmap.Decode(source);
             if (width.HasValue && heght.HasValue)
             {
                 bitmap.Resize(new SKImageInfo(width.Value, heght.Value), SKFilterQuality.High);// SKBitmapResizeMethod.Box);
             }
-            using System.IO.FileStream stream = new System.IO.FileStream(source, System.IO.FileMode.Create);
-            bitmap.PeekPixels().Encode(SKEncodedImageFormat.Png, 80).SaveTo(stream);
-            //SixLabors.ImageSharp.Image image = SixLabors.ImageSharp.Image.Load(source);
-            //image.Metadata.VerticalResolution = 96;
-            //image.Metadata.HorizontalResolution = 96;
-            // image.Save(fileName);
 
-            //BitmapSource bitmap = new BitmapImage(new Uri(source));
-
-            ////Don't let it import multiple images with different DPI's.
-            //if (previousDpi > 0 && Math.Abs(previousDpi - bitmap.DpiX) > 0.09)
-            //{
-            //    warn = true;
-            //    return null;
-            //}
-
-            //if (Math.Abs(previousDpi) < 0.01)
-            //    previousDpi = bitmap.DpiX;
-
-            //if (bitmap.Format != PixelFormats.Bgra32)
-            //    bitmap = new FormatConvertedBitmap(bitmap, PixelFormats.Bgra32, null, 0);
-
-            //using (var stream = new FileStream(fileName, FileMode.Create))
-            //{
-            //    var encoder = new PngBitmapEncoder();
-            //    encoder.Frames.Add(BitmapFrame.Create(bitmap));
-            //    encoder.Save(stream);
-            //    stream.Close();
-            //}
+            //using System.IO.FileStream stream = new System.IO.FileStream(source, System.IO.FileMode.Create);
+            //bitmap.PeekPixels().Encode(SKEncodedImageFormat.Png, 80).SaveTo(stream);
+           
 
             GC.Collect();
-
-            #endregion
 
             return new List<Frame> { new Frame(fileName, 66) };
         }
@@ -417,75 +319,66 @@ namespace An.Editor.ViewModels
         {
             //ShowProgress(DispatcherStringResource("Editor.ImportingFrames"), 50, true);
 
-
-
-            //using FileStream stream = new FileStream(source, FileMode.Open, FileAccess.Read);
-
-            //Apng apng = new Apng(stream);
-            //if (!apng.ReadFrames())
-            //    return ImportFromImage(source, pathTemp, null, null);
-
-
             var listFrames = new List<Frame>();
 
-            //var fullSize = new System.Drawing.Size((int)apng.Ihdr.Width, (int)apng.Ihdr.Height);
-           
+            using var stream = new FileStream(source, FileMode.Open);
+            Apng apng = new Apng();
+            apng.Load(stream);
 
-            //BitmapSource baseFrame = null;
-            //for (var index = 0; index < apng.Actl.NumFrames; index++)
-            //{
-            //    var metadata = apng.GetFrame(index);
-            //    var rawFrame = SKBitmap.Decode(metadata.ImageData);
+            if (!apng.IsAnimated)
+                return ImportFromImage(source, pathTemp, null, null);
 
+            SKBitmap baseFrame = null;
 
-            //    var bitmapSource = Apng.MakeFrame(fullSize, rawFrame, metadata, baseFrame);
+            var fullSize = new SKSize((int)apng.Width, (int)apng.Height);
+            for (int index = 0; index < apng.FrameCount; index++)
+            {
+                using SKBitmap rawFrame = apng.ToBitmap(index, out Ani.IMG.APNG.Frame frame);
 
-            //    #region Disposal Method
+                using SKBitmap bitmap = Render.MakeFrame(fullSize, rawFrame, frame, baseFrame);
+                switch (frame.DisposeOp)
+                {
+                    case DisposeOperation.NONE:
+                        baseFrame = bitmap.Copy();
+                        break;
+                    case DisposeOperation.BACKGROUND:
+                        baseFrame = Render.IsFullFrame(frame, fullSize) ? null : Render.ClearArea(bitmap, frame);
+                        break;
+                    case DisposeOperation.PREVIOUS:
+                        //Reuse same base frame.
+                        break;
+                }
 
-            //    switch (metadata.DisposeOp)
-            //    {
-            //        case Apng.DisposeOps.None: //No disposal is done on this frame before rendering the next; the contents of the output buffer are left as is.
-            //            baseFrame = bitmapSource;
-            //            break;
-            //        case Apng.DisposeOps.Background: //The frame's region of the output buffer is to be cleared to fully transparent black before rendering the next frame.
-            //            baseFrame = baseFrame == null || Apng.IsFullFrame(metadata, fullSize) ? null : Apng.ClearArea(baseFrame, metadata);
-            //            break;
-            //        case Apng.DisposeOps.Previous: //The frame's region of the output buffer is to be reverted to the previous contents before rendering the next frame.
-            //                                       //Reuse same base frame.
-            //            break;
-            //    }
-
-            //    #endregion
-
-            //    #region Each Frame
-
-            //    var fileName = Path.Combine(pathTemp, $"{index} {DateTime.Now:hh-mm-ss-ffff}.png");
-
-            //    //TODO: Do I need to verify the DPI of the image?
-
-            //    using (var output = new FileStream(fileName, FileMode.Create))
-            //    {
-            //        var encoder = new PngBitmapEncoder();
-            //        encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-            //        encoder.Save(output);
-            //        stream.Close();
-            //    }
-
-            //    list.Add(new FrameInfo(fileName, metadata.Delay));
-
-            //    UpdateProgress(index);
-
-            //    GC.Collect(1);
-
-            //    #endregion
-            //}
-
+                string fn = Path.Combine(pathTemp, $"{index}.png");
+                using var output = new FileStream(fn, FileMode.Create);
+                bitmap.Encode(SKEncodedImageFormat.Png, 100).SaveTo(output);
+            }
+            baseFrame?.Dispose();
 
             return listFrames;
         }
+
         private List<Frame> ImportFromWebp(string source, string pathTemp)
         {
-            return null;
+            //ShowProgress(DispatcherStringResource("Editor.ImportingFrames"), 50, true);
+
+            var listFrames = new List<Frame>();
+
+            using WebpDecoder decoder = new WebpDecoder(source);
+
+            for (int i = 0; i < decoder.FrameCount; i++)
+            {
+                string fileName = System.IO.Path.Combine(pathTemp, $"{i} {DateTime.Now:hh-mm-ss-ffff}.png");
+                int duration = decoder.GetFrame(i, fileName);
+
+                var frame = new Frame(fileName, duration);
+                listFrames.Add(frame);
+                //  UpdateProgress(index);
+            }
+
+            GC.Collect(1);
+
+            return listFrames;
         }
 
         private List<Frame> ImportFromVideo(string source, string pathTemp) {

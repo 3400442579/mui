@@ -1,27 +1,23 @@
 ﻿using SkiaSharp;
 using System.IO;
+using System;
 
-namespace Ani.IMG.Webp
+namespace Ani.IMG.WEBP
 {
 
-
-
-    public class WebpDecoder
+    public class WebpDecoder : IDisposable
     {
         private readonly SKCodec codec = null;
-        private SKImageInfo info = SKImageInfo.Empty;
+        //private SKImageInfo info = SKImageInfo.Empty;
         //private readonly SKBitmap bitmap = null;
-        private readonly SKCodecFrameInfo[] frames;
+        //private readonly SKCodecFrameInfo[] frames;
 
         public WebpDecoder(string gif)
         {
             codec = SKCodec.Create(gif);
         }
 
-        ~WebpDecoder()
-        {
-            codec.Dispose();
-        }
+
 
         /// <summary>
         /// 
@@ -35,9 +31,9 @@ namespace Ani.IMG.Webp
                 throw new System.Exception("Index超出FrameCount");
 
             SKCodecOptions opts = new SKCodecOptions(index);
-           
+
             using var bitmap = new SKBitmap(codec.Info);
- 
+
             if (codec?.GetPixels(codec.Info, bitmap.GetPixels(), opts) == SKCodecResult.Success)
             {
                 bitmap.NotifyPixelsChanged();
@@ -67,6 +63,10 @@ namespace Ani.IMG.Webp
             return codec.FrameInfo[index].Duration;
         }
 
+        public void Dispose()
+        {
+            codec.Dispose();
+        }
 
         public int FrameCount => codec.FrameCount;
 

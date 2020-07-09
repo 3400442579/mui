@@ -1,6 +1,6 @@
 ﻿using SkiaSharp;
 using System.IO;
-
+using System;
 namespace Ani.IMG.GIF
 {
     //public class GifDecoder
@@ -85,7 +85,7 @@ namespace Ani.IMG.GIF
 
     //}
 
-    public class GifDecoder
+    public class GifDecoder:IDisposable
     {
         private readonly SKCodec codec = null;
         //private SKImageInfo info = SKImageInfo.Empty;
@@ -101,10 +101,7 @@ namespace Ani.IMG.GIF
            // bitmap = new SKBitmap(info);
         }
 
-        ~GifDecoder()
-        {
-            codec.Dispose();
-        }
+        
 
         /// <summary>
         /// 
@@ -150,6 +147,10 @@ namespace Ani.IMG.GIF
             return codec.FrameInfo[index].Duration;
         }
 
+        public void Dispose()
+        {
+            codec.Dispose();
+        }
 
         public int FrameCount => codec.FrameCount;
 

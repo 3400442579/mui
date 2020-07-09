@@ -22,17 +22,13 @@ namespace Ani.IMG.WEBP
             collection.Add(path);
             collection[0].AnimationDelay = 66; // in this example delay is 1000ms/1sec
             
-
-
-           
-           
         }
 
         public void Save(string save) {
             collection.Optimize();
             //WebpEncoder encoder = new WebpEncoder(repeatCount);
-            //encoder.AddFrame();
-            
+            //encoder.AddFrame()
+            //encoder.collection.o
             //encoder.Save(save);
             collection.Write(save,MagickFormat.WebP);
         }

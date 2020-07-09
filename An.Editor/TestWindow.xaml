@@ -5,10 +5,14 @@
         xmlns:n="clr-namespace:An.Ava.Controls;assembly=An.Ava"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="An.Editor.TestWindow"
-        Title="Test"  >
+        Title="Test" 
+        Icon="/Assets/avalonia-logo.ico" >
 
+    <Grid RowDefinitions="auto,auto">
 
-  <Button Click="button_Click"  Content="aa"/>
-
+        <Image Source="/Assets/400x200.jpg"  Stretch="None" />
+        <Image Source="/Assets/400X200.png" Grid.Row="1"  Stretch="None" />
+        
+    </Grid>
 
 </n:MetroWindow>

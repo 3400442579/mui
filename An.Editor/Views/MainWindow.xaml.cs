@@ -1,14 +1,9 @@
 ﻿using An.Editor.ViewModels;
-using An.Image.Gif.Decoding;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using System.Linq;
-using System.IO;
-using An.Image.Gif.Encoder;
-using SkiaSharp;
-using An.Image.Webp;
 
 namespace An.Editor.Views
 {
@@ -30,27 +25,6 @@ namespace An.Editor.Views
 
             AddHandler(DragDrop.DropEvent, Drop);
             AddHandler(DragDrop.DragOverEvent, DragOver);
-
-            //using FileStream webpstream = new FileStream(@"C:\Users\jxw\Desktop\world-cup-2014-42.webp", FileMode.Open, FileAccess.Read);
-            WebpDecoder webpDecoder = new WebpDecoder(@"test\world-cup-2014-42.webp");
-            for (int i = 0; i < webpDecoder.FrameCount; i++)
-                webpDecoder.GetFrame(i, $@"test\gif\webp_{i}.jpg");
-
-            //using FileStream stream = new FileStream(@"C:\Users\jxw\Desktop\e.gif", FileMode.Open, FileAccess.Read);
-            //GifDecoder decoder = new GifDecoder(stream);
-            //for (int i = 0; i < decoder.Frames.Count; i++)
-            //    decoder.RenderFrame(i, $@"E:\T\a\{i}.jpg");
-
-            //using FileStream stream = new FileStream(@"C:\Users\jxw\Desktop\1.gif", FileMode.Create, FileAccess.Write);
-            //GifFile gifFile = new GifFile(stream)
-            //{
-            //    //TransparentColor = SKColors.Black,
-            //    MaximumNumberColor = 256,
-            //    QuantizationType = ColorQuantizationType.NeuQuant
-            //};
-            //gifFile.AddFrame(@"C:\Users\jxw\Desktop\gif问题\鱼\002_00000.png", new Image.Rect(0, 0, 1920, 1080),200);
-            //gifFile.AddFrame(@"C:\Users\jxw\Desktop\gif问题\鱼\002_00001.png", new Image.Rect(0, 0, 1920, 1080),200);
-            //gifFile.AddFrame(@"C:\Users\jxw\Desktop\gif问题\鱼\002_00002.png", new Image.Rect(0, 0, 1920, 1080),200);
         }
 
         private void DragOver(object sender, DragEventArgs e)
