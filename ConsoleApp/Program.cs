@@ -1,9 +1,6 @@
-﻿using Ani.IMG;
-using Ani.IMG.APNG;
+﻿using Ani.IMG.APNG;
 using Ani.IMG.GIF;
 using Ani.IMG.WEBP;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using SkiaSharp;
 using System;
 using System.IO;
@@ -24,8 +21,8 @@ namespace ConsoleApp
             //ApngEncoder();
 
 
-            Webp();
-            //ss();
+            //Webp();
+            ss();
         }
 
 
@@ -115,17 +112,19 @@ namespace ConsoleApp
 
 
 
-            var bg = Image.Load<Rgba32>(@"E:\T\0.png");
-            using Image img = Util.Ss(bg, new Ani.IMG.Frame { Path = @"E:\T\1.png", Rect = new SKRectI { Left = 0, Top = 0, Bottom = 230, Right = 230 } });
-            using FileStream stream = new FileStream(@"E:\T\1_1.png", FileMode.Create);
-            img.SaveAsPng(stream);
-            
-            using FileStream stream2 = new FileStream(@"E:\T\0_1.png", FileMode.Create);
-            bg.SaveAsPng(stream2);
+            //var bg = Image.Load<Rgba32>(@"E:\T\0.png");
+            //using Image img = Util.Ss(bg, new Ani.IMG.Frame { Path = @"E:\T\1.png", Rect = new SKRectI { Left = 0, Top = 0, Bottom = 230, Right = 230 } });
+            //using FileStream stream = new FileStream(@"E:\T\1_1.png", FileMode.Create);
+            //img.SaveAsPng(stream);
 
+            //using FileStream stream2 = new FileStream(@"E:\T\0_1.png", FileMode.Create);
+            //bg.SaveAsPng(stream2);
 
+            SKBitmap bitmap = SKBitmap.Decode(@"C:\Users\jxw\Desktop\400x200.jpg");
+            SKBitmap bitmap2 = SKBitmap.Decode(@"C:\Users\jxw\Desktop\400X200.png");
+            SKBitmap bitmap3 = SKBitmap.Decode(@"C:\Users\jxw\Desktop\警报.png");
 
-           // Util.Alpha()
+            // Util.Alpha()
         }
 
 

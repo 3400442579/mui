@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
+    <AssemblyName>An.Loc</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,13 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Languages\en.json">
+    <None Update="Langs\en.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Languages\zh-CN.json">
+    <None Update="Langs\zh-CN.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Languages\zh-TW.json">
+    <None Update="Langs\zh-TW.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

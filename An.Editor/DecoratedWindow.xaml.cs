@@ -10,9 +10,6 @@ namespace An.Editor
         public DecoratedWindow()
         {
             this.InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
 
         

@@ -17,14 +17,20 @@
     <Compile Remove="GIF\AnimatedGif\**" />
   
     <Compile Remove="GIF\Decoder\**" />
+  
+    <Compile Remove="GIF\Decoding\**" />
     
     <EmbeddedResource Remove="GIF\AnimatedGif\**" />
     
     <EmbeddedResource Remove="GIF\Decoder\**" />
+    
+    <EmbeddedResource Remove="GIF\Decoding\**" />
    
     <None Remove="GIF\AnimatedGif\**" />
    
     <None Remove="GIF\Decoder\**" />
+   
+    <None Remove="GIF\Decoding\**" />
   </ItemGroup>
 
   
@@ -35,8 +41,6 @@
 
   <ItemGroup>
     <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.20.0.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0003" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0010" />
     <PackageReference Include="SkiaSharp" Version="1.68.3" />
   </ItemGroup>
 

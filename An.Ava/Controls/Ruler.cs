@@ -273,7 +273,7 @@ namespace An.Ava.Controls
             double intervalPixel = scaleParm.Pixel; //长黑标线实际像素距离
             int intervalNum = scaleParm.Num;
             
-            var ftext = new FormattedText() { Typeface = new Typeface("Arial", 10), TextAlignment = TextAlignment.Left };
+            var ftext = new FormattedText() { FontSize=10, Typeface = new Typeface("Arial"), TextAlignment = TextAlignment.Left };
 
             
             //水平

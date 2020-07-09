@@ -15,9 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.9.11" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.11" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.9.9" />
+    <Compile Remove="ThemeManager.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.0-preview1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.0-preview1" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.0-preview1" />
   </ItemGroup>
 
   

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "An.Editor", "An.Editor\An.Editor.csproj", "{7022A93F-B7F7-4645-A03F-F3125A7207BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loc", "Loc\Loc.csproj", "{9817053D-44D7-4836-B27C-E743ACE87C5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "An.Loc", "Loc\An.Loc.csproj", "{9817053D-44D7-4836-B27C-E743ACE87C5E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "An.Test", "An.Test\An.Test.csproj", "{FAEA4304-A41C-488B-8C5A-907166592767}"
 EndProject

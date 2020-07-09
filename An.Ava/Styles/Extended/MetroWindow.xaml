@@ -10,8 +10,9 @@
       <Setter.Value>
         <ControlTemplate>
 
-          <Grid RowDefinitions="5,*,5" ColumnDefinitions="5,*,5">
-            <DockPanel  Grid.Column="1"  Grid.Row="1" >
+          <Grid RowDefinitions="5,*,5" ColumnDefinitions="5,*,5" Background="White">
+            <DockPanel  Grid.Column="0"  Grid.Row="0"  Grid.ColumnSpan="3" Grid.RowSpan="3">
+
               <Grid Name="TitleBar" Background="LightBlue" DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto">
                 <TextBlock VerticalAlignment="Center" Margin="5,0,0,0">Titleeeee</TextBlock>
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
@@ -25,20 +26,23 @@
                   <Button Name="CloseButton">X</Button>
                 </StackPanel>
               </Grid>
-              <Border Background="White" Margin="5">
+
+              <Border Background="White" Margin="0">
                 <ContentPresenter  Content="{TemplateBinding Content}" />
               </Border>
+
             </DockPanel>
 
+            <Border BorderThickness="1" BorderBrush="Black" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
 
-            <Border Name="TopLeft" Background="Red"/>
-            <Border Name="TopRight" Background="Red" Grid.Column="2" />
-            <Border Name="BottomLeft" Background="Red" Grid.Row="2" />
-            <Border Name="BottomRight" Background="Red"  Grid.Row="2" Grid.Column="2"/>
-            <Border Name="Top" Background="Blue" Grid.Column="1" />
-            <Border Name="Right" Background="Blue" Grid.Row="1"  Grid.Column="2" />
-            <Border Name="Bottom" Background="Blue" Grid.Row="2" Grid.Column="1"  />
-            <Border Name="Left" Background="Blue"  Grid.Row="1" />
+            <Border Name="TopLeft" Background="Transparent"/>
+            <Border Name="TopRight" Background="Transparent" Grid.Column="2" />
+            <Border Name="BottomLeft" Background="Transparent" Grid.Row="2" />
+            <Border Name="BottomRight" Background="Transparent"  Grid.Row="2" Grid.Column="2"/>
+            <Border Name="Top" Background="Transparent" Grid.Column="1" />
+            <Border Name="Right" Background="Transparent" Grid.Row="1"  Grid.Column="2" />
+            <Border Name="Bottom" Background="Transparent" Grid.Row="2" Grid.Column="1"  />
+            <Border Name="Left" Background="Transparent"  Grid.Row="1" />
           </Grid>
          
         </ControlTemplate>

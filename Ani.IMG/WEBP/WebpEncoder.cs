@@ -26,10 +26,6 @@ namespace Ani.IMG.WEBP
 
         public void Save(string save) {
             collection.Optimize();
-            //WebpEncoder encoder = new WebpEncoder(repeatCount);
-            //encoder.AddFrame()
-            //encoder.collection.o
-            //encoder.Save(save);
             collection.Write(save,MagickFormat.WebP);
         }
 

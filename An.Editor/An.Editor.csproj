@@ -23,16 +23,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.9.11" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.9.11" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.11" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.9.9" />
+    <PackageReference Include="Avalonia" Version="0.10.0-preview1" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.0-preview1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.0-preview1" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.0-preview1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\An.Ava\An.Ava.csproj" />
     <ProjectReference Include="..\Ani.IMG\Ani.IMG.csproj" />
-    <ProjectReference Include="..\Loc\Loc.csproj" />
+    <ProjectReference Include="..\Loc\An.Loc.csproj" />
   </ItemGroup>
 
 </Project>

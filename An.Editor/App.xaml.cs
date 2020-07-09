@@ -6,6 +6,8 @@ using An.Editor.Views;
 using Avalonia.Styling;
 using Avalonia.Markup.Xaml.Styling;
 using System;
+using An.Ava;
+using An.Ava.Controls;
 
 namespace An.Editor
 {
@@ -32,6 +34,7 @@ namespace An.Editor
                 //};
                 desktop.MainWindow = new TestWindow();
                 //desktop.MainWindow.Styles.Add(theme);
+
             }
 
             base.OnFrameworkInitializationCompleted();

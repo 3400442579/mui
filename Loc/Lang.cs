@@ -22,7 +22,7 @@ namespace Loc
 
             if (appDir != null)
             {
-                _langDir = Path.Combine(appDir, "Languages");
+                _langDir = Path.Combine(appDir, "Langs");
 
                 if (Directory.Exists(_langDir))
                 {
