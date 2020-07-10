@@ -40,8 +40,8 @@ namespace Ani.IMG.GIF.Encoder
         /// </summary>
         private const int Eof = -1;
 
-        private readonly int _imgW;
-        private readonly int _imgH;
+        //private readonly int _imgW;
+        //private readonly int _imgH;
         private readonly byte[] _pixAry;
         private readonly int _initCodeSize;
         //private int _remaining;

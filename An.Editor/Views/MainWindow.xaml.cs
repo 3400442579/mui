@@ -1,5 +1,4 @@
 ﻿using An.Editor.ViewModels;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
@@ -9,8 +8,7 @@ namespace An.Editor.Views
 {
     public class MainWindow : Window
     {
-
-        private MainWindowViewModel vm;
+        //private MainWindowViewModel vm;
         public MainWindow()
         {
             InitializeComponent();
